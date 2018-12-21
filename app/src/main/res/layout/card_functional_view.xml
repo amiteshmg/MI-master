@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragment.FunctionalCardView"
+    android:id="@+id/card_funtional_view_layout"
+    android:orientation="vertical"
+    android:background="@drawable/rectangle"
+    android:layout_margin="13dp"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="4dp"
+android:padding="10dp"
+    >
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <!--serial number row-->
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Serial No."
+            android:textSize="@dimen/normal_text"
+            android:padding="@dimen/icon_padding"
+
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/functional_serial_no_tv"
+            android:text="0"
+            android:layout_weight="1"/>
+
+
+
+    </LinearLayout>
+    <!--consumer no row-->
+
+
+
+    <LinearLayout
+        android:layout_marginLeft="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Consumer No."
+                android:padding="@dimen/icon_padding"
+
+                />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/consumer_no_tv"
+                android:text="0"
+
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+
+
+
+
+
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#f2f3f6" />
+    <!--mobile number row-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:id="@+id/call_layout"
+        >
+
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/call_iv"
+            app:srcCompat="@drawable/call_icon"
+            android:layout_marginLeft="10dp"
+            android:padding="@dimen/icon_padding"
+
+            />
+
+        <TextView
+            android:id="@+id/contact_no_tv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:text="1234567890"
+            android:textStyle="bold"
+            android:gravity="center_vertical"
+
+            />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#f2f3f6" />
+    <!--name row-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp">
+
+            <ImageView
+                android:layout_marginLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/person_iv"
+                app:srcCompat="@drawable/person_icon"
+                android:padding="@dimen/icon_padding"
+                />
+
+            <TextView
+                android:id="@+id/functional_user_name_tv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Amitesh M Gadade"
+                android:textAllCaps="true"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#f2f3f6" />
+
+    <!--address row-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp">
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/home_iv"
+                app:srcCompat="@drawable/home_icon"
+                android:padding="@dimen/icon_padding"
+                android:layout_marginLeft="10dp"
+                />
+
+            <TextView
+                android:id="@+id/functional_address_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Pune,Maharashtra,India"
+                android:textAllCaps="true" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#f2f3f6" />
+
+
+    <!--distributor row-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp">
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_marginLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/distributor_iv"
+                app:srcCompat="@drawable/building_icon"
+                android:padding="@dimen/icon_padding"
+                />
+
+            <TextView
+                android:id="@+id/functinal_distributor_tv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="132 PARVATI"
+                android:textAllCaps="true"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#f2f3f6" />
+
+
+    <!--Button row-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            >
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/not_available_button"
+                android:text="Not Available"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:textSize="@dimen/button_text"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/rectangle"
+
+
+
+
+                />
+
+            <Button
+                android:id="@+id/denied_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/rectangle"
+                android:padding="@dimen/icon_padding"
+                android:text="Denied"
+                android:textSize="@dimen/button_text"
+                android:layout_marginBottom="2dp"/>
+
+            <Button
+                android:id="@+id/inspect_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/rectangle"
+                android:padding="@dimen/icon_padding"
+                android:text="Inspect"
+                android:textSize="@dimen/button_text"
+
+                android:layout_marginBottom="2dp"
+
+                />
+
+        </LinearLayout>
+
+
+
+
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
+
+</android.support.v7.widget.CardView>

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "132587347790",
+    "firebase_url": "https://mi-master-3c57f.firebaseio.com",
+    "project_id": "mi-master-3c57f",
+    "storage_bucket": "mi-master-3c57f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:132587347790:android:8e1dee440d01328c",
+        "android_client_info": {
+          "package_name": "com.example.aadyam.mi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "132587347790-cg1jommasunb22s9eu5albsllehankhe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.aadyam.mi",
+            "certificate_hash": "268d5a791fbacfb6904e2ab45efa37c2e6cf47f9"
+          }
+        },
+        {
+          "client_id": "132587347790-5maba68eivr9v2c61mdtcpas56v9tqgp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjBAKs73oOxXPWK51s3kekwccWt_kF5IQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "132587347790-5maba68eivr9v2c61mdtcpas56v9tqgp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
