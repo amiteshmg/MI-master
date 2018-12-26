@@ -25,12 +25,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.example.aadyam.mi.CameraUtils;
-import com.example.aadyam.mi.Database.DatabaseHelperUser;
+import com.example.aadyam.mi.Utils.CameraUtils;
+import com.example.aadyam.mi.database.DatabaseHelperUser;
 import com.example.aadyam.mi.Global.MyGlobals;
 import com.example.aadyam.mi.R;
-import com.example.aadyam.mi.Utils.Constants;
-import com.example.aadyam.mi.adapter.QuestionAdapter;
 import com.github.gcacace.signaturepad.views.SignaturePad;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -54,7 +52,6 @@ import static com.example.aadyam.mi.activity.MainActivity.MEDIA_TYPE_IMAGE;
 
 public class UploadPhoto extends Fragment
 {
-
     private static String imageStoragePath;
     private static final int BITMAP_SAMPLE_SIZE = 8;
     private static final int REGULATOR_CODE = 1;
@@ -66,14 +63,10 @@ public class UploadPhoto extends Fragment
     private ImageView stove_iv,regulator_iv,hose_iv,installation_iv,signature_iv;
     public static final String GALLERY_DIRECTORY_NAME = "MI_Images";
 
-
     Button submit,save;
     LinearLayout layout;
     SignaturePad signaturePad;
     private int mCurCheckPosition=0;
-
-
-
 
 
     public UploadPhoto()
@@ -93,11 +86,7 @@ public class UploadPhoto extends Fragment
     {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_upload_photo, container, false);
-
     }
-
-
-
 
 
 
@@ -107,7 +96,7 @@ public class UploadPhoto extends Fragment
     public void onPause()
     {
         super.onPause();
-        Toast.makeText(getContext(), "onPause()", Toast.LENGTH_SHORT).show();
+        // Toast.makeText(getContext(), "onPause()", Toast.LENGTH_SHORT).show();
 
         //TODO enter code to save image to database in Base64 format conversion
     }
@@ -120,31 +109,9 @@ public class UploadPhoto extends Fragment
         super.onStart();
 
         Log.i("FRAGMENT LIFECYCLE","onStart()");
-        Toast.makeText(getContext(), "onStart()", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), "onStart()", Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void onAttach(Context context)
-    {
-
-        super.onAttach(context);
-        Log.i("FRAGMENT LIFECYCLE","onAttach()");
-        Toast.makeText(getContext(), "onAttach()", Toast.LENGTH_SHORT).show();
-
-    }
-
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-        //TODO : enter code to retrieve image from database
-        setPhotoView(STOVE_CODE);
-        setPhotoView(REGULATOR_CODE);
-        setPhotoView(INSTALLATION_CODE);
-        setPhotoView(HOSE_CODE);
-        Toast.makeText(getContext(), "onResume()", Toast.LENGTH_SHORT).show();
-        Log.i("FRAGMENT LIFECYCLE","onResume()");
-    }
 
 
 
@@ -157,14 +124,14 @@ public class UploadPhoto extends Fragment
     public void onViewCreated(@NonNull View view, @Nullable final Bundle savedInstanceState)
     {
 
-        submit=view.findViewById(R.id.button_next);
+     //   submit=view.findViewById(R.id.button_next);
         submit.setText("Submit");
-        save=view.findViewById(R.id.button_save);
-
+       // save=view.findViewById(R.id.button_save);
 
         super.onViewCreated(view, savedInstanceState);
 
         //signaturePad=view.findViewById(R.id.);
+
 
         new MyGlobals(getContext()).getJSON();
         this.bundle=savedInstanceState;
@@ -173,17 +140,13 @@ public class UploadPhoto extends Fragment
         hose_iv=view.findViewById(R.id.hose_iv);
         installation_iv=view.findViewById(R.id.installation_iv);
         signature_iv=view.findViewById(R.id.signature_iv);
-        
+
         layout=view.findViewById(R.id.signature_layout);
         stove_iv.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-
-
-
-
                 if (CameraUtils.checkPermissions(getContext()))
                 {
                     captureImage(STOVE_CODE);
@@ -198,9 +161,9 @@ public class UploadPhoto extends Fragment
                     requestCameraPermission(MEDIA_TYPE_IMAGE,STOVE_CODE);
                 }
 
-
             }
         });
+
 
 
         regulator_iv.setOnClickListener(new View.OnClickListener()
@@ -227,6 +190,10 @@ public class UploadPhoto extends Fragment
         });
 
 
+
+
+
+
         installation_iv.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -249,25 +216,28 @@ public class UploadPhoto extends Fragment
         });
 
 
-        hose_iv.setOnClickListener(new View.OnClickListener() {
+        hose_iv.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View view) {
+
                 if (CameraUtils.checkPermissions(getContext()))
                 {
                     captureImage(HOSE_CODE);
                     restoreFromBundle(savedInstanceState,HOSE_CODE);
                 }
+
+
                 else
                 {
                     requestCameraPermission(MEDIA_TYPE_IMAGE,HOSE_CODE);
                 }
 
-
             }
         });
 
 
-        signature_iv.setOnClickListener(new View.OnClickListener() {
+       /* signature_iv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 UploadPhoto fragment = new UploadPhoto();
@@ -278,22 +248,18 @@ public class UploadPhoto extends Fragment
                 fragmentTransaction.commit();
                 //IntentFilter intentFilter
             }
+        });*/
+
+
+
+        save.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                // new QuestionAdapter(getContext()).updateAnswer(Constants.UPLOAD_PHOTO_FRAG_CODE);
+            }
         });
-
-
-
-    save.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            // new QuestionAdapter(getContext()).updateAnswer(Constants.UPLOAD_PHOTO_FRAG_CODE);
-        }
-    });
-
-
     }
-
-
-
 
 
 
@@ -313,17 +279,17 @@ public class UploadPhoto extends Fragment
                     {
                         // capture regulator picture
                         if(CODE==REGULATOR_CODE)
-                        captureImage(REGULATOR_CODE);
+                            captureImage(REGULATOR_CODE);
 
-                        // capture stove picture
+                            // capture stove picture
                         else if(CODE==STOVE_CODE)
                             captureImage(STOVE_CODE);
 
-                        // capture hose picture
+                            // capture hose picture
                         else if(CODE==HOSE_CODE)
                             captureImage(HOSE_CODE);
 
-                        // capture installation picture
+                            // capture installation picture
                         else if(CODE==INSTALLATION_CODE)
                             captureImage(INSTALLATION_CODE);
                     }
@@ -332,7 +298,7 @@ public class UploadPhoto extends Fragment
                     else
                     {
                         if(CODE==REGULATOR_CODE)
-                        requestCameraPermission(MEDIA_TYPE_IMAGE,REGULATOR_CODE);
+                            requestCameraPermission(MEDIA_TYPE_IMAGE,REGULATOR_CODE);
 
                         else if(CODE==STOVE_CODE)
                             requestCameraPermission(MEDIA_TYPE_IMAGE,REGULATOR_CODE);
@@ -410,26 +376,7 @@ public class UploadPhoto extends Fragment
 
 
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState != null) {
-            // Restore last state for checked position.
-            mCurCheckPosition = savedInstanceState.getInt("curChoice", 0);
-            setPhotoView(STOVE_CODE);
-            setPhotoView(REGULATOR_CODE);
-            setPhotoView(INSTALLATION_CODE);
-            setPhotoView(HOSE_CODE);
-        }
-    }
-
-
-
-
-
-
-
-    public void setPhotoView(int ImageViewCode)
+  /*  public void setPhotoView(int ImageViewCode)
     {
 
         String imageString= new DatabaseHelperUser(getContext()).getPhotoEntry(ImageViewCode);
@@ -442,35 +389,35 @@ public class UploadPhoto extends Fragment
         else{
 
 
-        byte[] decodedString = Base64.decode(imageString, Base64.DEFAULT);
+            byte[] decodedString = Base64.decode(imageString, Base64.DEFAULT);
 
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
-        switch(ImageViewCode)
-        {
-            case REGULATOR_CODE:
+            switch(ImageViewCode)
+            {
+                case REGULATOR_CODE:
 
-                regulator_iv.setImageBitmap(decodedByte);
-                break;
+                    regulator_iv.setImageBitmap(decodedByte);
+                    break;
 
-            case HOSE_CODE:
+                case HOSE_CODE:
 
-                hose_iv.setImageBitmap(decodedByte);
-                break;
+                    hose_iv.setImageBitmap(decodedByte);
+                    break;
 
-            case INSTALLATION_CODE:
+                case INSTALLATION_CODE:
 
-                installation_iv.setImageBitmap(decodedByte);
-                break;
+                    installation_iv.setImageBitmap(decodedByte);
+                    break;
 
-            case STOVE_CODE:
+                case STOVE_CODE:
 
-                stove_iv.setImageBitmap(decodedByte);
-                break;
+                    stove_iv.setImageBitmap(decodedByte);
+                    break;
+            }
+
         }
-
-        }
-    }
+    }*/
 
 
     /**
@@ -519,7 +466,7 @@ public class UploadPhoto extends Fragment
     private void previewCapturedImage(int CODE) {
         DatabaseHelperUser databaseHelperUser=new DatabaseHelperUser(getContext());
 
-        try 
+        try
         {
             //Bitmap bitmap = CameraUtils.optimizeBitmap(BITMAP_SAMPLE_SIZE, imageStoragePath);
             //imgPreview.setVisibility(View.VISIBLE);
@@ -538,8 +485,6 @@ public class UploadPhoto extends Fragment
                     String filename=CameraUtils.getOutputMediaFile().getName();
 
                     databaseHelperUser.setPhotos(filename,encodedImage, REGULATOR_CODE);
-
-
 
 
 
@@ -586,7 +531,7 @@ public class UploadPhoto extends Fragment
                     break;
             }
 
-           // Bitmap bitmap = CameraUtils.optimizeBitmap(BITMAP_SAMPLE_SIZE, imageStoragePath);
+            // Bitmap bitmap = CameraUtils.optimizeBitmap(BITMAP_SAMPLE_SIZE, imageStoragePath);
 
 
 
@@ -729,9 +674,7 @@ public class UploadPhoto extends Fragment
             else
             {
                 // failed to capture image
-                Toast.makeText(getContext(),
-                        "Sorry! Failed to capture image", Toast.LENGTH_SHORT)
-                        .show();
+                Toast.makeText(getContext(), "Sorry! Failed to capture image", Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -756,6 +699,7 @@ public class UploadPhoto extends Fragment
                         "User cancelled image capture", Toast.LENGTH_SHORT)
                         .show();
             }
+
 
 
 
@@ -804,3 +748,4 @@ public class UploadPhoto extends Fragment
     }
 
 }
+

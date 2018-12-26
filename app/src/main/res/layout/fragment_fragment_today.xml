@@ -63,7 +63,7 @@
                 android:text="0"
                 android:textStyle="bold" />
 
-            <com.example.aadyam.mi.MyTextView_Roboto_Medium
+            <com.example.aadyam.mi.Fonts.MyTextView_Roboto_Medium
                 android:id="@+id/allotted_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

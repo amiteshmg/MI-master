@@ -1,4 +1,4 @@
-package com.example.aadyam.mi.activity.Preferences;
+package com.example.aadyam.mi.Preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;

@@ -19,7 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.aadyam.mi.R;
-import com.example.aadyam.mi.CameraUtils;
+import com.example.aadyam.mi.Utils.CameraUtils;
 import com.example.aadyam.mi.Utils.Constants;
 import com.example.aadyam.mi.Utils.SharedValues;
 import com.example.aadyam.mi.model.Distributor;
@@ -48,7 +48,8 @@ public class LoginActivity extends AppCompatActivity
 
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed()
+    {
         // Disable going back to the MainActivity
         moveTaskToBack(true);
     }

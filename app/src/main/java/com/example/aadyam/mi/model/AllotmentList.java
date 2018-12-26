@@ -1,19 +1,20 @@
 package com.example.aadyam.mi.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
-import java.util.List;
-
 public class AllotmentList
 
 {
 
+
+    public String getJsonData() {
+        return JsonData;
+    }
+
+    private  String JsonData;
 
     @NonNull
     @Override
@@ -478,4 +479,9 @@ public class AllotmentList
         }
 
 
+    public void setJsonData(String json)
+    {
+        this.JsonData=json;
+
+    }
 }

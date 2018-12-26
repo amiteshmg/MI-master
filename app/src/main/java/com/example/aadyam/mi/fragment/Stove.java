@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.aadyam.mi.Database.DatabaseHelperUser;
+import com.example.aadyam.mi.database.DatabaseHelperUser;
 import com.example.aadyam.mi.R;
 import com.example.aadyam.mi.adapter.QuestionAdapter;
 import com.example.aadyam.mi.model.QuestionList;
@@ -45,11 +45,11 @@ public class Stove extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        recyclerView = (RecyclerView)view.findViewById(R.id.stove_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+       // recyclerView = (RecyclerView)view.findViewById(R.id.stove_recycler_view);
+       // recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         databaseHelperUser=new DatabaseHelperUser(getContext());
         questionList=new ArrayList<QuestionList>();
         questionList = databaseHelperUser.getQuestionEntries(R.layout.fragment_stove);
-        recyclerView.setAdapter(new QuestionAdapter(questionList,getContext()));
+       // recyclerView.setAdapter(new QuestionAdapter(questionList,getContext()));
     }
 }

@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.aadyam.mi.Database.DatabaseHelperUser;
+import com.example.aadyam.mi.database.DatabaseHelperUser;
 import com.example.aadyam.mi.R;
 import com.example.aadyam.mi.adapter.QuestionAdapter;
 import com.example.aadyam.mi.model.QuestionList;
@@ -47,20 +47,16 @@ public class Regulator extends Fragment {
 
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
+    {
         super.onViewCreated(view, savedInstanceState);
-
-
         save=view.findViewById(R.id.button_save);
-
-
-
-        recyclerView = (RecyclerView)view.findViewById(R.id.regulator_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        //recyclerView = (RecyclerView)view.findViewById(R.id.regulator_recycler_view);
+        //  recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         databaseHelperUser=new DatabaseHelperUser(getContext());
         questionList=new ArrayList<QuestionList>();
         questionList = databaseHelperUser.getQuestionEntries(R.layout.fragment_regulator);
-        recyclerView.setAdapter(new QuestionAdapter(questionList,getContext()));
+        //recyclerView.setAdapter(new QuestionAdapter(questionList,getContext()));
         //recyclerView.setAdapter(new QuestionAdapter(questionObject.getQuestionnaireListResult(),R.layout.card_radio, getContext()));
 
         save.setOnClickListener(new View.OnClickListener() {

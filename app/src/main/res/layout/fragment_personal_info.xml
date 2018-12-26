@@ -45,12 +45,12 @@
                 android:id="@+id/card_edit_editText_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginTop="@dimen/icon_padding"
+                android:layout_weight="1"
                 android:background="@drawable/rectangle"
-                android:inputType="date"
                 android:hint="Mobile No"
 
+                android:inputType="phone"
                 android:text="" />
 
         </LinearLayout>
@@ -86,11 +86,11 @@
                 android:id="@+id/card_edit_editText_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Email ID"
                 android:layout_marginTop="@dimen/icon_padding"
+                android:layout_weight="1"
                 android:background="@drawable/rectangle"
-                android:inputType="date"
+                android:hint="Email ID"
+                android:inputType="textEmailAddress"
                 android:text="" />
 
         </LinearLayout>
@@ -124,15 +124,15 @@
 
 
             <EditText
-                android:id="@+id/card_edit_editText"
+                android:id="@+id/card_edit_DOB"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="DD/MM/YYYY"
                 android:layout_marginTop="@dimen/icon_padding"
+                android:layout_weight="1"
                 android:background="@drawable/rectangle"
-                android:inputType="date"
+                android:hint="DD/MM/YYYY"
 
+                android:inputType="date"
                 android:text="" />
 
         </LinearLayout>
@@ -210,11 +210,11 @@
             android:id="@+id/card_edit_editText_mother_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginTop="@dimen/icon_padding"
+            android:layout_weight="1"
             android:background="@drawable/rectangle"
-            android:inputType="date"
             android:hint="Mother's maiden name"
+            android:inputType="text"
 
             android:text="" />
 

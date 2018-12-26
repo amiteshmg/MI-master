@@ -16,9 +16,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.aadyam.mi.Database.DatabaseHelperUser;
+import com.example.aadyam.mi.database.DatabaseHelperUser;
 import com.example.aadyam.mi.R;
-import com.example.aadyam.mi.activity.AllotmentDisplay;
+import com.example.aadyam.mi.activity.InspectionDisplayActivity;
 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            public class Fragment_today extends Fragment {
 
@@ -66,7 +66,7 @@ import com.example.aadyam.mi.activity.AllotmentDisplay;
             {
 
                /* if(isNetworkAvailable()) {*/
-                    Intent intent = new Intent(getActivity(), AllotmentDisplay.class);
+                    Intent intent = new Intent(getActivity(), InspectionDisplayActivity.class);
                     startActivity(intent);
                 //}
 
@@ -97,7 +97,7 @@ import com.example.aadyam.mi.activity.AllotmentDisplay;
 
     }
 
-    private boolean isNetworkAvailable() {
+   /* private boolean isNetworkAvailable() {
         ConnectivityManager connMgr = (ConnectivityManager) getActivity()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -110,6 +110,6 @@ import com.example.aadyam.mi.activity.AllotmentDisplay;
             return  false;
         }
     }
-
+*/
 
 }

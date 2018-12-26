@@ -1,4 +1,4 @@
-package com.example.aadyam.mi;
+package com.example.aadyam.mi.Fonts;
 
 import android.content.Context;
 import android.graphics.Typeface;

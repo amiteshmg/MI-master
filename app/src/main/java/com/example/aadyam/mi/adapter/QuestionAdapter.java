@@ -3,8 +3,6 @@ package com.example.aadyam.mi.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.database.sqlite.SQLiteDatabase;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -23,26 +21,31 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.aadyam.mi.Database.DatabaseHelperUser;
+import com.example.aadyam.mi.database.DatabaseHelperUser;
 import com.example.aadyam.mi.R;
 import com.example.aadyam.mi.Utils.Constants;
-import com.example.aadyam.mi.model.Question;
 import com.example.aadyam.mi.model.QuestionList;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 
 public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
-    public List<QuestionList> questionList;
+    private List<QuestionList> questionList;
     public Context context;
     public int size=0;
 
-    Map<Integer,String> map = new HashMap<>();
+
+
+
+
     private static int count=0;
+    private String[] answer=new String[1];
 
     public QuestionAdapter()
     {
@@ -115,13 +118,13 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
 
-
     @Override
     public int getItemViewType(int position) {
 
 
 
-        switch (questionList.get(position).getFieldType()) {
+        switch (questionList.get(position).getFieldType())
+        {
             case "C":
                 return R.layout.card_radio;
 
@@ -131,11 +134,11 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case "D":
                 return R.layout.card_spinner;
 
-
             default:
                 return R.layout.card_edit_text;
 
         }
+
 
 
 }
@@ -147,6 +150,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
+        //answers=new String[questionList.size()];
         final RecyclerView.ViewHolder viewHolder;
         View view;
 
@@ -181,74 +185,84 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 viewHolder=new MyButtonsViewHolder(view);
                 //can write here code for manipulating this card entry like deleting;
                 break;
+
         }
 
         return viewHolder;
+
     }
+
 
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position)
     {
         if(holder instanceof MyRadioViewHolder)
         {
+
             final QuestionList question=questionList.get(position);
             ((MyRadioViewHolder) holder).radioTextView.setText(question.getDescription());
             ((MyRadioViewHolder) holder).radio_yes.setText(R.string.yes);
             ((MyRadioViewHolder) holder).radio_no.setText(R.string.no);
 
-
-
-
             final String[] answer = new String[1];
 
+            if(((MyRadioViewHolder) holder).radioGroup.getCheckedRadioButtonId()==-1) {
 
-            int fragCode=Integer.parseInt(questionList.get(position).getCategoryId());
+                ((MyRadioViewHolder) holder).radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+                        int radioButtonID = ((MyRadioViewHolder) holder).radioGroup.getCheckedRadioButtonId();
+                        View radioButton = ((MyRadioViewHolder) holder).radioGroup.findViewById(radioButtonID);
+                        int idx = ((MyRadioViewHolder) holder).radioGroup.indexOfChild(radioButton);
 
-            map.put(fragCode,answer[0]);
+                        RadioButton r = (RadioButton) ((MyRadioViewHolder) holder).radioGroup.getChildAt(idx);
+                        setAnswer(r.getText().toString());
+                    }
+
+                });
+
+            }
+
+            else
+            {
+            Toast.makeText(context, ""+getAnswer(), Toast.LENGTH_SHORT).show();
+            }
+            /*if(((MyRadioViewHolder) holder).radioGroup.getCheckedRadioButtonId()!=-1)
+            {
+
+            }*/
 
 
 
-
-
-           /* int id=((MyRadioViewHolder) holder).radioGroup.getCheckedRadioButtonId();
-
-            ((MyRadioViewHolder) holder).checked=((MyRadioViewHolder) holder).radioGroup.findViewById(id);
-*/
-
+/*
 
             ((MyRadioViewHolder) holder).radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    int radioButtonID = ((MyRadioViewHolder) holder).radioGroup.getCheckedRadioButtonId();
+                    View radioButton = ((MyRadioViewHolder) holder).radioGroup.findViewById(radioButtonID);
+                    int idx =((MyRadioViewHolder) holder).radioGroup.indexOfChild(radioButton);
 
-                    switch (checkedId)
-                    {
-                        case R.id.radio_yes:
-                            Toast.makeText(context, ((MyRadioViewHolder) holder).radio_yes.getText(), Toast.LENGTH_SHORT).show();
-                            // updateAnswer();
-
-
-
-                            break;
-
-                        case R.id.radio_no:
-                            Toast.makeText(context, ((MyRadioViewHolder) holder).radio_no.getText(), Toast.LENGTH_SHORT).show();
-                            break;
-                    }
-
-
-                    ((MyRadioViewHolder) holder).checked=((MyRadioViewHolder) holder).radioGroup.findViewById(checkedId);
-                    answer[0] = ((MyRadioViewHolder) holder).checked.getText().toString();
-                    // Toast.makeText(context, ((MyRadioViewHolder) holder).checked.getText().toString(), Toast.LENGTH_SHORT).show();
-                    map.put(position,answer[0]);
-                    System.out.println("Map data"+map);
-
-
+                    RadioButton r = (RadioButton) ((MyRadioViewHolder) holder).radioGroup.getChildAt(idx);
+                    answer[0] = r.getText().toString();
+                    Toast.makeText(context, ""+answer[0], Toast.LENGTH_SHORT).show();
                 }
             });
+*/
 
 
-}
+           /* if(((MyRadioViewHolder) holder).radioGroup.getCheckedRadioButtonId()!=-1)
+            {
+                // Toast.makeText(context, ""+answer[0], Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, ""+answer[0], Toast.LENGTH_SHORT).show();
+            }*/
 
+
+            int FRAGMENT_CATEGORY=Integer.parseInt(questionList.get(position).getCategoryId());
+            putAnswers(FRAGMENT_CATEGORY, answer[0],questionList.get(position).getQuestionId(),questionList.get(position).getDescription(),questionList.get(position).getCategoryId());
+
+
+        }
 
 
         else if(holder instanceof  MyEditTextViewHolder)
@@ -298,12 +312,12 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             ((MySpinnerViewHolder) holder).spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+                {
 
-
-                    if(((MySpinnerViewHolder) holder).spinner.getSelectedItem().toString()!=spinnerList.get(0))
+                    /*if(((MySpinnerViewHolder) holder).spinner.getSelectedItem().toString()!=spinnerList.get(0))
                     {
-                        ((MySpinnerViewHolder) holder).spinner.setBackgroundColor(view.getResources().getColor(R.color.red));
+                        //((MySpinnerViewHolder) holder).spinner.setBackgroundColor(view.getResources().getColor(R.color.red));
                         Toast.makeText(context, "Selected :"+((MySpinnerViewHolder) holder).spinner.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
                     }
 
@@ -311,7 +325,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     {
                         ((MySpinnerViewHolder) holder).spinner.setBackgroundColor(view.getResources().getColor(R.color.white));
                         Toast.makeText(context, "Selected :"+((MySpinnerViewHolder) holder).spinner.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
-                    }
+                    }*/
                 }
 
 
@@ -362,8 +376,14 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
+    private void setAnswer(String answer)
+    {
+        this.answer[0]=answer;
+    }
 
-
+    public String[] getAnswer() {
+        return answer;
+    }
 
     @Override
     public int getItemCount()
@@ -381,32 +401,31 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
 
-    public void updateAnswer(int FRAGMENT_CODE,Map<Integer,String> map,String quesId,String quesDescription,String categoryId)
+
+
+
+    public void putAnswers(int FRAGMENT_CODE,String answers, String quesId, String quesDescription, String categoryId)
     {
-
-        switch (FRAGMENT_CODE) {
-
+        switch (FRAGMENT_CODE)
+        {
                 case Constants.CYLINDER_FRAG_CODE:
 
                 DatabaseHelperUser databaseHelperUser=new DatabaseHelperUser(context);
+                databaseHelperUser.putAnswerEntryInDatabase(FRAGMENT_CODE,answers,quesId,quesDescription,categoryId);
+                //String questionId,String questionDescription,String answer,String category,String fieldType
+                break;
 
-                databaseHelperUser.updateAnswerEntryInDatabase(Constants.CYLINDER_FRAG_CODE,map,quesId,quesDescription,categoryId);
-
- //               String questionId,String questionDescription,String answer,String category,String fieldType
+                case Constants.REGULATOR_FRAG_CODE:
 
 
 
                 break;
 
-            case Constants.REGULATOR_FRAG_CODE:
+                case Constants.RUBBER_HOSE_FRAG_CODE:
 
                 break;
 
-            case Constants.RUBBER_HOSE_FRAG_CODE:
-
-                break;
-
-            case  Constants.STOVE_FRAG_CODE:
+                case  Constants.STOVE_FRAG_CODE:
 
                 break;
 
@@ -434,8 +453,8 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         {
 
             super(view);
-            save_button=itemView.findViewById(R.id.button_save);
-            next_button=itemView.findViewById(R.id.button_next);
+            //save_button=itemView.findViewById(R.id.button_save);
+            //next_button=itemView.findViewById(R.id.button_next);
 
 
 

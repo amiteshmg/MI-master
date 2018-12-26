@@ -3,7 +3,6 @@ package com.example.aadyam.mi.rest;
 
 
 import com.example.aadyam.mi.model.Allotment;
-import com.example.aadyam.mi.model.AllotmentList;
 import com.example.aadyam.mi.model.Distributor;
 import com.example.aadyam.mi.model.Question;
 

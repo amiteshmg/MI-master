@@ -1,13 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_static_view_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+
+
     android:orientation="vertical"
     android:background="@drawable/rectangle"
-    android:id="@+id/card_static_view_layout">
+    android:layout_margin="13dp"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="4dp"
+    android:padding="10dp">
 
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
 
+    android:padding="@dimen/icon_padding">
     <!--serial number row-->
 
     <LinearLayout
@@ -63,7 +77,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/consumer_no_tv"
+                android:id="@+id/static_consumer_no_tv"
                 android:text="0"
                 android:gravity="center"
                 android:layout_weight="1"/>
@@ -71,7 +85,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/call_layout"
+            android:id="@+id/static_call_layout"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_weight="1"
@@ -85,7 +99,7 @@
                 app:srcCompat="@drawable/call_icon" />
 
             <TextView
-                android:id="@+id/contact_no_tv"
+                android:id="@+id/static_contact_no_tv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/icon_padding"
@@ -125,7 +139,7 @@
                 />
 
             <TextView
-                android:id="@+id/user_name_tv"
+                android:id="@+id/static_user_name_tv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -165,7 +179,7 @@
                 />
 
             <TextView
-                android:id="@+id/address_tv"
+                android:id="@+id/static_address_tv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -204,7 +218,7 @@
                 />
 
             <TextView
-                android:id="@+id/distributor_tv"
+                android:id="@+id/static_distributor_tv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -318,6 +332,6 @@
 
     </LinearLayout>
 
-
-
 </LinearLayout>
+
+</android.support.v7.widget.CardView>

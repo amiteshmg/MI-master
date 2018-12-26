@@ -1,4 +1,4 @@
-package com.example.aadyam.mi;
+package com.example.aadyam.mi.Utils;
 
 
 import android.Manifest;
@@ -16,6 +16,7 @@ import android.support.v4.content.FileProvider;
 import android.util.Log;
 
 import com.example.aadyam.mi.activity.MainActivity;
+import com.example.aadyam.mi.BuildConfig;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -68,8 +69,8 @@ public class CameraUtils
      * Checks whether device has camera or not. This method not necessary if
      * android:required="true" is used in manifest file
      */
-     public static boolean isDeviceSupportCamera(Context context)
-     {
+    public static boolean isDeviceSupportCamera(Context context)
+    {
         if (context.getPackageManager().hasSystemFeature(
                 PackageManager.FEATURE_CAMERA))
         {
@@ -78,19 +79,19 @@ public class CameraUtils
         }
 
         else
-            {
+        {
             // no camera on this device
             return false;
-            }
+        }
     }
 
 
 
     /**
 
- Open device app settings to allow user to enable permissions
+     Open device app settings to allow user to enable permissions
 
-    **/
+     **/
 
     public static void openSettings(Context context)
     {
@@ -134,10 +135,11 @@ public class CameraUtils
         File mediaFile;
 
 
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator
-                    + "IMG_" + timeStamp + "." + MainActivity.IMAGE_EXTENSION);
+        mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + "." + MainActivity.IMAGE_EXTENSION);
 
         return mediaFile;
+
     }
 
 }
+

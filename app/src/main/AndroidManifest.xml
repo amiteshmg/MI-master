@@ -38,11 +38,13 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
+
+
         </provider>
 
         <activity android:name="com.example.aadyam.mi.activity.MainActivity"/>
 
-        <activity android:name=".activity.AllotmentDisplay"/>
+        <activity android:name=".activity.InspectionDisplayActivity"/>
 
         <activity android:name=".activity.SurveyActivity" />
 

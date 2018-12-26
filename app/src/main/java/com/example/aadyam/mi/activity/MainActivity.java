@@ -5,11 +5,8 @@ package com.example.aadyam.mi.activity;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +16,7 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
@@ -26,33 +24,27 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-
-import com.example.aadyam.mi.Database.DatabaseHelperUser;
+import com.example.aadyam.mi.database.DatabaseHelperUser;
 import com.example.aadyam.mi.R;
 import com.example.aadyam.mi.Utils.Constants;
 import com.example.aadyam.mi.fragment.Fragment_today;
-import com.example.aadyam.mi.fragment.fragment_total;
+import com.example.aadyam.mi.fragment.Fragment_total;
 import com.example.aadyam.mi.model.Allotment;
-import com.example.aadyam.mi.model.AllotmentList;
 import com.example.aadyam.mi.model.Distributor;
 import com.example.aadyam.mi.rest.ApiClient;
 import com.example.aadyam.mi.rest.ApiInterface;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -100,16 +92,15 @@ public class MainActivity extends AppCompatActivity
 
 
     @Override
-    protected void onDestroy() {
+    protected void onDestroy()
+    {
         super.onDestroy();
-
     }
 
     @Override
-    protected void onStop() {
+    protected void onStop()
+    {
         super.onStop();
-
-
     }
 
     @Override
@@ -119,9 +110,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
         super.onResume();
-
     }
 
     @SuppressLint("CommitPrefEdits")
@@ -129,10 +120,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-
         super.onCreate(savedInstanceState);
-
-
        /* sharedPreferences=getSharedPreferences(Constants.PREFS_NAME,Context.MODE_PRIVATE);
         if(sharedPreferences==null)
         {
@@ -152,7 +140,7 @@ public class MainActivity extends AppCompatActivity
 
         //getDistributorDetails();
 
-
+        //progressDialog=new ProgressDialog(this);
         setTitle(R.string.dashboard);
 
         databaseHelperUser=new DatabaseHelperUser(getApplicationContext());
@@ -160,8 +148,6 @@ public class MainActivity extends AppCompatActivity
         allotment=new Allotment();
 
         Date c = Calendar.getInstance().getTime();
-
-
 
         //getAllotment();
         //Toast.makeText(this, ""+c, Toast.LENGTH_SHORT).show();
@@ -224,14 +210,11 @@ public class MainActivity extends AppCompatActivity
 
                         }
 
-
-
                         // Add code here to update the UI based on the item selected
                         // For example, swap UI fragments here
                         return true;
                     }
                 });
-
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.drawer_icon);
@@ -241,22 +224,15 @@ public class MainActivity extends AppCompatActivity
 
         TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-
+       // progressDialog.show();
     }
 
 
 
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connMgr = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-
-        if (networkInfo != null && networkInfo.isConnected()) {
-            return true;
-        } else {
-            // display error
-            return  false;
-        }
+    @Override
+    protected void onRestart()
+    {
+        super.onRestart();
     }
 
 
@@ -266,6 +242,7 @@ public class MainActivity extends AppCompatActivity
     {
         super.onBackPressed();
     }
+
 
 
     @Override
@@ -280,10 +257,8 @@ public class MainActivity extends AppCompatActivity
     {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new Fragment_today(), "Today's Inspection");
-        adapter.addFragment(new fragment_total(), "Total Inspection");
+        adapter.addFragment(new Fragment_total(), "Total Inspection");
         viewPager.setAdapter(adapter);
-
-
     }
 
     //adapt the viewpager to the tabLayout
@@ -305,11 +280,13 @@ public class MainActivity extends AppCompatActivity
             return mFragmentList.get(position);
         }
 
+
         @Override
         public int getCount()
         {
             return mFragmentList.size();
         }
+
 
         void addFragment(Fragment fragment, String title)
         {
@@ -370,11 +347,10 @@ public class MainActivity extends AppCompatActivity
         //TODO :take number from login page
         SharedPreferences sharedPreferences=getSharedPreferences(Constants.PREFS_NAME,Context.MODE_PRIVATE);
 
-
         Call<Distributor> call = apiInterface.getDistributorDetails(sharedPreferences.getString("number","0"));
 
-
-        call.enqueue(new Callback<Distributor>() {
+        call.enqueue(new Callback<Distributor>()
+        {
             @Override
             public void onResponse(@NonNull Call<Distributor> call, @NonNull Response<Distributor> response) {
 
@@ -388,69 +364,20 @@ public class MainActivity extends AppCompatActivity
             }
 
             @Override
-            public void onFailure(@NonNull Call<Distributor> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<Distributor> call, @NonNull Throwable t)
+            {
                 Log.d("ERROR",t.getMessage());
                 Toast.makeText(MainActivity.this, "NO "+t.getMessage() , Toast.LENGTH_SHORT).show();
             }
+
+
+
+
         });
 
     }
 
 
-    private void getAllotment()
-    {
-
-        ApiInterface apiInterface;
-        apiInterface = ApiClient.getClient().create(ApiInterface.class);
-
-        //AllotmentList?UserId=8193&StaffRefNo=11710819300000002&ConsumerCount=0
-        Call<Allotment> call = apiInterface.getAllotmentList();
-
-        call.enqueue(new Callback<Allotment>() {
-            @Override
-            public void onResponse(@NonNull Call<Allotment> call, @NonNull Response<Allotment> response) {
-
-                List<AllotmentList> allotmentLists;
-                allotmentLists = new ArrayList<>();
-
-                progressDialog.dismiss();
-                assert response.body() != null;
-
-                //int size=response.body().getAllotmentListResult().size();
-
-                int size = response.body().getAllotmentListResult().size();
-
-                for (int i = 0; i < size; i++) {
-                    AllotmentList a = new AllotmentList();
-                    System.out.println("Data : " + response.body().getAllotmentListResult().get(i).getAddress());
-
-                    //TODO extract DATA and apply business logic
-
-                    a.setAreaName(response.body().getAllotmentListResult().get(i).getAreaName());
-                    a.setAddress(response.body().getAllotmentListResult().get(i).getAddress());
-                    a.setMobileNo(response.body().getAllotmentListResult().get(i).getMobileNo());
-                    a.setConsumerName(response.body().getAllotmentListResult().get(i).getConsumerName());
-                    a.setConsumerNo(response.body().getAllotmentListResult().get(i).getConsumerNo());
-                    a.setAllottedDate(response.body().getAllotmentListResult().get(i).getAllottedDate());
-                    allotmentLists.add(a);
-
-                }
-
-                databaseHelperUser.setAllotmentEntries(allotmentLists);
-
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<Allotment> call, @NonNull Throwable t) {
-                Log.d("ERROR", t.getMessage());
-                Toast.makeText(MainActivity.this, "NO " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
-
-
-    }
 
 
     public class QuestionAsync extends AsyncTask<Void,Void,Void>
@@ -472,7 +399,7 @@ public class MainActivity extends AppCompatActivity
             };
 
             Handler pdCanceller = new Handler();
-            pdCanceller.postDelayed(progressRunnable, 5000);
+            pdCanceller.postDelayed(progressRunnable, 3000);
         }
 
 
@@ -538,7 +465,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            progressDialog.dismiss();
+          //  progressDialog.dismiss();
         }
     }
 

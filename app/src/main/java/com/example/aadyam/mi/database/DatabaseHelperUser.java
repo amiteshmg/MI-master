@@ -1,13 +1,13 @@
-package com.example.aadyam.mi.Database;
+package com.example.aadyam.mi.database;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
@@ -22,12 +22,11 @@ import com.example.aadyam.mi.model.Question;
 import com.example.aadyam.mi.model.QuestionList;
 import com.example.aadyam.mi.rest.ApiClient;
 import com.example.aadyam.mi.rest.ApiInterface;
+import com.google.gson.Gson;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Observer;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -218,16 +217,40 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
     public DatabaseHelperUser(Context context)
     {
-        super(context, Environment.getExternalStorageDirectory() + File.separator + DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, /*Environment.getExternalStorageDirectory() + File.separator + */DATABASE_NAME, null, DATABASE_VERSION);
         this.context=context;
     }
 
 
 
     public void createTables()
-    {SQLiteDatabase db=this.getWritableDatabase();
+    {
 
 
+        //getQuestion();
+        //getQuestion();
+        /*if(new MyGlobals(context).isNetworkConnected())
+        {
+
+            getAllotment();
+        }
+*/
+
+    }
+
+
+    public void updateTables()
+    {
+        getAllotment();
+        getQuestion();
+
+    }
+
+
+
+    @Override
+    public void onCreate(SQLiteDatabase db)
+    {
         db.execSQL(SQL_CREATE_TABLE_QUESTIONS);
         db.execSQL(SQL_CREATE_TABLE_DISTRIBUTOR);
         db.execSQL(SQL_CREATE_TABLE_ALLOTMENT_LIST);
@@ -236,28 +259,8 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
         db.execSQL(SQL_CREATE_TABLE_ANSWERS);
         db.execSQL(SQL_CREATE_TABLE_PHOTOS);
         db.execSQL(SQL_CREATE_TABLE_LAYOUT_COUNT);
-        getQuestion();
         getAllotment();
 
-
-
-    }
-
-
-    @Override
-    public void onCreate(SQLiteDatabase db)
-    {
-        // question=new Question();
-       /* db.execSQL(SQL_CREATE_TABLE_QUESTIONS);
-        db.execSQL(SQL_CREATE_TABLE_DISTRIBUTOR);
-        db.execSQL(SQL_CREATE_TABLE_ALLOTMENT_LIST);
-        db.execSQL(SQL_CREATE_TABLE_PERSONAL_INFO);
-        db.execSQL(SQL_CREATE_TABLE_UNSAFE_QUESTIONS);
-        db.execSQL(SQL_CREATE_TABLE_ANSWERS);
-        db.execSQL(SQL_CREATE_TABLE_PHOTOS);
-        getQuestion();
-*/
-        //getAllotment();
     }
 
 
@@ -475,18 +478,21 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
                     System.out.println("Data : "+response.body().getQuestionList().get(i).getDescription());
                     String s1,s2,s3,s4,s5,s6,s7,s8,s9;
 
-                    s1=response.body().getQuestionList().get(i).getActive();
-                    s2=response.body().getQuestionList().get(i).getCategoryId();
-                    s3=response.body().getQuestionList().get(i).getDescription();
-                    s4=response.body().getQuestionList().get(i).getDescriptionHindi();
-                    s5=response.body().getQuestionList().get(i).getDescriptionMarathi();
-                    s6=response.body().getQuestionList().get(i).getFieldData();
-                    s7=response.body().getQuestionList().get(i).getFieldType();
-                    s8=response.body().getQuestionList().get(i).getIsRemark();
-                    s9=response.body().getQuestionList().get(i).getQuestionId();
+                    if(response.body().getQuestionList().get(i).getActive().equalsIgnoreCase("true"))
+                    {
+                        s1 = response.body().getQuestionList().get(i).getActive();
+                        s2 = response.body().getQuestionList().get(i).getCategoryId();
+                        s3 = response.body().getQuestionList().get(i).getDescription();
+                        s4 = response.body().getQuestionList().get(i).getDescriptionHindi();
+                        s5 = response.body().getQuestionList().get(i).getDescriptionMarathi();
+                        s6 = response.body().getQuestionList().get(i).getFieldData();
+                        s7 = response.body().getQuestionList().get(i).getFieldType();
+                        s8 = response.body().getQuestionList().get(i).getIsRemark();
+                        s9 = response.body().getQuestionList().get(i).getQuestionId();
+                        addQuestion(s1, s2, s3, s4, s5, s6, s7, s8, s9);
 
-                    addQuestion(s1,s2,s3,s4,s5,s6,s7,s8,s9);
 
+                    }
 
 
                 }
@@ -529,10 +535,15 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
         contentValues.put(COL1_8, Remark);
         contentValues.put(COL1_9, QuestionID);
 
-        long result = db.insert(TABLE_NAME_QUESTION, null, contentValues);
+        //long result = db.insert(TABLE_NAME_QUESTION, null, contentValues);
+
+        long id =  db.insertWithOnConflict(TABLE_NAME_QUESTION, null, contentValues, SQLiteDatabase.CONFLICT_IGNORE);
+        if (id == -1) {
+            db.update(TABLE_NAME_QUESTION, contentValues, COL1_9+"="+QuestionID,null/* new String[] {"1"}*/);  // number 1 is the _id here, update to variable for your code
+        }
 
 
-        System.out.println("Data: " + result);
+        System.out.println("Data: " + id);
 
 
 
@@ -569,18 +580,17 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
             {
 
                 Toast.makeText(context, ""+response.body().getAllotmentListResult().size(), Toast.LENGTH_SHORT).show();
-                System.out.println(" DEMO "+response.body().getAllotmentListResult().get(1).getAddress());
+                Toast.makeText(context, "Connected. Fetched Allotment updates successfully! ", Toast.LENGTH_SHORT).show();
 
+                System.out.println(" DEMO "+response.body().getAllotmentListResult().get(1).getAddress());
 
                 assert response.body() != null;
 
-
-
                 int size=response.body().getAllotmentListResult().size();
+
                 for(int i=0;i<size;i++)
                 {
                     String s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14,s15,s16,s17,s18,s19,s20,s21,s22,s23,s24,s25,s26,s27,s28,s29,s30,s31,s32,s33,s34,s35,s36,s37,s38,s39;
-
                     s1=response.body().getAllotmentListResult().get(i).getInspFormId();
                     s2=response.body().getAllotmentListResult().get(i).getAddress();
                     s3=response.body().getAllotmentListResult().get(i).getAllottedDate();
@@ -605,26 +615,28 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
                     count++;
                     putAllotment(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14,s15,s16,s17,s18,s19,s20);
 
+
                 }
 
-                setAllotmentCount(count);
+
 
             }
 
             @Override
             public void onFailure(@NonNull Call<Allotment> call, @NonNull Throwable t)
             {
-
-                Log.d("ERROR",t.getMessage());
-
+                Toast.makeText(context, "DatabaseHelperUser getAllottment() Onfailure :"+t.toString(), Toast.LENGTH_SHORT).show();
             }
         });
 
     }
 
-    private void setAllotmentCount(int count) {
+
+    private void setAllotmentCount(int count)
+    {
         this.count=count;
     }
+
 
 
     public int getAllotmentCount()
@@ -632,16 +644,17 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
         return count;
     }
 
-    public void putAllotment(String inspectionId ,String address,String allotteddate, String areaname, String arearefno ,String consumername ,String consumerno,String isCompleted ,String isUnsafe ,String isUnsafeReAllot ,String denied ,String not_available,String pre_denied ,String pre_not_available ,String ref_ins_formId ,String ref_allotment_id ,String mobileno ,String uniqueConsumerId ,String allotedid ,String inspection_no)
+
+    public void putAllotment(String inspectionId ,String address,String allottedDate, String areaname, String arearefno ,String consumername ,String consumerno,String isCompleted ,String isUnsafe ,String isUnsafeReAllot ,String denied ,String not_available,String pre_denied ,String pre_not_available ,String ref_ins_formId ,String ref_allotment_id ,String mobileno ,String uniqueConsumerId ,String allotedid ,String inspection_no)
     {
 
-
         SQLiteDatabase db = this.getWritableDatabase();
+
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL3_2, inspectionId);
         contentValues.put(COL3_3, address);
-        contentValues.put(COL3_4, allotteddate);
+        contentValues.put(COL3_4, allottedDate);
         contentValues.put(COL3_5, areaname);
         contentValues.put(COL3_6, arearefno);
         contentValues.put(COL3_7, consumername);
@@ -660,7 +673,8 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
         contentValues.put(COL3_20, allotedid);
         contentValues.put(COL3_21, inspection_no);
 
-        // contentValues.put(COL3_22, instruction);
+
+        //contentValues.put(COL3_22, instruction);
         // contentValues.put(COL3_23, longitude);
         // contentValues.put(COL3_24, latitude);
         // contentValues.put(COL3_25, lastinspection);
@@ -680,9 +694,16 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
         // contentValues.put(COL3_38, json_data);
 
 
-        long result = db.insert(TABLE_NAME_ALLOTMENT, null, contentValues);
+        //long result = db.insert(TABLE_NAME_ALLOTMENT, null, contentValues);
 
-        System.out.println("Data: " + result);
+        int id =  (int)db.insertWithOnConflict(TABLE_NAME_ALLOTMENT, null, contentValues, SQLiteDatabase.CONFLICT_IGNORE);
+
+        if (id == -1)
+        {
+            db.update(TABLE_NAME_ALLOTMENT, contentValues, COL3_20+"="+allotedid,null/* new String[] {"1"}*/);
+        }
+
+        System.out.println("Data: " + id);
         count++;
 
     }
@@ -694,26 +715,25 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
     //fetching allotment entries from the mobile SQLiteDatabase
     public List<AllotmentList> getAllotmentEntries(int CLICK_CODE)
     {
+        SQLiteDatabase db = this.getReadableDatabase();
+
         List<AllotmentList> allotmentLists = new ArrayList<AllotmentList>();
+
         Cursor cursor;
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues=new ContentValues();
+
         switch (CLICK_CODE)
         {
-
-//TODO Apply logic here
+            //TODO Apply logic here
 
             case Constants.TOTAL_ALLOTTED_PENDING:
                 String selectQuery = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_9+"=0 AND "+COL3_12+"=0 and "+COL3_13+"=0 ;";
                 cursor = db.rawQuery(selectQuery, null);
                 break;
 
-
             case Constants.TOTAL_UNSAFE:
                 String selectQuery1 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_10+"=1 AND "+COL3_33+"='false';";
                 cursor = db.rawQuery(selectQuery1, null);
                 break;
-
 
             case Constants.TOTAL_DENIED:
                 String selectQuery2= "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_12+"=1";
@@ -757,13 +777,16 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
 
             case Constants.TOTAL_AGAINST_DENIED:
+
                 String selectQuery9 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_14+"=1;";
                 cursor = db.rawQuery(selectQuery9, null);
+
                 break;
 
 
 
             case Constants.TOTAL_AGAINST_NOT_AVAILABLE:
+
                 String selectQuery10 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_15+"=1;";
                 cursor = db.rawQuery(selectQuery10, null);
                 break;
@@ -809,6 +832,13 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
                 allotment.setAllotmentId(cursor.getInt(19));
                 allotmentLists.add(allotment);
 
+                Gson gson=new Gson();
+                String json=gson.toJson(allotment);
+                allotment.setJsonData(json);
+
+//                Toast.makeText(context, ""+json, Toast.LENGTH_SHORT).show();
+
+
             } while (cursor.moveToNext());
         }
 
@@ -816,34 +846,6 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
         return allotmentLists;
 
     }
-
-
-
-   /* public long getLayoutCount(int LAYOUT_CODE)
-    {
-        SQLiteDatabase db=this.getReadableDatabase();
-
-        int count1;
-        //long numRows = DatabaseUtils.queryNumEntries(db, TABLE_NAME_LAYOUT_COUNT);
-
-        Cursor cursor=db.rawQuery("SELECT * from "+TABLE_NAME_LAYOUT_COUNT,null);
-
-
-        if(cursor.moveToFirst())
-        {
-
-            do {
-
-                return cursor.getInt(1);
-            }while (cursor.moveToNext());
-        }
-
-        else
-        {
-            return 0;
-        }
-
-    }*/
 
 
 
@@ -858,13 +860,12 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
 
 
-    public void putAnswers(String areaName,String consumerName, String consumerNo,String UniqueConumerId,String AllottedId)
+    public boolean updateAnswers(int FRAGMENT_CODE,String areaName,String consumerName, String consumerNo,String UniqueConumerId,String AllottedId)
     {
 
+        //context=this.context;
         SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues contentValues = new ContentValues();
-
        // contentValues.put(COL4_2, questionId);
        // contentValues.put(COL4_3, questionDescription);
        // contentValues.put(COL4_4, answer);
@@ -876,10 +877,26 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
        // contentValues.put(COL4_12, category);
        // contentValues.put(COL4_13, fieldType);
 
-
-        long result = db.insert(TABLE_NAME_ANSWERS, null, contentValues);
+        long result = db.update(TABLE_NAME_ANSWERS,  contentValues,""+COL4_4+" IS NOT NULL ",null);
 
         System.out.println("ANSWERS Data: " + result);
+
+        if(result==-1)
+        {
+            return false;
+        }
+        else
+
+            {
+            return  true;
+        }
+
+
+        //updateAnswerEntryInDatabase();
+
+
+
+      //  Toast.makeText(context, "saved successfully!", Toast.LENGTH_SHORT).show();
 
 
     }
@@ -926,15 +943,13 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
     }
 
-    public void setAllotmentEntries(List<AllotmentList> allotmentLists) {
-
+    public void setAllotmentEntries(List<AllotmentList> allotmentLists)
+    {
         int size=allotmentLists.size();
 
         SQLiteDatabase db=this.getWritableDatabase();
 
         ContentValues contentValues=new ContentValues();
-
-
 
         //CREATE TABLE consumer( id INTEGER PRIMARY KEY,inspectionId TEXT,address TEXT,allotteddate TEXT, areaname TEXT, arearefno TEXT,consumername TEXT,consumerno TEXT,isCompleted TEXT,isUnsafe TEXT,isUnsafeReAllot TEXT,denied TEXT,not_available TEXT,pre_denied TEXT,pre_not_available TEXT,ref_ins_formId TEXT,ref_allotment_id TEXT,mobileno TEXT,uniqueConsumerId TEXT,allotedid TEXT,inspection_no TEXT,instruction TEXT,longitude TEXT,latitude TEXT,lastinspection TEXT,cylinder_save TEXT,regulator_save TEXT,rubberhose_save TEXT,stove_save TEXT,general_save TEXT,personal_save TEXT,unsafe_save TEXT,satisfactory TEXT,mobile_completed TEXT,web_mobile_completed TEXT,SYNC_completed TEXT,internet TEXT,json_data TEXT)
 
@@ -980,36 +995,14 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
     }
 
 
+
     public void putOfflineAnswers()
     {
 
 
     }
 
-    public boolean ifQuestionTableExists()
-    {
 
-        SQLiteDatabase db=this.getWritableDatabase();
-
-        String checkQuery="select DISTINCT tbl_name from sqlite_master where tbl_name = '"
-                + TABLE_NAME_QUESTION + "'";
-
-        //SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='Question';
-
-        Cursor cursor=db.rawQuery(checkQuery,null);
-
-        Log.d("CURSOR",""+cursor.getCount());
-
-        if(cursor.getCount()!=0)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-
-    }
 
 
     public String getPhotoEntry(int imageViewCode)
@@ -1023,26 +1016,20 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
         if(cursor.moveToFirst())
         {
             do {
-                //cursor.getString()
                 return cursor.getString(8);
-
-
-                }
+            }
 
             while(cursor.moveToNext());
         }
 
         else
-            {
+        {
             return null;
-            }
-
-
-
+        }
     }
 
 
-    public void updateAnswerEntryInDatabase(int FRAGMENT_CODE, Map<Integer,String> answer,String quesId,String quesDescription,String categoryId)
+    public void putAnswerEntryInDatabase(int FRAGMENT_CODE, String answer,String quesId,String quesDescription,String categoryId)
     {
         SQLiteDatabase db=this.getWritableDatabase();
 
@@ -1054,24 +1041,18 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
                 ContentValues contentValues=new ContentValues();
                 //db.getSyncedTables();
                 //String questionId,String questionDescription,String answer,String areaName,String consumerName, String consumerNo,String UniqueConumerId,String AllottedId,String category,String fieldType
-                for(int i=0;i<answer.size();i++)
-                {
+
                     ContentValues cv = new ContentValues();
                     cv.put(COL4_2,quesId); //These Fields should be your String values of actual column names
                     cv.put(COL4_3,quesDescription);
                     cv.put(COL4_12,categoryId);
-                    cv.put(COL4_4,answer.toString());
-
-
+                    cv.put(COL4_4,answer);
 
                 //TODO update condition here --- no categoryId
-                long result=db.update(TABLE_NAME_ANSWERS, cv, "_id="+categoryId, null);
+                long result=db.insert(TABLE_NAME_ANSWERS,  null,cv);
 
                     //long result=db.insert(TABLE_NAME_ANSWERS,null,contentValues);
                     System.out.print("ANSWER RESULT "+result);
-
-                }
-
 
 
                 break;
@@ -1142,225 +1123,26 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
     }
 
-    //CUSTOMIZATION LATER ON
+    public void fillTables() {
+        getQuestion();
+        getAllotment();
 
-  /*  public void setLayoutCount( int LAYOUT_CODE)
-    {
+    }
+
+    public void moveEntryToNotAvailable(Integer consumerNo) {
+
+        ContentValues cv = new ContentValues();
+        cv.put(COL3_13,"1"); //These Fields should be your String values of actual column names
+        //cv.put("Field2","19");
+        //cv.put("Field2","Male");
+
+
         SQLiteDatabase db=this.getWritableDatabase();
-        ContentValues contentValues=new ContentValues();
-        int co = 0;
-        Cursor cursor;
+        db.update(TABLE_NAME_ALLOTMENT, cv, COL3_8+"="+consumerNo, null);
+        Toast.makeText(context, "Updated Successfully as Not Available", Toast.LENGTH_SHORT).show();
 
-        switch (LAYOUT_CODE)
-        {
 
-        case Constants.TOTAL_ALLOTTED_PENDING:
-         cursor=db.rawQuery("SELECT * FROM "+TABLE_NAME_ALLOTMENT,null);
+    }
 
-        if(cursor.moveToFirst())
-        {
-            do {
-            co++;
-            }while(cursor.moveToNext());
 
-        }
-        contentValues.put("id",Constants.TOTAL_ALLOTTED_PENDING);
-        contentValues.put("Count",co);
-        db.insert(TABLE_NAME_LAYOUT_COUNT,null,contentValues);
-        contentValues.clear();
-
-        break;
-
-
-            case Constants.TOTAL_UNSAFE:
-                 cursor=db.rawQuery("SELECT * FROM "+TABLE_NAME_ALLOTMENT,null);
-
-                if(cursor.moveToFirst())
-                {
-                    do {
-                        co++;
-                    }while(cursor.moveToNext());
-                }
-                contentValues.put("id",Constants.TOTAL_UNSAFE);
-                contentValues.put("Count",co);
-                db.insert(TABLE_NAME_LAYOUT_COUNT,null,contentValues);
-                contentValues.clear();
-
-                break;
-
-
-
-            case Constants.TOTAL_DENIED:
-                 cursor=db.rawQuery("SELECT * FROM "+TABLE_NAME_ALLOTMENT,null);
-
-                if(cursor.moveToFirst())
-                {
-                    do {
-                        co++;
-                    }while(cursor.moveToNext());
-                }
-                contentValues.put("id",Constants.TOTAL_DENIED);
-                contentValues.put("Count",co);
-                db.insert(TABLE_NAME_LAYOUT_COUNT,null,contentValues);
-                contentValues.clear();
-
-                break;
-
-
-
-          *//*  case Constants.TOTAL_ALLOTTED_PENDING:
-                 cursor=db.rawQuery("SELECT * FROM "+TABLE_NAME_ALLOTMENT,null);
-
-                if(cursor.moveToFirst())
-                {
-                    do {
-                        co++;
-                    }while(cursor.moveToNext());
-                }
-                contentValues.put("id",Constants.TOTAL_ALLOTTED_PENDING);
-                contentValues.put("Count",co);
-                db.insert(TABLE_NAME_LAYOUT_COUNT,null,contentValues);
-                contentValues.clear();
-
-                break;
-
-
-
-
-            case Constants.TOTAL_ALLOTTED_PENDING:
-                 cursor=db.rawQuery("SELECT * FROM "+TABLE_NAME_ALLOTMENT,null);
-
-                if(cursor.moveToFirst())
-                {
-                    do {
-                        co++;
-                    }while(cursor.moveToNext());
-                }
-                contentValues.put("id",Constants.TOTAL_ALLOTTED_PENDING);
-                contentValues.put("Count",co);
-                db.insert(TABLE_NAME_LAYOUT_COUNT,null,contentValues);
-                contentValues.clear();
-
-                break;
-
-
-
-
-            case Constants.TOTAL_ALLOTTED_PENDING:
-                 cursor=db.rawQuery("SELECT * FROM "+TABLE_NAME_ALLOTMENT,null);
-
-                if(cursor.moveToFirst())
-                {
-                    do {
-                        co++;
-                    }while(cursor.moveToNext());
-                }
-                contentValues.put("id",Constants.TOTAL_ALLOTTED_PENDING);
-                contentValues.put("Count",co);
-                db.insert(TABLE_NAME_LAYOUT_COUNT,null,contentValues);
-                contentValues.clear();
-
-                break;
-
-
-
-
-            case Constants.TOTAL_ALLOTTED_PENDING:
-                 cursor=db.rawQuery("SELECT * FROM "+TABLE_NAME_ALLOTMENT,null);
-
-                if(cursor.moveToFirst())
-                {
-                    do {
-                        co++;
-                    }while(cursor.moveToNext());
-                }
-                contentValues.put("id",Constants.TOTAL_ALLOTTED_PENDING);
-                contentValues.put("Count",co);
-                db.insert(TABLE_NAME_LAYOUT_COUNT,null,contentValues);
-                contentValues.clear();
-
-                break;
-
-
-
-            case Constants.TOTAL_ALLOTTED_PENDING:
-                 cursor=db.rawQuery("SELECT * FROM "+TABLE_NAME_ALLOTMENT,null);
-
-                if(cursor.moveToFirst())
-                {
-                    do {
-                        co++;
-                    }while(cursor.moveToNext());
-                }
-                contentValues.put("id",Constants.TOTAL_ALLOTTED_PENDING);
-                contentValues.put("Count",co);
-                db.insert(TABLE_NAME_LAYOUT_COUNT,null,contentValues);
-                contentValues.clear();
-
-                break;
-
-
-
-
-
-
-            case Constants.TOTAL_ALLOTTED_PENDING:
-                 cursor=db.rawQuery("SELECT * FROM "+TABLE_NAME_ALLOTMENT,null);
-
-                if(cursor.moveToFirst())
-                {
-                    do {
-                        co++;
-                    }while(cursor.moveToNext());
-                }
-                contentValues.put("id",Constants.TOTAL_ALLOTTED_PENDING);
-                contentValues.put("Count",co);
-                db.insert(TABLE_NAME_LAYOUT_COUNT,null,contentValues);
-                contentValues.clear();
-
-                break;
-
-
-
-
-
-            case Constants.TOTAL_ALLOTTED_PENDING:
-                 cursor=db.rawQuery("SELECT * FROM "+TABLE_NAME_ALLOTMENT,null);
-
-                if(cursor.moveToFirst())
-                {
-                    do {
-                        co++;
-                    }while(cursor.moveToNext());
-                }
-                contentValues.put("id",Constants.TOTAL_ALLOTTED_PENDING);
-                contentValues.put("Count",co);
-                db.insert(TABLE_NAME_LAYOUT_COUNT,null,contentValues);
-                contentValues.clear();
-
-                break;
-
-
-
-
-
-
-            case Constants.TOTAL_ALLOTTED_PENDING:
-                 cursor=db.rawQuery("SELECT * FROM "+TABLE_NAME_ALLOTMENT,null);
-
-                if(cursor.moveToFirst())
-                {
-                    do {
-                        co++;
-                    }while(cursor.moveToNext());
-                }
-                contentValues.put("id",Constants.TOTAL_ALLOTTED_PENDING);
-                contentValues.put("Count",co);
-                db.insert(TABLE_NAME_LAYOUT_COUNT,null,contentValues);
-                contentValues.clear();
-                break;
-*//*    }
-
-
-    }*/
 }

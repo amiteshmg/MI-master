@@ -10,14 +10,18 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
-import com.example.aadyam.mi.Database.DatabaseHelperUser;
+import com.example.aadyam.mi.database.DatabaseHelperUser;
 import com.example.aadyam.mi.R;
 import com.example.aadyam.mi.fragment.Cylinder;
 import com.example.aadyam.mi.fragment.General;
@@ -30,10 +34,12 @@ import com.example.aadyam.mi.model.Allotment;
 import com.example.aadyam.mi.model.AllotmentList;
 import com.example.aadyam.mi.rest.ApiInterface;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class SurveyActivity extends FragmentActivity {
+public class SurveyActivity extends FragmentActivity
+{
 
     private static final String TAG = SurveyActivity.class.getSimpleName();
 
@@ -63,14 +69,11 @@ public class SurveyActivity extends FragmentActivity {
     private static String imageStoragePath;
 
 
+
     private TabLayout tabLayout;
     private ViewPager viewPager1;
     Toolbar toolbar1;
-    RecyclerView CylinderRecyclerView;
-    ApiInterface apiService;
-    int list_size;
-    private ProgressDialog progressDialog;
-    public String questiondisplay;
+
     DatabaseHelperUser databaseHelperUser;
     Allotment allotment;
 
@@ -79,14 +82,21 @@ public class SurveyActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey);
+
+
+
+
+
+
+
+
+
+
+
+
+
+     //TODO code present up is new
         toolbar1 = (Toolbar) findViewById(R.id.toolbar1);
-
-       /* Cylinder details = new Cylinder();
-        details.setArguments(getIntent().getExtras());
-        getSupportFragmentManager().beginTransaction().add(
-                android.R.id.content, details).commit();*/
-
-
 
         setActionBar(toolbar1);
         databaseHelperUser=new DatabaseHelperUser(this);
@@ -98,20 +108,13 @@ public class SurveyActivity extends FragmentActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabs1);
         tabLayout.setupWithViewPager(viewPager1);
 
-
-
         List<AllotmentList> list=new ArrayList<>();
-
-
         }
-
-
 
 
     private void setupViewPager(ViewPager viewPager)
     {
         SurveyActivity.ViewPagerAdapter1 adapter = new ViewPagerAdapter1(getSupportFragmentManager());
-
         adapter.addFragment(new Cylinder(),"Cylinder");
         adapter.addFragment(new Regulator(), "Regulator");
         adapter.addFragment(new Rubberhose(), "Rubber Hose");
@@ -127,31 +130,29 @@ public class SurveyActivity extends FragmentActivity {
     public void onClickSaveCylinderDetails()
     {
         Log.i("QUESTION DISPLAY","In questionDisplay");
-
         //new DatabaseHelperUser(getBaseContext()).
-
     }
+
 
 
     class ViewPagerAdapter1 extends FragmentPagerAdapter
     {
+
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
+
 
         ViewPagerAdapter1(FragmentManager manager)
         {
             super(manager);
         }
 
+
         @Override
         public Fragment getItem(int position)
         {
             return mFragmentList.get(position);
         }
-
-
-
-
 
 
         @Override
@@ -161,19 +162,14 @@ public class SurveyActivity extends FragmentActivity {
         }
 
 
-
-
-
-        void addFragment(Fragment fragment, String title) {
+        void addFragment(Fragment fragment, String title)
+        {
             FragmentManager fragmentManager=getSupportFragmentManager();
             FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-
 
             mFragmentList.add(fragment);
             fragmentTransaction.commit();
             mFragmentTitleList.add(title);
-
-
         }
 
 
@@ -182,13 +178,6 @@ public class SurveyActivity extends FragmentActivity {
         {
             return mFragmentTitleList.get(position);
         }
-
-
-
-
-
-
-
     }
 
 
