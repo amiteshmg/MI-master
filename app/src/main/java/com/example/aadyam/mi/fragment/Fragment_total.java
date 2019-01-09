@@ -1,11 +1,13 @@
 package com.example.aadyam.mi.fragment;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,9 @@ import com.example.aadyam.mi.Global.MyGlobals;
 import com.example.aadyam.mi.R;
 import com.example.aadyam.mi.Utils.Constants;
 import com.example.aadyam.mi.activity.InspectionDisplayActivity;
+import com.example.aadyam.mi.database.DatabaseHelperUser;
+
+import java.util.Objects;
 
 
 public class Fragment_total extends Fragment
@@ -26,7 +31,7 @@ public class Fragment_total extends Fragment
 
     ProgressDialog progressDialog;
 
-
+    boolean allowRefresh;
     public Fragment_total()
     {
         // Required empty public constructor
@@ -41,32 +46,63 @@ public class Fragment_total extends Fragment
         return inflater.inflate(R.layout.fragment_fragment_total, container, false);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+      /*  if (allowRefresh)
+        {
+            allowRefresh = false;
+            DatabaseHelperUser databaseHelperUser=new DatabaseHelperUser(getContext());
+            databaseHelperUser.getAllotment();
+            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+        }*/
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+
+    }
+
+
+    public void setAllowRefresh()
+    {
+        DatabaseHelperUser databaseHelperUser=new DatabaseHelperUser(getContext());
+        databaseHelperUser.getAllotment();
+        assert getFragmentManager() != null;
+        getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+    }
+
+
 
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-
+        //allowRefresh=true;
         progressDialog=new ProgressDialog(getContext());
         progressDialog.setMessage("Please Wait.....");
 
-
         allotted_pending_layout=view.findViewById(R.id.allotted_layout);
         unsafe_layout=view.findViewById(R.id.unsafe_layout);
+
         Denied_layout=view.findViewById(R.id.denied_layout);
         Not_available_layout=view.findViewById(R.id.not_available_layout);
+
         reallotted_unsafe_layout=view.findViewById(R.id.reallotted_not_available_layout);
         reallotted_denied_layout=view.findViewById(R.id.reallotted_denied_layout);
+
         reallotted_not_available_layout=view.findViewById(R.id.reallotted_not_available_layout);
         total_layout=view.findViewById(R.id.total_layout);
+
         against_unsafe_layout=view.findViewById(R.id.against_unsafe_layout);
         against_denied_layout=view.findViewById(R.id.against_denied_layout);
         against_not_available_layout=view.findViewById(R.id.against_not_available_layout);
 
         //initializeLayouts(view);
-
-
         allotted_count_tv = view.findViewById(R.id.allotted_count_text);
         unsafe_count_tv = view.findViewById(R.id.unsafe_count_text);
         denied_count_tv = view.findViewById(R.id.denied_count_text);
@@ -193,10 +229,11 @@ public class Fragment_total extends Fragment
 
 
 
-        reallotted_not_available_layout.setOnClickListener(new View.OnClickListener() {
+        reallotted_not_available_layout.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
-
+            public void onClick(View v)
+            {
                 Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
                 intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_REALLOTTED_NOT_AVAILABLE);
                 startActivity(intent);
@@ -216,16 +253,17 @@ public class Fragment_total extends Fragment
         });
 
 
-        against_unsafe_layout.setOnClickListener(new View.OnClickListener() {
+        against_unsafe_layout.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
-
+            public void onClick(View v)
+            {
                 Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
                 intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_AGAINST_UNSAFE);
                 startActivity(intent);
-
             }
         });
+
 
 
         against_denied_layout.setOnClickListener(new View.OnClickListener() {
@@ -293,5 +331,13 @@ public class Fragment_total extends Fragment
     }
 
 
+    public void refreshFragment() {
+
+
+
+        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+        ft.detach(Fragment_total.this).attach(Fragment_total.this).commit();
+
+    }
 }
 
