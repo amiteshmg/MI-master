@@ -297,12 +297,14 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         else if(holder instanceof MySpinnerViewHolder)
         {
+
             final QuestionList question=questionList.get(position);
             String str = question.getFieldData();
 
             final List<String> spinnerList = Arrays.asList(str.split(","));
-            ArrayAdapter<String> adapter =
-                    new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, spinnerList);
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, spinnerList);
+
             adapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
 
             ((MySpinnerViewHolder) holder).spinner.setAdapter(adapter);
@@ -411,7 +413,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 case Constants.CYLINDER_FRAG_CODE:
 
                 DatabaseHelperUser databaseHelperUser=new DatabaseHelperUser(context);
-                databaseHelperUser.putAnswerEntryInDatabase(FRAGMENT_CODE,answers,quesId,quesDescription,categoryId);
+             //   databaseHelperUser.putAnswerEntryInDatabase(FRAGMENT_CODE,answers,quesId,quesDescription,categoryId);
                 //String questionId,String questionDescription,String answer,String category,String fieldType
                 break;
 

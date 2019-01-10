@@ -1,7 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="radio_options_yes_no">
+
         <item>Yes</item>
         <item>No</item>
         </string-array>
+
+    <string-array name="genderList">
+        <item>Select</item>
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
+    <string-array name="fatherSpouseList">
+        <item>Select</item>
+        <item>Father</item>
+        <item>Spouse</item>
+    </string-array>
+
+    <string-array name="rationCardAffidavitList">
+        <item>Select</item>
+        <item>Ration Card</item>
+        <item>Affidavit</item>
+    </string-array>
+
+    <string-array name="houseAccomodationList" >
+        <item>Select</item>
+        <item>Own</item>
+        <item>Rent</item>
+    </string-array>
+
+    <string-array name="refillBookingModeList" >
+        <item>Select</item>
+        <item>Manual</item>
+        <item>Phone</item>
+        <item>Online</item>
+        <item>Other</item>
+
+    </string-array>
+
+
+    <string-array name="cylinder_gap_spinnerList" >
+        <item>Select</item>
+        <item>100 Days</item>
+        <item>75 Days</item>
+        <item>50 Days</item>
+        <item>25 Days</item>
+    </string-array>
+
+
 </resources>

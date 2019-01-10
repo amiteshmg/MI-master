@@ -69,7 +69,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                             preference.getContext(), Uri.parse(stringValue));
 
                     if (ringtone == null) {
-                        // Clear the summary if there was a lookup error.
+                        // Clear the summary if there was a lookup fail.
                         preference.setSummary(null);
                     } else {
                         // Set the summary to reflect the new ringtone display

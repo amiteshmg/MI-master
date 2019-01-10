@@ -12,751 +12,879 @@
 
 
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-    <!--Mobile number -->
-
-    <android.support.v7.widget.CardView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/card_height"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:padding="@dimen/icon_padding"
-        android:layout_margin="10dp"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="2dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <!--Mobile number -->
 
-        <LinearLayout
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_margin="@dimen/icon_padding">
-            <TextView
+            android:layout_height="@dimen/card_height"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:padding="@dimen/icon_padding"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Mobile No."
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/icon_padding">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Mobile No."
 
-                />
+                    />
 
 
-            <EditText
-                android:id="@+id/card_edit_editText_number"
+                <EditText
+                    android:id="@+id/mobileNo_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/icon_padding"
+                    android:layout_weight="1"
+                    android:background="@drawable/rectangle"
+                    android:hint="Mobile No"
+
+                    android:inputType="phone"
+                    android:text="" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+        <!--email ID-->
+
+
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/card_height"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:padding="@dimen/icon_padding"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/icon_padding">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Email ID" />
+
+
+                <EditText
+                    android:id="@+id/emailId_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/icon_padding"
+                    android:layout_weight="1"
+                    android:background="@drawable/rectangle"
+                    android:hint="Email ID"
+                    android:inputType="textEmailAddress"
+                    android:text="" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+
+
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/card_height"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:padding="@dimen/icon_padding"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/icon_padding">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Date of Birth"
+                    android:id="@+id/edit_text_question_tv"
+                    />
+
+
+                <EditText
+                    android:id="@+id/dateOfBirth_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="39dp"
+                    android:layout_marginTop="@dimen/icon_padding"
+                    android:layout_weight="1"
+                    android:background="@drawable/rectangle"
+                    android:hint="DD/MM/YYYY"
+
+                    android:inputType="date"
+                    android:text="" />
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+
+
+
+
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/card_height"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:padding="@dimen/icon_padding"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_margin="@dimen/icon_padding">
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="VIP"
+                    android:id="@+id/vip_checkBox"
+                    />
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Using Credit Card"
+                    android:id="@+id/credit_card_checkBox"
+                    />
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="High Consumption consumer"
+                    android:id="@+id/high_consumption_checkbox"
+                    />
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+
+
+
+
+
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/card_height"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:padding="@dimen/icon_padding"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
                 android:layout_marginTop="@dimen/icon_padding"
-                android:layout_weight="1"
-                android:background="@drawable/rectangle"
-                android:hint="Mobile No"
+                android:layout_marginLeft="@dimen/icon_padding"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:id="@+id/spinner_question_tv"
+                    android:textSize="@dimen/normal_text"
+                    android:text="Gender"
+                    />
 
-                android:inputType="phone"
-                android:text="" />
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/spinner_gender"
+                    android:layout_weight="1"
 
-        </LinearLayout>
+                    android:layout_marginStart="@dimen/icon_padding"
+                    android:layout_marginLeft="@dimen/icon_padding"
+                    />
+            </LinearLayout>
 
-    </android.support.v7.widget.CardView>
-    <!--email ID-->
+
+        </android.support.v7.widget.CardView>
 
 
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/card_height"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:padding="@dimen/icon_padding"
-        android:layout_margin="10dp"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="2dp">
 
-        <LinearLayout
+
+
+
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_margin="@dimen/icon_padding">
+            android:layout_height="@dimen/card_height"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:padding="@dimen/icon_padding"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="2dp">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Email ID" />
-
-
-            <EditText
-                android:id="@+id/card_edit_editText_email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
                 android:layout_marginTop="@dimen/icon_padding"
-                android:layout_weight="1"
-                android:background="@drawable/rectangle"
-                android:hint="Email ID"
-                android:inputType="textEmailAddress"
-                android:text="" />
+                android:layout_marginLeft="@dimen/icon_padding"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Father/Spouse"
+                    android:id="@+id/spinner_tv_father_spouse"
+                    android:textSize="@dimen/normal_text"
+                    />
 
-        </LinearLayout>
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/spinner_father_spouse"
+                    android:layout_weight="1"
 
-    </android.support.v7.widget.CardView>
+                    android:layout_marginStart="@dimen/icon_padding"
+                    android:layout_marginLeft="@dimen/icon_padding"
+                    />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
 
 
 
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/card_height"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:padding="@dimen/icon_padding"
-        android:layout_margin="10dp"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="2dp">
 
-        <LinearLayout
+
+
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_margin="@dimen/icon_padding">
-            <TextView
+            android:layout_height="@dimen/card_height"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:padding="@dimen/icon_padding"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Date of Birth"
-                android:id="@+id/edit_text_question_tv"
-                />
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/icon_padding">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Mothers name"
+
+                    />
 
 
-            <EditText
-                android:id="@+id/card_edit_DOB"
+                <EditText
+                    android:id="@+id/motherName_editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/icon_padding"
+                    android:layout_weight="1"
+                    android:background="@drawable/rectangle"
+                    android:hint="Mother's maiden name"
+                    android:inputType="text"
+
+                    android:text="" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+
+
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/card_height"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:padding="@dimen/icon_padding"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="2dp">
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/icon_padding">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Father/Spouse name"
+
+                    />
+
+
+                <EditText
+                    android:id="@+id/card_edit_editText_Father_spouse_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/icon_padding"
+                    android:layout_weight="1"
+                    android:background="@drawable/rectangle"
+                    android:hint="Father/spouse name"
+                    android:inputType="text"
+
+                    android:text="" />
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+
+
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/card_height"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:padding="@dimen/icon_padding"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/icon_padding">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Number of family members"
+
+                    />
+
+
+                <EditText
+                    android:id="@+id/card_edit_editText_family_members"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginTop="@dimen/icon_padding"
+                    android:background="@drawable/rectangle"
+                    android:inputType="date"
+                    android:hint="Family member count"
+                    android:text="" />
+
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+
+
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/card_height"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:padding="@dimen/icon_padding"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="2dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
                 android:layout_marginTop="@dimen/icon_padding"
-                android:layout_weight="1"
-                android:background="@drawable/rectangle"
-                android:hint="DD/MM/YYYY"
+                android:layout_marginLeft="@dimen/icon_padding"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Gap between two cylinders"
+                    android:id="@+id/spinner_tv_cylinder_gap"
+                    android:textSize="@dimen/normal_text"
 
-                android:inputType="date"
-                android:text="" />
+                    />
 
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/spinner_cylinder_gap"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/icon_padding"
+                    android:layout_marginLeft="@dimen/icon_padding"
+                    />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
 
 
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/card_height"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:padding="@dimen/icon_padding"
-        android:layout_margin="10dp"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="2dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginTop="@dimen/icon_padding"
-        android:layout_marginLeft="@dimen/icon_padding"
-        >
-        <TextView
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:id="@+id/spinner_question_tv"
-            android:textSize="@dimen/normal_text"
-            android:text="Gender"
-            />
+            android:layout_height="@dimen/card_height"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:padding="@dimen/icon_padding"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="2dp">
 
-        <Spinner
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="@dimen/icon_padding"
+                android:layout_marginLeft="@dimen/icon_padding"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="How do you book your refill"
+                    android:id="@+id/spinner_tv_father_spous"
+                    android:textSize="@dimen/normal_text"
+                    />
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/spinner_cylinder_booking_mode"
+                    android:layout_weight="1"
+
+                    android:layout_marginStart="@dimen/icon_padding"
+                    android:layout_marginLeft="@dimen/icon_padding"
+                    />
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+
+
+
+
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/spinner_gender"
-            android:layout_weight="1"
+            android:layout_height="@dimen/card_height"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:padding="@dimen/icon_padding"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="2dp">
 
-            android:layout_marginStart="@dimen/icon_padding"
-            android:layout_marginLeft="@dimen/icon_padding"
-            />
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="@dimen/icon_padding"
+                android:layout_marginLeft="@dimen/icon_padding"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Type of house accommodation"
+
+                    android:textSize="@dimen/normal_text"
+                    />
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/spinner_accommodation"
+                    android:layout_weight="1"
+
+                    android:layout_marginStart="@dimen/icon_padding"
+                    android:layout_marginLeft="@dimen/icon_padding"
+                    />
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
 
 
-</android.support.v7.widget.CardView>
 
 
-
-
-
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/card_height"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:padding="@dimen/icon_padding"
-        android:layout_margin="10dp"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="2dp">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_margin="@dimen/icon_padding">
-        <TextView
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Father/Spouse name"
+            android:layout_height="@dimen/card_height"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:padding="@dimen/icon_padding"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="2dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="@dimen/icon_padding"
+                android:layout_marginLeft="@dimen/icon_padding"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Ration card/Affidavit"
+                    android:id="@+id/spinner_tv_ratio_affidavit"
+                    android:textSize="@dimen/normal_text"
+                    />
 
-            />
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/spinner_ration_affidavit"
+                    android:layout_weight="1"
+
+                    android:layout_marginStart="@dimen/icon_padding"
+                    android:layout_marginLeft="@dimen/icon_padding"
+                    />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
 
 
-        <EditText
-            android:id="@+id/card_edit_editText_mother_name"
+
+
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/icon_padding"
-            android:layout_weight="1"
-            android:background="@drawable/rectangle"
-            android:hint="Mother's maiden name"
-            android:inputType="text"
+            android:layout_height="@dimen/card_height"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:padding="@dimen/icon_padding"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="2dp">
 
-            android:text="" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/icon_padding">
+                <TextView
+                    android:id="@+id/rationAffidavit_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Ration card no."
 
-    </LinearLayout>
-
-    </android.support.v7.widget.CardView>
+                    />
 
 
+                <EditText
+                    android:id="@+id/rationAffidavit_EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/icon_padding"
+                    android:layout_weight="1"
+                    android:background="@drawable/rectangle"
+                    android:hint="Ration card no."
+                    android:inputType="text"
+                    />
 
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/card_height"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:padding="@dimen/icon_padding"
-        android:layout_margin="10dp"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="2dp">
+            </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginTop="@dimen/icon_padding"
-        android:layout_marginLeft="@dimen/icon_padding"
-        >
-        <TextView
+        </android.support.v7.widget.CardView>
+
+
+
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Father/Spouse"
-            android:id="@+id/spinner_tv_father_spouse"
-            android:textSize="@dimen/normal_text"
-            />
+            android:layout_height="@dimen/card_height"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:padding="@dimen/icon_padding"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="2dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="@dimen/icon_padding"
+                android:layout_marginLeft="@dimen/icon_padding"
+                >
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Used Piped Gas"
+                    android:id="@+id/piped_gas_checkBox"
+                    />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
 
-        <Spinner
+
+
+
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/spinner_father_spouse"
-            android:layout_weight="1"
+            android:layout_height="@dimen/card_height"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:padding="@dimen/icon_padding"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="2dp">
 
-            android:layout_marginStart="@dimen/icon_padding"
-            android:layout_marginLeft="@dimen/icon_padding"
-            />
-    </LinearLayout>
-    </android.support.v7.widget.CardView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/icon_padding">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="No. of two wheelers"
+
+                    />
+
+
+                <EditText
+                    android:id="@+id/card_edit_editText_two_wheeler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginTop="@dimen/icon_padding"
+                    android:background="@drawable/rectangle"
+                    android:inputType="date"
+                    android:hint="No. of two wheelers"
+
+                    android:text="" />
+
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
 
 
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/card_height"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:padding="@dimen/icon_padding"
-        android:layout_margin="10dp"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="2dp">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_margin="@dimen/icon_padding">
-        <TextView
+
+
+
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Father/Spouse name"
+            android:layout_height="@dimen/card_height"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:padding="@dimen/icon_padding"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="2dp">
 
-            />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/icon_padding">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="No. of four wheelers"
+
+                    />
 
 
-        <EditText
-            android:id="@+id/card_edit_editText_Father_spouse_name"
+                <EditText
+                    android:id="@+id/card_edit_editText_four_wheeler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginTop="@dimen/icon_padding"
+                    android:background="@drawable/rectangle"
+                    android:inputType="date"
+                    android:hint="No. of four wheelers"
+
+                    android:text="" />
+
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+
+
+
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginTop="@dimen/icon_padding"
-            android:background="@drawable/rectangle"
-            android:inputType="date"
-            android:hint="Father/spouse name"
+            android:layout_height="@dimen/card_height"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:padding="@dimen/icon_padding"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="2dp">
 
-            android:text="" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/icon_padding">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="PAN Card number"
 
-    </LinearLayout>
-    </android.support.v7.widget.CardView>
+                    />
+
+
+                <EditText
+                    android:id="@+id/card_edit_editText_pan_no"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/icon_padding"
+                    android:layout_weight="1"
+                    android:background="@drawable/rectangle"
+                    android:hint="PAN number"
+                    android:inputType="text"
+
+                    android:text="" />
+
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
 
 
 
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/card_height"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:padding="@dimen/icon_padding"
-        android:layout_margin="10dp"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="2dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_margin="@dimen/icon_padding">
-        <TextView
+
+
+
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Number of family members"
+            android:layout_height="@dimen/card_height"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:padding="@dimen/icon_padding"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="2dp">
 
-            />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/icon_padding">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Passport no."
+
+                    />
 
 
-        <EditText
-            android:id="@+id/card_edit_editText_family_members"
+                <EditText
+                    android:id="@+id/card_edit_editText_passport"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/icon_padding"
+                    android:layout_weight="1"
+                    android:background="@drawable/rectangle"
+                    android:hint="Passport no."
+
+                    android:inputType="text"
+                    android:text="" />
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+
+
+
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginTop="@dimen/icon_padding"
-            android:background="@drawable/rectangle"
-            android:inputType="date"
-            android:hint="Family member count"
-            android:text="" />
+            android:layout_height="@dimen/card_height"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:padding="@dimen/icon_padding"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/icon_padding">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Voter ID no."
+
+                    />
 
 
-    </LinearLayout>
-    </android.support.v7.widget.CardView>
+                <EditText
+                    android:id="@+id/card_edit_editText_voter_ID"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/icon_padding"
+                    android:layout_weight="1"
+                    android:background="@drawable/rectangle"
+                    android:hint="Voter ID no."
+
+                    android:inputType="text"
+                    android:text="" />
+
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
 
 
 
-
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/card_height"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:padding="@dimen/icon_padding"
-        android:layout_margin="10dp"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="2dp">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginTop="@dimen/icon_padding"
-        android:layout_marginLeft="@dimen/icon_padding"
-        >
-        <TextView
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Gap between two cylinders"
-            android:id="@+id/spinner_tv_cylinder_gap"
-            android:textSize="@dimen/normal_text"
-
-            />
-
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/spinner_cylinder_gap"
-            android:layout_weight="1"
-            android:layout_marginStart="@dimen/icon_padding"
-            android:layout_marginLeft="@dimen/icon_padding"
-            />
-    </LinearLayout>
-    </android.support.v7.widget.CardView>
+            android:layout_height="@dimen/card_height"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:padding="@dimen/icon_padding"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="2dp">
 
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/icon_padding">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Driving license number"
+
+                    />
 
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/card_height"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:padding="@dimen/icon_padding"
-        android:layout_margin="10dp"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="2dp">
+                <EditText
+                    android:id="@+id/card_edit_editText_Driving_license"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/icon_padding"
+                    android:layout_weight="1"
+                    android:background="@drawable/rectangle"
+                    android:hint="Driving license number"
+                    android:inputType="text"
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginTop="@dimen/icon_padding"
-        android:layout_marginLeft="@dimen/icon_padding"
-        >
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="How do you book your refill"
-            android:id="@+id/spinner_tv_father_spous"
-            android:textSize="@dimen/normal_text"
-            />
+                    android:text="" />
 
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/spinner_cylinder_booking_mode"
-            android:layout_weight="1"
-
-            android:layout_marginStart="@dimen/icon_padding"
-            android:layout_marginLeft="@dimen/icon_padding"
-            />
-    </LinearLayout>
-
-    </android.support.v7.widget.CardView>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
 
 
-
-
-
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/card_height"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:padding="@dimen/icon_padding"
-        android:layout_margin="10dp"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="2dp">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginTop="@dimen/icon_padding"
-        android:layout_marginLeft="@dimen/icon_padding"
-        >
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Type of house accommodation"
-
-            android:textSize="@dimen/normal_text"
-            />
-
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/spinner_accommodation"
-            android:layout_weight="1"
-
-            android:layout_marginStart="@dimen/icon_padding"
-            android:layout_marginLeft="@dimen/icon_padding"
-            />
-    </LinearLayout>
-
-    </android.support.v7.widget.CardView>
-
-
-
-
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/card_height"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:padding="@dimen/icon_padding"
-        android:layout_margin="10dp"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="2dp">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginTop="@dimen/icon_padding"
-        android:layout_marginLeft="@dimen/icon_padding"
-        >
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Ration card/Affidavit"
-            android:id="@+id/spinner_tv_ratio_affidavit"
-            android:textSize="@dimen/normal_text"
-            />
-
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/spinner_ration_affidavit"
-            android:layout_weight="1"
-
-            android:layout_marginStart="@dimen/icon_padding"
-            android:layout_marginLeft="@dimen/icon_padding"
-            />
-    </LinearLayout>
-    </android.support.v7.widget.CardView>
-
-
-
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/card_height"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:padding="@dimen/icon_padding"
-        android:layout_margin="10dp"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="2dp">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_margin="@dimen/icon_padding">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="No. of two wheelers"
-
-            />
-
-
-        <EditText
-            android:id="@+id/card_edit_editText_two_wheeler"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginTop="@dimen/icon_padding"
-            android:background="@drawable/rectangle"
-            android:inputType="date"
-            android:hint="No. of two wheelers"
-
-            android:text="" />
-
-
-    </LinearLayout>
-    </android.support.v7.widget.CardView>
-
-
-
-
-
-
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/card_height"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:padding="@dimen/icon_padding"
-        android:layout_margin="10dp"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="2dp">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_margin="@dimen/icon_padding">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="No. of four wheelers"
-
-            />
-
-
-        <EditText
-            android:id="@+id/card_edit_editText_four_wheeler"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginTop="@dimen/icon_padding"
-            android:background="@drawable/rectangle"
-            android:inputType="date"
-            android:hint="No. of four wheelers"
-
-            android:text="" />
-
-
-    </LinearLayout>
-    </android.support.v7.widget.CardView>
-
-
-
-
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/card_height"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:padding="@dimen/icon_padding"
-        android:layout_margin="10dp"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="2dp">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_margin="@dimen/icon_padding">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="PAN Card number"
-
-            />
-
-
-        <EditText
-            android:id="@+id/card_edit_editText_pan_no"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginTop="@dimen/icon_padding"
-            android:background="@drawable/rectangle"
-            android:inputType="date"
-            android:hint="PAN number"
-
-            android:text="" />
-
+        <include layout="@layout/card_buttons"/>
 
     </LinearLayout>
-
-    </android.support.v7.widget.CardView>
-
-
-
-
-
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/card_height"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:padding="@dimen/icon_padding"
-        android:layout_margin="10dp"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="2dp">
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_margin="@dimen/icon_padding">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Passport no."
-
-            />
-
-
-        <EditText
-            android:id="@+id/card_edit_editText_passport"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginTop="@dimen/icon_padding"
-            android:background="@drawable/rectangle"
-            android:inputType="date"
-            android:hint="Passport no."
-
-            android:text="" />
-
-    </LinearLayout>
-    </android.support.v7.widget.CardView>
-
-
-
-
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/card_height"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:padding="@dimen/icon_padding"
-        android:layout_margin="10dp"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="2dp">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_margin="@dimen/icon_padding">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Voter ID no."
-
-            />
-
-
-        <EditText
-            android:id="@+id/card_edit_editText_voter_ID"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginTop="@dimen/icon_padding"
-            android:background="@drawable/rectangle"
-            android:inputType="date"
-            android:hint="Voter ID no."
-
-            android:text="" />
-
-
-    </LinearLayout>
-    </android.support.v7.widget.CardView>
-
-
-
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/card_height"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:padding="@dimen/icon_padding"
-        android:layout_margin="10dp"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="2dp">
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_margin="@dimen/icon_padding">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Driving license number"
-
-            />
-
-
-        <EditText
-            android:id="@+id/card_edit_editText_Driving_license"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginTop="@dimen/icon_padding"
-            android:background="@drawable/rectangle"
-            android:inputType="date"
-            android:hint="Driving license number"
-
-            android:text="" />
-
-    </LinearLayout>
-    </android.support.v7.widget.CardView>
-
-</LinearLayout>
 
 </ScrollView>

@@ -1,7 +1,5 @@
 package com.example.aadyam.mi.activity;
 
-
-
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -16,13 +14,14 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -31,15 +30,26 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import com.example.aadyam.mi.Global.GPSTracker;
+import com.example.aadyam.mi.Global.MyGlobals;
+import com.example.aadyam.mi.activity.session.AlertDialogManager;
+import com.example.aadyam.mi.activity.session.SessionManager;
 import com.example.aadyam.mi.database.DatabaseHelperUser;
 import com.example.aadyam.mi.R;
 import com.example.aadyam.mi.Utils.Constants;
 import com.example.aadyam.mi.fragment.Fragment_today;
 import com.example.aadyam.mi.fragment.Fragment_total;
+import com.example.aadyam.mi.fragment.PersonalInfo;
 import com.example.aadyam.mi.model.Allotment;
 import com.example.aadyam.mi.model.Distributor;
+import com.example.aadyam.mi.model.Personal;
+import com.example.aadyam.mi.model.PersonalInfoList;
 import com.example.aadyam.mi.rest.ApiClient;
 import com.example.aadyam.mi.rest.ApiInterface;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -90,30 +100,14 @@ public class MainActivity extends AppCompatActivity
     public static final String IMAGE_EXTENSION = "jpg";
     public static final String VIDEO_EXTENSION = "mp4";
 
+    // Alert Dialog Manager
+    AlertDialogManager alert = new AlertDialogManager();
+    private FragmentRefreshListener fragmentRefreshListener;
+    // Session Manager Class
+    SessionManager session;
+    SwipeRefreshLayout swipeRefreshLayout;
+    //QuestionAsync questionAsync;
 
-    @Override
-    protected void onDestroy()
-    {
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onStop()
-    {
-        super.onStop();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-    }
-
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-    }
 
     @SuppressLint("CommitPrefEdits")
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -121,36 +115,22 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-       /* sharedPreferences=getSharedPreferences(Constants.PREFS_NAME,Context.MODE_PRIVATE);
-        if(sharedPreferences==null)
-        {
-            Intent intent1=new Intent(MainActivity.this,LoginActivity.class);
-            startActivity(intent1);
-            finish();
-        }*/
-
         setContentView(R.layout.activity_main);
 
-        //databaseHelperUser.setLayoutCount();
+        swipeRefreshLayout=findViewById(R.id.swipeRefreshLayout);
 
-        //new MyGlobals(this).getAllotmentInDataBase();
+        progressDialog=new ProgressDialog(getApplicationContext());
+        session = new SessionManager(getApplicationContext());
 
 
-        //TODO : Hidden to not generate OTP
-
-        //getDistributorDetails();
-
-        //progressDialog=new ProgressDialog(this);
         setTitle(R.string.dashboard);
-
         databaseHelperUser=new DatabaseHelperUser(getApplicationContext());
+        databaseHelperUser.getQuestion();
 
         allotment=new Allotment();
 
         Date c = Calendar.getInstance().getTime();
 
-        //getAllotment();
-        //Toast.makeText(this, ""+c, Toast.LENGTH_SHORT).show();
         Log.i("DATE", String.valueOf(c));
 
         mDrawerLayout=findViewById(R.id.drawer_layout);
@@ -192,12 +172,8 @@ public class MainActivity extends AppCompatActivity
                             case R.id.logout:
 
                                 SharedPreferences sharedPreferences=getSharedPreferences(Constants.PREFS_NAME,Context.MODE_PRIVATE);
-                                //SharedPreferences.Editor editor;
+                                session.logoutUser();
 
-                               /* sharedPreferences.edit().clear();
-                                Intent intent=new Intent(MainActivity.this,LoginActivity.class);
-                                startActivity(intent);
-                               */
                                 break;
 
                             case R.id.nav_settings:
@@ -205,8 +181,6 @@ public class MainActivity extends AppCompatActivity
                                 startActivity(i);
 
                             case R.id.sync_entries:
-                                QuestionAsync async=new QuestionAsync();
-                                async.onPreExecute();
 
                         }
 
@@ -219,13 +193,48 @@ public class MainActivity extends AppCompatActivity
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.drawer_icon);
 
-        ViewPager viewPager = findViewById(R.id.viewpager);
+        final ViewPager viewPager = findViewById(R.id.viewpager);
+
+       /* swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        {
+            @Override
+            public void onRefresh()
+            {
+                Toast.makeText(MainActivity.this, "Refresh", Toast.LENGTH_SHORT).show();
+            }
+        });*/
+
+
+       swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+           @Override
+           public void onRefresh()
+           {
+                databaseHelperUser.getAllotment();
+                Fragment fragment=getFragment(viewPager,1);
+                getSupportFragmentManager().beginTransaction().detach(fragment).add(fragment,"total").commit();
+                swipeRefreshLayout.clearFocus();
+                /* finish();
+                startActivity(getIntent());*/
+           }
+       });
+
         setupViewPager(viewPager);
 
         TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-       // progressDialog.show();
+
     }
+
+
+
+
+
+    public FragmentRefreshListener getFragmentRefreshListener() {
+        return fragmentRefreshListener;
+    }
+
+
+
 
 
 
@@ -255,19 +264,38 @@ public class MainActivity extends AppCompatActivity
     //to add fragments to ViewPager
     private void setupViewPager(ViewPager viewPager)
     {
+
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new Fragment_today(), "Today's Inspection");
         adapter.addFragment(new Fragment_total(), "Total Inspection");
         viewPager.setAdapter(adapter);
     }
 
+    private Fragment getFragment(ViewPager viewPager,int position)
+    {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        switch (position)
+        {
+            case 0:
+              return adapter.getItem(position);
+
+
+            case 1:
+                return adapter.getItem(position);
+             //   adapter.getItem(position).refresh();
+
+        }
+
+        return null;
+    }
+
+
     //adapt the viewpager to the tabLayout
     class ViewPagerAdapter extends FragmentPagerAdapter
     {
+
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
-
-
         ViewPagerAdapter(FragmentManager manager)
         {
             super(manager);
@@ -277,8 +305,21 @@ public class MainActivity extends AppCompatActivity
         @Override
         public Fragment getItem(int position)
         {
-            return mFragmentList.get(position);
+            switch (position)
+            {
+                case 0 : return new Fragment_today();
+
+                case 1 : return new Fragment_total();
+
+            }
+            return null;
         }
+
+
+
+
+
+
 
 
         @Override
@@ -377,97 +418,10 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-
-
-
-    public class QuestionAsync extends AsyncTask<Void,Void,Void>
-    {
-        @Override
-        protected void onPreExecute()
-        {
-
-
-
-
-            Runnable progressRunnable = new Runnable()
-            {
-                @Override
-                public void run() {
-
-                    Toast.makeText(MainActivity.this, "Server is Facing some issues right now. Please try again later", Toast.LENGTH_SHORT).show();
-                }
-            };
-
-            Handler pdCanceller = new Handler();
-            pdCanceller.postDelayed(progressRunnable, 3000);
-        }
-
-
-        @Override
-        protected Void doInBackground(Void... voids)
-        {
-
-            //     getAllotment();
-
-         /*   if(databaseHelperUser.getAnswerCount()>0)
-            {
-
-                final AlertDialog.Builder builder = new AlertDialog.Builder(getBaseContext());
-                builder.setTitle("Functionality in Progress");
-                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        finish();
-                    }
-
-                });
-
-
-                builder.setCancelable(false);
-                builder.show();
-                databaseHelperUser.putOfflineAnswers();
-
-
-
-            }
-
-            else if(databaseHelperUser.getAnswerCount() == 0)
-            {
-                Toast.makeText(MainActivity.this, "No entries to Sync!", Toast.LENGTH_SHORT).show();
-            }
-
-            else
-            {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(getBaseContext());
-                builder.setTitle("No internet Detected ! Try again later");
-                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        //  databaseHelperUser.getAllotmentEntries().size();
-                    }
-                });
-
-                builder.setCancelable(false);
-                builder.show();
-
-
-
-            }*/
-
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-          //  progressDialog.dismiss();
-        }
+    public interface FragmentRefreshListener{
+        void onRefresh();
     }
+
 
 
 }

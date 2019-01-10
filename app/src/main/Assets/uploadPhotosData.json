@@ -1,0 +1,62 @@
+[{
+  "Active":true,
+  "CategoryId":2,
+  "Description":"Stove Photo",
+  "FieldData":null,
+  "FieldType":"I",
+  "SubFieldType":"",
+  "InformationId":21,
+  "isCompulsory":1
+}
+
+,{
+"Active":true,
+"CategoryId":2,
+"Description":"Regulator Photo",
+"FieldData":null,
+"FieldType":"I",
+"SubFieldType":"",
+"InformationId":22,
+"isCompulsory":1
+}
+,{
+"Active":true,
+"CategoryId":2,
+"Description":"Hose Validity",
+"FieldData":null,
+"FieldType":"I",
+"SubFieldType":"",
+"InformationId":23,
+"isCompulsory":1
+}
+,{
+"Active":true,
+"CategoryId":2,
+"Description":"Complete installation",
+"FieldData":null,
+"FieldType":"I",
+"SubFieldType":"",
+"InformationId":24,
+"isCompulsory":1
+}
+,{
+"Active":true,
+"CategoryId":2,
+"Description":"Signature",
+"FieldData":null,
+"FieldType":"I",
+"SubFieldType":"sign",
+"InformationId":25,
+"isCompulsory":1
+}
+
+,{
+"Active":true,
+"CategoryId":2,
+"Description":"Instruction to consumer",
+"FieldData":null,
+"FieldType":"E",
+"SubFieldType":"",
+"InformationId":26,
+"isCompulsory":0
+}]

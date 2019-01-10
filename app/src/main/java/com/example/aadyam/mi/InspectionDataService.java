@@ -1,0 +1,550 @@
+package com.example.aadyam.mi;
+import android.app.IntentService;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+
+
+/*
+import com.androidquery.AQuery;
+import com.androidquery.callback.AjaxCallback;
+import com.androidquery.callback.AjaxStatus;
+*/
+
+
+
+//import com.aquery.AQuery;
+
+
+/*
+import com.hpgasmi.db.CustomerListDB;
+import com.hpgasmi.db.PersonalnfoDB;
+import com.hpgasmi.db.PhotoDB;
+import com.hpgasmi.db.QuestionAnswerDB;
+import com.hpgasmi.user.navigationdrawersubmenu.LogAllModel;
+import com.hpgasmi.user.navigationdrawersubmenu.PersonalInfoList;
+*/
+
+
+//import com.hpgasmi.user.navigationdrawersubmenu.PhotoList;
+//import com.hpgasmi.user.navigationdrawersubmenu.QuestionAnswerList;
+//import com.hpgasmi.user.navigationdrawersubmenu.TodayAllotedList;
+
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Locale;
+
+//import configpg.ConfigPG;
+
+/**
+ * Created by $@NCH!T on 3/22/2016.
+ **/
+
+
+public class InspectionDataService extends IntentService
+{
+    /**
+     * Creates an IntentService.  Invoked by your subclass's constructor.
+     *
+     * @param name Used to name the worker thread, important only for debugging.
+     */
+    public InspectionDataService(String name) {
+        super(name);
+    }
+
+    @Override
+    protected void onHandleIntent(Intent intent) {
+
+    }
+//    public Context mcontex;
+//    SharedPreferences sharedPreferences;
+//    SharedPreferences.Editor edit;
+//    ArrayList<String> allotedIdList = new ArrayList<>();
+//    JSONObject jsonObjBasicInfo;
+//    JSONObject jsonObjPersonalInfo;
+//    JSONArray jsonArrPersonalInfo;
+//    JSONArray jsonArrayBasicInfo;
+//    JSONArray jsonArrayQuestions;
+//    String questionsString = "";
+//    String consumerString, personalInfoString = "";
+//    String inspdate = Utils.getCurrentDate();
+//    ArrayList<LogAllModel> logArrayList = new ArrayList<>();
+//
+//
+//    public InspectionDataService()
+//    {
+//        super(InspectionDataService.class.getName());
+//    }
+//
+//    @Override
+//    protected void onHandleIntent(Intent intent)
+//    {
+//
+//        sharedPreferences = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+//
+//        edit = sharedPreferences.edit();
+//
+//        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+//
+//        inspdate = sdf.format(new Date());
+//        inspectionWebService();
+//
+//    }
+//
+//    private void inspectionWebService()
+//    {
+//
+//        try
+//        {
+//            String strAllotmentId = "";
+//            mcontex = InspectionDataService.this;
+//            allotedIdList = QuestionAnswerDB.getInstance(this).getAllotedId();
+//            System.out.println("consumerAllotedId = " + allotedIdList);
+//            InspectionDataSoapHelper helper = new InspectionDataSoapHelper();
+//
+//            for (int i = 0; i < allotedIdList.size(); i++) {
+//
+//                strAllotmentId = allotedIdList.get(i);
+//
+//                if (CustomerListDB.getInstance(InspectionDataService.this).
+//
+//                        getMobileCompleted(strAllotmentId))
+//                {
+//
+//                    // Mobile completed flag service
+//                    AQuery aQuery = new AQuery(this);
+//                    String url = ConfigPG.InspCompletedFlagInMobile + "AllotmentId=" + strAllotmentId + "&" + "IsCompleteFlag=" + "1";
+//                    Date currentTime = Calendar.getInstance().getTime();
+//                    String date = currentTime.toString();
+//                    //Constants.printResponseLog(InspectionDataService.this, " InspCompletedFlagInMobile Service - " + "AllotmentId=" + strAllotmentId, "Request -", date.toString(), " Seq - 001");
+//                    aQuery.ajax(url, JSONObject.class, 60000, new AjaxCallback<JSONObject>() {
+//                        public void callback(String url, JSONObject object, AjaxStatus status)
+//                        {
+//                            super.callback(url, object, status);
+//                            timeout(60000);
+//                            System.out.println("ResponseInspectionMobileFlag" + object);
+//                            if (object != null)
+//                            {
+//
+//                                Date currentTime = Calendar.getInstance().getTime();
+//                                String date = currentTime.toString();
+//                                // Constants.printResponseLog(InspectionDataService.this, " InspCompletedFlagInMobile Service - " + "", "Response - Success", date.toString(), " Seq - 001");
+//
+//                            }
+//                        }
+//                    });
+//
+//
+//                    //Consumer Info
+//                    TodayAllotedList todayAllotedList = CustomerListDB.getInstance(this).getTodayAllotedList(strAllotmentId);
+//
+//                    jsonArrayBasicInfo = new JSONArray();
+//                    jsonObjBasicInfo = new JSONObject();
+//                    try {
+//
+//                        String strSatisfy = todayAllotedList.getIsSatisfactory();
+//
+//                        if (strSatisfy.equalsIgnoreCase("")||
+//                                strSatisfy.equalsIgnoreCase("null") || strSatisfy.equalsIgnoreCase(null))
+//                        {
+//                            strSatisfy = "true";
+//                        }
+//
+//                        else
+//                        {
+//                            strSatisfy = todayAllotedList.getIsSatisfactory();
+//                        }
+//
+//
+//                        String strInsDate = todayAllotedList.getLastinspectiondate();
+//
+//                        if (strInsDate.equalsIgnoreCase("") || strInsDate.equalsIgnoreCase("null") ||
+//
+//                                strInsDate.equalsIgnoreCase(null))
+//                        {
+//                            strInsDate = inspdate;
+//                        }
+//
+//                        else
+//                        {
+//                            strInsDate = todayAllotedList.getLastinspectiondate();
+//                        }
+//
+//
+//                        jsonObjBasicInfo.put("AltId", strAllotmentId);
+//                        jsonObjBasicInfo.put("Lat", todayAllotedList.getLatitude());
+//                        jsonObjBasicInfo.put("Long", todayAllotedList.getLongitude());
+//                        jsonObjBasicInfo.put("Stisfy", strSatisfy);
+//                        jsonObjBasicInfo.put("Rmrk", todayAllotedList.getInstruction());
+//                        jsonObjBasicInfo.put("IDt", strInsDate);
+//                        jsonArrayBasicInfo.put(jsonObjBasicInfo);
+//                        consumerString = jsonArrayBasicInfo.toString();
+//
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//
+//                        try {
+//
+//                            LogAllModel logDetailModel = new LogAllModel();
+//                            logDetailModel.setLogPriority("High");
+//                            logDetailModel.setLogFor("Exception");
+//                            logDetailModel.setLogClass("Inspection Data Service");
+//                            logDetailModel.setLog_method("Consumer Info");
+//                            logDetailModel.setLog_data("");
+//                            logDetailModel.setLog_status("");
+//                            logDetailModel.setLogSubmited("");
+//                            logDetailModel.setException(e.toString());
+//                            logDetailModel.setLogKey("");
+//                            logArrayList.add(logDetailModel);
+//                            new Logger(InspectionDataService.this).saveLog(logArrayList);
+//
+//                        } catch (Exception ex) {
+//
+//                            ex.printStackTrace();
+//                            System.out.println("Exception@@" + ex);
+//                        }
+//                    }
+//
+//
+//                    // Personnal Info
+//                    PersonalInfoList personalInfoLists = PersonalnfoDB.getInstance(this).getPersonalInformationList(strAllotmentId);
+//                    jsonObjPersonalInfo = new JSONObject();
+//                    jsonArrPersonalInfo = new JSONArray();
+//
+//                    try {
+//
+//                        if (personalInfoLists != null) {
+//
+//                            System.out.println("DateOfBirthFormat@@@" + personalInfoLists.getDateofbirth());
+//                            String strBirthDate = personalInfoLists.getDateofbirth().trim();
+//                            DateValidator dateValidator = new DateValidator();
+//
+//                            if (dateValidator.validate(strBirthDate)) {
+//
+//                                jsonObjPersonalInfo.put("DOB", personalInfoLists.getDateofbirth());
+//
+//                            } else {
+//
+//                                String dateOfBirth = personalInfoLists.getDateofbirth().substring(0, 4);
+//                                if (!dateOfBirth.contains("-")) {
+//
+//                                    if (Integer.parseInt(dateOfBirth) > 1899) {
+//                                        jsonObjPersonalInfo.put("DOB", personalInfoLists.getDateofbirth());
+//
+//                                    }
+//
+//                                    else
+//                                    {
+//                                        String dateString=personalInfoLists.getDateofbirth().replace(dateOfBirth, "1975");
+//                                        System.out.println("New Date String == " + dateString);
+//                                        jsonObjPersonalInfo.put("DOB", dateString);
+//                                    }
+//
+//                                } else {
+//
+//                                    jsonObjPersonalInfo.put("DOB", personalInfoLists.getDateofbirth());
+//
+//                                }
+//
+//
+//                            }
+//
+//
+//                            // AFFIDIVATE DATE
+//
+//                            String strAffDate = personalInfoLists.getAffidavitdate().trim();
+//                            if (dateValidator.validate(strAffDate)) {
+//
+//                                strAffDate = personalInfoLists.getAffidavitdate();
+//                            } else {
+//
+//                                if (strAffDate.contains("/")) {
+//
+//                                    strAffDate = strAffDate.replace("/", "-");
+//                                }
+//                            }
+//
+//                            jsonObjPersonalInfo.put("VIP", personalInfoLists.getVip());
+//                            jsonObjPersonalInfo.put("Gndr", personalInfoLists.getGender());
+//                            jsonObjPersonalInfo.put("CCrd", personalInfoLists.getUsingcreditcard());
+//                            jsonObjPersonalInfo.put("MMNme", personalInfoLists.getMothername());
+//                            jsonObjPersonalInfo.put("HCC", personalInfoLists.getHighconsumer());
+//                            jsonObjPersonalInfo.put("FSp", personalInfoLists.getFatherspousename());
+//                            jsonObjPersonalInfo.put("Gp2Refil", personalInfoLists.getRefills());
+//                            jsonObjPersonalInfo.put("Hwfil", personalInfoLists.getBook_refill());
+//                            jsonObjPersonalInfo.put("NoOfFM", personalInfoLists.getFamilymember());
+//                            jsonObjPersonalInfo.put("TypOfHA", personalInfoLists.getTypeofhouse());
+//                            jsonObjPersonalInfo.put("RtCrdAff", personalInfoLists.getRationcard());
+//                            jsonObjPersonalInfo.put("TWhelr", personalInfoLists.getTwo_wheeler());
+//                            jsonObjPersonalInfo.put("AffDt", strAffDate);
+//                            jsonObjPersonalInfo.put("FWhelr", personalInfoLists.getFour_wheeler());
+//                            jsonObjPersonalInfo.put("RCNo", personalInfoLists.getRationcardno());
+//                            jsonObjPersonalInfo.put("UsePipGs", personalInfoLists.getPipegas());
+//                            jsonObjPersonalInfo.put("PCNo", personalInfoLists.getPancardno());
+//                            jsonObjPersonalInfo.put("PsprtNo", personalInfoLists.getPassportno());
+//                            jsonObjPersonalInfo.put("VCNo", personalInfoLists.getVoterid());
+//                            jsonObjPersonalInfo.put("DriLicNo", personalInfoLists.getLicenseno());
+//                            jsonObjPersonalInfo.put("MobNo", personalInfoLists.getMobileno());
+//                            jsonObjPersonalInfo.put("EmailId", personalInfoLists.getEmailid());
+//
+//                            jsonArrPersonalInfo.put(jsonObjPersonalInfo);
+//
+//                            personalInfoString = jsonArrPersonalInfo.toString();
+//
+//                        }
+//
+//                    }
+//
+//                    catch (JSONException e)
+//                    {
+//                        e.printStackTrace();
+//
+//
+//                        try
+//                        {
+//
+//                            LogAllModel logDetailModel = new LogAllModel();
+//                            logDetailModel.setLogPriority("High");
+//                            logDetailModel.setLogFor("Exception");
+//                            logDetailModel.setLogClass("Inspection Data Service");
+//                            logDetailModel.setLog_method("Personal Info");
+//                            logDetailModel.setLog_data("");
+//                            logDetailModel.setLog_status("");
+//                            logDetailModel.setLogSubmited("");
+//                            logDetailModel.setException(e.toString());
+//                            logDetailModel.setLogKey("");
+//                            logArrayList.add(logDetailModel);
+//                            new Logger(InspectionDataService.this).saveLog(logArrayList);
+//
+//                        } catch (Exception ex) {
+//
+//                            ex.printStackTrace();
+//                            System.out.println("Exception@@" + ex);
+//                        }
+//                    }
+//
+//                    //questions string
+//                    ArrayList<QuestionAnswerList> queAnsList = QuestionAnswerDB.getInstance(this).getAnswerList(strAllotmentId);
+//                    System.out.println("queAnsList @@" + queAnsList);
+//
+//                    jsonArrayQuestions = new JSONArray();
+//                    JSONObject jsonObjectQuestions = null;
+//
+//                    for (int j = 0; j < queAnsList.size(); j++) {
+//
+//
+//                        try
+//                        {
+//                            jsonObjectQuestions = new JSONObject();
+//                            jsonObjectQuestions.put("QId", 							 queAnsList.get(j).getQuestionid());
+//                            jsonObjectQuestions.put("Ans",queAnsList.get(j).getAnswers());                       	jsonArrayQuestions.put(jsonObjectQuestions);
+//                            System.out.println("jsonArrayQuestions@@@@@@@@" + jsonArrayQuestions);
+//
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                            System.out.println("Exception Question Upload Record");
+//
+//                            try {
+//
+//                                LogAllModel logDetailModel = new LogAllModel();
+//                                logDetailModel.setLogPriority("High");
+//                                logDetailModel.setLogFor("Exception");
+//                                logDetailModel.setLogClass("Inspection Data Service");
+//                                logDetailModel.setLog_method("Upload Question");
+//                                logDetailModel.setLog_data("");
+//                                logDetailModel.setLog_status("");
+//                                logDetailModel.setLogSubmited("");
+//                                logDetailModel.setException(e.toString());
+//                                logDetailModel.setLogKey("");
+//                                logArrayList.add(logDetailModel);
+//                                new Logger(InspectionDataService.this).saveLog(logArrayList);
+//
+//                            }
+//                            catch (Exception ex)
+//                            {
+//                                ex.printStackTrace();
+//                                System.out.println("Exception@@"+ ex);
+//                            }
+//                        }
+//                    }
+//
+//                    questionsString = jsonArrayQuestions.toString();   System.out.println("strQueAns=" + questionsString);
+//
+//// Upload Images
+//                    ArrayList<PhotoList> photoLists = PhotoDB.getInstance(this).getImagesList(strAllotmentId);
+//
+//                    ArrayList<byte[]> imageByteList = new ArrayList<>();
+//                    ArrayList<String> photoNameList = new ArrayList<String>();
+//
+//
+//                    for (int j = 0; j < photoLists.size(); j++)
+//                    {
+//
+//                        try
+//                        {
+//                            String strFile = String.valueOf(photoLists.get(j));
+//
+//                            if (strFile.contains("/storage"))
+//                            {
+//
+//                                /* Get file pathfrom table photos */
+//
+//                                try
+//                                {
+//                                    Bitmap bm=BitmapFactory.decodeFile(photoLists.get(j).getFilestream());
+//
+//                                    if (bm != null)
+//                                    {
+//
+//                                        ByteArrayOutputStream baos = new ByteArrayOutputStream();                                       bm.compress(Bitmap.CompressFormat.PNG, 65, baos); //bm is the bitmap object
+//                                        byte[] imageByteArr = baos.toByteArray();
+//
+//
+//                                        if (imageByteArr != null)
+//                                        {
+//                                            imageByteList.add(j, imageByteArr);
+//                                            photoNameList.add(j, photoLists.get(j).getFilename());
+//                                        }
+//
+//
+//                                    }
+//                                } catch (Exception e) {
+//
+//                                    e.printStackTrace();
+//                                }
+//
+//                            } else {
+//
+//                                /*get string from photo table*/
+//                                Bitmap bitmap = null;
+//                                String string = photoLists.get(j).getFilestream();
+//                                if (string != null) {
+//                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                                    try {
+//                                        byte[] encodeByte = Base64.decode(string, Base64.DEFAULT);
+//                                        bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+//
+//                                        bitmap.compress(Bitmap.CompressFormat.PNG, 65, baos); //bm is the bitmap object
+//                                        byte[] imageByteArr = baos.toByteArray();
+//
+//                                        imageByteList.add(j, imageByteArr);
+//                                        photoNameList.add(j, photoLists.get(j).getFilename());
+//                                    }
+//
+//                                    catch (Exception e)
+//                                    {
+//                                        e.getMessage();
+//                                    }
+//                                }
+//                            }
+//
+//                        } catch (Exception e) {
+//
+//                            e.printStackTrace();
+//
+//                            try {
+//                                LogAllModel logDetailModel = new LogAllModel();
+//                                logDetailModel.setLogPriority("High");
+//                                logDetailModel.setLogFor("Exception");
+//                                logDetailModel.setLogClass("Inspection Data Service");
+//                                logDetailModel.setLog_method("Upload Images");
+//                                logDetailModel.setLog_data("");
+//                                logDetailModel.setLog_status("");
+//                                logDetailModel.setLogSubmited("");
+//                                logDetailModel.setException(e.toString());
+//                                logDetailModel.setLogKey("");
+//                                logArrayList.add(logDetailModel);
+//                                new Logger(InspectionDataService.this).saveLog(logArrayList);
+//
+//                            }catch(Exception ex) {
+//                                ex.printStackTrace();
+//                                System.out.println("Exception@@" + ex);
+//                            }
+//                        }
+//
+//
+//                    }
+//
+//                    LinkedHashMap recordHashMap = new LinkedHashMap<>();
+//
+//                    recordHashMap.put("ConsumerInfo", consumerString);
+//                    recordHashMap.put("PersonalInfo", personalInfoString);
+//                    recordHashMap.put("QuestionsInfo", questionsString);
+//
+//                    if (photoNameList.size() > 4) {
+//
+//                        recordHashMap.put("Img1", photoNameList.get(1));
+//                        recordHashMap.put("Img2", photoNameList.get(2));
+//                        recordHashMap.put("Img3", photoNameList.get(3));
+//                        recordHashMap.put("Img4", photoNameList.get(4));
+//                        recordHashMap.put("Img5", photoNameList.get(0));
+//                    }
+//                   /* else {
+//                        recordHashMap.put("Img1", "");
+//                        recordHashMap.put("Img2", "");
+//                        recordHashMap.put("Img3","");
+//                        recordHashMap.put("Img4", "");
+//                        recordHashMap.put("Img5","");
+//                    }*/
+//
+//                    if (imageByteList.size() > 4) {
+//
+//                        recordHashMap.put("img1Byt", imageByteList.get(1));
+//                        recordHashMap.put("img2Byt", imageByteList.get(2));
+//                        recordHashMap.put("img3Byt", imageByteList.get(3));
+//                        recordHashMap.put("img4Byt", imageByteList.get(4));
+//                        recordHashMap.put("img5Byt", imageByteList.get(0));
+//                    }
+//                   /* else {
+//                        recordHashMap.put("img1Byt", "");
+//                        recordHashMap.put("img2Byt", "");
+//                        recordHashMap.put("img3Byt", "");
+//                        recordHashMap.put("img4Byt", "");
+//                        recordHashMap.put("img5Byt", "");
+//                    }*/
+//
+//                    helper.getSoapRequest(InspectionDataService.this, ConfigPG.NAMESPACE, ConfigPG.METHOD_INSPECTION_DATA_PostFile, ConfigPG.ServerUrl_Soap, ConfigPG.SOAP_ACTION_INSPECTION_DATA, recordHashMap);
+//
+//                }
+//            }
+//
+//
+//        } catch (Exception e) {
+//
+//            e.printStackTrace();
+//
+//            try {
+//                LogAllModel logDetailModel = new LogAllModel();
+//                logDetailModel.setLogPriority("High");
+//                logDetailModel.setLogFor("Exception");
+//                logDetailModel.setLogClass("Inspection Data Service");
+//                logDetailModel.setLog_method("InspectionData");
+//                logDetailModel.setLog_data("");
+//                logDetailModel.setLog_status("");
+//                logDetailModel.setLogSubmited("");
+//                logDetailModel.setException(e.toString());
+//                logDetailModel.setLogKey("");
+//                logArrayList.add(logDetailModel);
+//                new Logger(InspectionDataService.this).saveLog(logArrayList);
+//
+//            } catch (Exception ex) {
+//                ex.printStackTrace();
+//                System.out.println("Exception@@" + ex);
+//            }
+//        }
+//
+//    }
+
+}

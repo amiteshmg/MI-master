@@ -26,6 +26,13 @@ public class Constants
     public static final String IS_COMPLETED = "isCompleted";
     public static final String ALLOTED_ID = "allottedId";
     public static final String ANSWER = "Answer";
+    public static final String PREF_CONSUMER_DETAILS = "ConsumerPrefCurrent";
+    public static final String MOBILE_NO = "mobileNo";
+    public static final String FIRST_RUN = "firstRun";
+    public static final String ARRAY_LENGTH = "arrayLength";
+    public static final String TAG = "MI_debugData";
+    public static final String INSPECTION_ID = "InspectionId";
+    public static final int SIGNATURE = 5;
 
 
     public static  String SERVER_URL="http://hpgasprodweb1t.hpcl.co.in/hp.svc/QuestionnaireList";
@@ -51,9 +58,13 @@ public class Constants
     static String loginFlag="loginFlag";
     public static String Otp = "otp";
     public static int AllotmentCount;
-    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
+    public static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
 
 
+    public static final int REGULATOR_CODE = 1;
+    public static final int STOVE_CODE = 2;
+    public static final int HOSE_CODE = 3;
+    public static final int INSTALLATION_CODE = 4;
 
 
     private static final int CAMERA_CAPTURE_VIDEO_REQUEST_CODE = 200;

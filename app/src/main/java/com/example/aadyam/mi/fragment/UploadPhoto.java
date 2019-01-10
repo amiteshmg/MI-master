@@ -1,18 +1,21 @@
 package com.example.aadyam.mi.fragment;
 
 import android.Manifest;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -21,11 +24,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.aadyam.mi.Global.GPSTracker;
 import com.example.aadyam.mi.Utils.CameraUtils;
+import com.example.aadyam.mi.Utils.Constants;
 import com.example.aadyam.mi.database.DatabaseHelperUser;
 import com.example.aadyam.mi.Global.MyGlobals;
 import com.example.aadyam.mi.R;
@@ -34,10 +40,15 @@ import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
+
 
 import static android.support.v7.app.AppCompatActivity.RESULT_CANCELED;
 import static android.support.v7.app.AppCompatActivity.RESULT_OK;
@@ -50,51 +61,42 @@ import static com.example.aadyam.mi.activity.MainActivity.MEDIA_TYPE_IMAGE;
  */
 
 
-public class UploadPhoto extends Fragment
-{
+public class UploadPhoto extends Fragment {
+    private static final int SIGNATURE = 5;
     private static String imageStoragePath;
     private static final int BITMAP_SAMPLE_SIZE = 8;
     private static final int REGULATOR_CODE = 1;
     private static final int STOVE_CODE = 2;
     private static final int HOSE_CODE = 3;
     private static final int INSTALLATION_CODE = 4;
-    private Bundle bundle;
     private static final String KEY_IMAGE_STORAGE_PATH = "image_path";
-    private ImageView stove_iv,regulator_iv,hose_iv,installation_iv,signature_iv;
+    private ImageView stove_iv, regulator_iv, hose_iv, installation_iv, signature_iv;
     public static final String GALLERY_DIRECTORY_NAME = "MI_Images";
+    private SignaturePad userInput;
+    String encoded4;
+    String[] imageArray,fileNameArray;
 
-    Button submit,save;
-    LinearLayout layout;
+
+    EditText instruction_editText;
     SignaturePad signaturePad;
-    private int mCurCheckPosition=0;
+    int count=0;
+    private Context context;//=getContext();
+    private Bitmap regulatorBitmap,stoveBitmap,hoseBitmap,installationBitmap,signatureBitmap;
 
-
-    public UploadPhoto()
-    {
+    public UploadPhoto() {
         // Required empty public constructor
     }
 
 
-
-
-
-
-
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_upload_photo, container, false);
     }
 
 
-
-
-
     @Override
-    public void onPause()
-    {
+    public void onPause() {
         super.onPause();
         // Toast.makeText(getContext(), "onPause()", Toast.LENGTH_SHORT).show();
 
@@ -102,87 +104,74 @@ public class UploadPhoto extends Fragment
     }
 
 
-
-
     @Override
     public void onStart() {
         super.onStart();
 
-        Log.i("FRAGMENT LIFECYCLE","onStart()");
+        Log.i("FRAGMENT LIFECYCLE", "onStart()");
         //Toast.makeText(getContext(), "onStart()", Toast.LENGTH_SHORT).show();
     }
 
 
-
-
-
-
-
-
-
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable final Bundle savedInstanceState)
-    {
+    public void onViewCreated(@NonNull View view, @Nullable final Bundle savedInstanceState) {
 
-     //   submit=view.findViewById(R.id.button_next);
+        Button submit = view.findViewById(R.id.button_next);
         submit.setText("Submit");
-       // save=view.findViewById(R.id.button_save);
+        final Button save = view.findViewById(R.id.button_save);
 
+        instruction_editText=view.findViewById(R.id.consumer_instruction_editext);
         super.onViewCreated(view, savedInstanceState);
-
+        context=getContext();
         //signaturePad=view.findViewById(R.id.);
+        assert context != null;
+        final SharedPreferences sharedPreferences=context.getSharedPreferences(Constants.PREFS_NAME,Context.MODE_PRIVATE);
 
+        String uniqueNo=sharedPreferences.getString(Constants.UNIQUE_CONSUMER_NO,null);
+        String allottedId=sharedPreferences.getString(Constants.ALLOTED_ID,null);
+
+        // setPhotoView(Constants.REGULATOR_CODE,allottedId);
+        // setPhotoView(Constants.STOVE_CODE,allottedId);
+        // setPhotoView(Constants.HOSE_CODE,allottedId);
+        // setPhotoView(Constants.INSTALLATION_CODE,allottedId);
+        //  setPhotoView(Constants.SIGNATURE,allottedId);
 
         new MyGlobals(getContext()).getJSON();
-        this.bundle=savedInstanceState;
-        stove_iv=view.findViewById(R.id.stove_iv);
-        regulator_iv=view.findViewById(R.id.regulator_iv);
-        hose_iv=view.findViewById(R.id.hose_iv);
-        installation_iv=view.findViewById(R.id.installation_iv);
-        signature_iv=view.findViewById(R.id.signature_iv);
+        stove_iv = view.findViewById(R.id.stove_iv);
+        regulator_iv = view.findViewById(R.id.regulator_iv);
+        hose_iv = view.findViewById(R.id.hose_iv);
+        installation_iv = view.findViewById(R.id.installation_iv);
+        signature_iv = view.findViewById(R.id.signature_iv);
 
-        layout=view.findViewById(R.id.signature_layout);
-        stove_iv.setOnClickListener(new View.OnClickListener()
-        {
+        LinearLayout layout = view.findViewById(R.id.signature_layout);
+        stove_iv.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
-                if (CameraUtils.checkPermissions(getContext()))
-                {
+            public void onClick(View view) {
+                if (CameraUtils.checkPermissions(getContext())) {
                     captureImage(STOVE_CODE);
                     // restoring storage image path from saved instance state
                     // otherwise the path will be null on device rotation
 
-                    restoreFromBundle(savedInstanceState,STOVE_CODE);
-                }
-
-                else
-                {
-                    requestCameraPermission(MEDIA_TYPE_IMAGE,STOVE_CODE);
+                    restoreFromBundle(savedInstanceState, STOVE_CODE);
+                } else {
+                    requestCameraPermission(MEDIA_TYPE_IMAGE, STOVE_CODE);
                 }
 
             }
         });
 
 
-
-        regulator_iv.setOnClickListener(new View.OnClickListener()
-        {
+        regulator_iv.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
-                if (CameraUtils.checkPermissions(getContext()))
-                {
+            public void onClick(View view) {
+                if (CameraUtils.checkPermissions(getContext())) {
                     captureImage(REGULATOR_CODE);
                     // restoring storage image path from saved instance state
                     // otherwise the path will be null on device rotation
 
-                    restoreFromBundle(savedInstanceState,REGULATOR_CODE);
-                }
-
-                else
-                {
-                    requestCameraPermission(MEDIA_TYPE_IMAGE,REGULATOR_CODE);
+                    restoreFromBundle(savedInstanceState, REGULATOR_CODE);
+                } else {
+                    requestCameraPermission(MEDIA_TYPE_IMAGE, REGULATOR_CODE);
                 }
 
 
@@ -190,82 +179,233 @@ public class UploadPhoto extends Fragment
         });
 
 
-
-
-
-
-        installation_iv.setOnClickListener(new View.OnClickListener()
-        {
+        installation_iv.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
-                if (CameraUtils.checkPermissions(getContext()))
-                {
+            public void onClick(View view) {
+                if (CameraUtils.checkPermissions(getContext())) {
                     captureImage(INSTALLATION_CODE);
                     // restoring storage image path from saved instance state
                     // otherwise the path will be null on device rotation
 
-                    restoreFromBundle(savedInstanceState,INSTALLATION_CODE);
-                }
-                else
-                {
-                    requestCameraPermission(MEDIA_TYPE_IMAGE,INSTALLATION_CODE);
+                    restoreFromBundle(savedInstanceState, INSTALLATION_CODE);
+                } else {
+                    requestCameraPermission(MEDIA_TYPE_IMAGE, INSTALLATION_CODE);
                 }
 
             }
         });
 
 
-        hose_iv.setOnClickListener(new View.OnClickListener()
-        {
+        hose_iv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if (CameraUtils.checkPermissions(getContext()))
-                {
+                if (CameraUtils.checkPermissions(getContext())) {
                     captureImage(HOSE_CODE);
-                    restoreFromBundle(savedInstanceState,HOSE_CODE);
-                }
-
-
-                else
-                {
-                    requestCameraPermission(MEDIA_TYPE_IMAGE,HOSE_CODE);
+                    restoreFromBundle(savedInstanceState, HOSE_CODE);
+                } else {
+                    requestCameraPermission(MEDIA_TYPE_IMAGE, HOSE_CODE);
                 }
 
             }
         });
 
 
-       /* signature_iv.setOnClickListener(new View.OnClickListener() {
+        signature_iv.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                UploadPhoto fragment = new UploadPhoto();
-                FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.signature_layout, fragment);
+            public void onClick(View v)
+            {
 
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-                //IntentFilter intentFilter
+
+                // get prompts.xml view
+                LayoutInflater li = LayoutInflater.from(getContext());
+                View promptsView = li.inflate(R.layout.signature_capture_layout, null);
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                        context);
+
+                // set prompts.xml to alertdialog builder
+                alertDialogBuilder.setView(promptsView);
+
+                userInput = (SignaturePad) promptsView.findViewById(R.id.signaturePad1);
+
+
+                userInput.setOnSignedListener(new SignaturePad.OnSignedListener() {
+                    @Override
+                    public void onStartSigning()
+                    {
+
+                    }
+
+                    @Override
+                    public void onSigned()
+                    {
+                        signatureBitmap=userInput.getSignatureBitmap();
+
+                    }
+
+                    @Override
+                    public void onClear() {
+
+                    }
+                });
+
+                // set dialog message
+                alertDialogBuilder.setCancelable(false).setPositiveButton("Submit", new DialogInterface.OnClickListener()
+                        {
+                                    public void onClick(DialogInterface dialog,int id)
+                                    {
+                                        // get user input and set it to result
+                                        // edit text
+                                        signatureBitmap=userInput.getSignatureBitmap();
+                                        signature_iv.setImageBitmap(signatureBitmap);
+                                        DatabaseHelperUser databaseHelperUser=new DatabaseHelperUser(context);
+                                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                                        signatureBitmap.compress(Bitmap.CompressFormat.PNG, 60, byteArrayOutputStream);
+
+                                        byte[] byteArray = byteArrayOutputStream .toByteArray();
+
+                                        encoded4 = Base64.encodeToString(byteArray, Base64.DEFAULT);
+
+                                        //databaseHelperUser.setPhotos("Signature_",encoded,5);
+
+                                        count++;
+
+                                        //Log.i(Constants.TAG,userInput.getSignatureSvg());
+
+                                        Toast.makeText(context, ""+userInput.getSignatureSvg(), Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                        .setNegativeButton("Cancel",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
+
+                // show it
+                alertDialog.show();
+              //  restoreFromBundle(savedInstanceState, SIGNATURE);
+
             }
-        });*/
 
+
+
+
+               /* Signature fragment = new Signature();
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.viewpager, fragment);
+
+                fragmentTransaction.commit();
+*/
+
+
+                //IntentFilter intentFilter
+                /*Signature signature=new Signature();
+                FragmentManager fragmentManager = getFragmentManager();
+
+                FragmentTransaction fragmentTransaction =fragmentManager.beginTransaction();
+                fragmentTransaction.add(signature,"Signature");
+                fragmentTransaction.show(signature);*/
+                //fragmentTransaction.replace(R.id.viewpager,signature);
+
+
+        });
 
 
         save.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
+
+                if(hoseBitmap!=null && regulatorBitmap!=null && installationBitmap!=null && signatureBitmap!=null && stoveBitmap!=null)
+                {
+                    saveCapturedImage();
+                    //saveCapturedImage(STOVE_CODE);
+                    //saveCapturedImage(HOSE_CODE);
+                    //saveCapturedImage(INSTALLATION_CODE);
+                    //saveCapturedImage(SIGNATURE);
+
+
+                }
+
+                else
+                    {
+                    Toast.makeText(context, "Capturing All images is Mandatory!", Toast.LENGTH_SHORT).show();
+                    }
                 // new QuestionAdapter(getContext()).updateAnswer(Constants.UPLOAD_PHOTO_FRAG_CODE);
             }
         });
+
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                Date date = new Date();
+                String dateString = dateFormat.format(date);
+
+                System.out.println(dateFormat.format(date)); //2016/11/16 12:08:43
+
+
+                GPSTracker gps = new GPSTracker(context);
+                DatabaseHelperUser databaseHelperUser=new DatabaseHelperUser(context);
+                double latitude,longitude;
+                String allotted_id=sharedPreferences.getString(Constants.ALLOTED_ID,null);
+                //String inspection_id=sharedPreferences.getString(Constants.INSPECTION_ID,null);
+                String unique=sharedPreferences.getString(Constants.UNIQUE_CONSUMER_NO,null);
+
+                // Check if GPS enabled
+                if(gps.canGetLocation())
+                {
+                    latitude = gps.getLatitude();
+                    longitude = gps.getLongitude();
+                    String instruction=instruction_editText.getText().toString();
+                    // \n is for new line
+                    Toast.makeText(context, "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+                    databaseHelperUser.putExtraAllotedUserData(allotted_id,"3528821"/*inspection_id*/,instruction,latitude,longitude);
+
+
+
+                    String consumerInfo=databaseHelperUser.getConsumerJsonString(allotted_id,latitude,longitude,instruction,dateString);
+                    String personalInfo=databaseHelperUser.getPersonalJsonString(unique);
+                    String answerInfo=databaseHelperUser.getAnswerJsonString(unique);
+
+
+
+
+                    Toast.makeText(context, ""+consumerInfo, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, ""+personalInfo, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, ""+answerInfo, Toast.LENGTH_SHORT).show();
+
+                }
+
+                else
+                {
+                    // Can't get location.
+                    // GPS or network is not enabled.
+                    // Ask user to enable GPS/network in settings.
+                    gps.showSettingsAlert();
+                }
+                //databaseHelperUser.putExtraAllotedUserData(instruction,latitude,longitude);
+
+            }
+        });
+
+
+
+
     }
 
 
 
 
-
-    private void requestCameraPermission(final int type,final int CODE)
+    private void requestCameraPermission(final int type, final int CODE)
     {
         Dexter.withActivity(getActivity()).withPermissions(Manifest.permission.CAMERA,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE).withListener(new MultiplePermissionsListener() {
@@ -273,42 +413,39 @@ public class UploadPhoto extends Fragment
             @Override
             public void onPermissionsChecked(MultiplePermissionsReport report)
             {
-                if (report.areAllPermissionsGranted())
-                {
-                    if (type == MEDIA_TYPE_IMAGE )
-                    {
+                if (report.areAllPermissionsGranted()) {
+                    if (type == MEDIA_TYPE_IMAGE) {
                         // capture regulator picture
-                        if(CODE==REGULATOR_CODE)
+                        if (CODE == REGULATOR_CODE)
                             captureImage(REGULATOR_CODE);
 
                             // capture stove picture
-                        else if(CODE==STOVE_CODE)
+                        else if (CODE == STOVE_CODE)
                             captureImage(STOVE_CODE);
 
                             // capture hose picture
-                        else if(CODE==HOSE_CODE)
+                        else if (CODE == HOSE_CODE)
                             captureImage(HOSE_CODE);
 
                             // capture installation picture
-                        else if(CODE==INSTALLATION_CODE)
+                        else if (CODE == INSTALLATION_CODE)
                             captureImage(INSTALLATION_CODE);
                     }
 
-
                     else
-                    {
-                        if(CODE==REGULATOR_CODE)
-                            requestCameraPermission(MEDIA_TYPE_IMAGE,REGULATOR_CODE);
+                        {
+                        if (CODE == REGULATOR_CODE)
+                            requestCameraPermission(MEDIA_TYPE_IMAGE, REGULATOR_CODE);
 
-                        else if(CODE==STOVE_CODE)
-                            requestCameraPermission(MEDIA_TYPE_IMAGE,REGULATOR_CODE);
+                        else if (CODE == STOVE_CODE)
+                            requestCameraPermission(MEDIA_TYPE_IMAGE, REGULATOR_CODE);
 
-                        else if(CODE==HOSE_CODE)
-                            requestCameraPermission(MEDIA_TYPE_IMAGE,REGULATOR_CODE);
+                        else if (CODE == HOSE_CODE)
+                            requestCameraPermission(MEDIA_TYPE_IMAGE, REGULATOR_CODE);
 
-                        else if(CODE==INSTALLATION_CODE)
-                            requestCameraPermission(MEDIA_TYPE_IMAGE,REGULATOR_CODE);
-                    }
+                        else if (CODE == INSTALLATION_CODE)
+                            requestCameraPermission(MEDIA_TYPE_IMAGE, REGULATOR_CODE);
+                        }
 
                 }
 
@@ -326,10 +463,6 @@ public class UploadPhoto extends Fragment
             }
         }).check();
     }
-
-
-
-
 
 
     private void showPermissionsAlert()
@@ -350,80 +483,58 @@ public class UploadPhoto extends Fragment
     }
 
 
-
-
-
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
 
-
     @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState)
+    {
         super.onSaveInstanceState(outState);
         // save file url in bundle as it will be null on screen orientation
         // changes
         outState.putString(KEY_IMAGE_STORAGE_PATH, imageStoragePath);
+        int mCurCheckPosition = 0;
         outState.putInt("curChoice", mCurCheckPosition);
 
     }
 
 
 
-
-
-  /*  public void setPhotoView(int ImageViewCode)
+    public void setPhotoView(int ImageViewCode,String allottedId)
     {
-
-        String imageString= new DatabaseHelperUser(getContext()).getPhotoEntry(ImageViewCode);
-
+        String imageString= new DatabaseHelperUser(context).getPhotoEntry(ImageViewCode,allottedId);
         Toast.makeText(getContext(), ""+imageString, Toast.LENGTH_SHORT).show();
-        if(imageString==null)
+
+        if(imageString!=null)
         {
-            return;
-        }
-        else{
-
-
             byte[] decodedString = Base64.decode(imageString, Base64.DEFAULT);
-
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
             switch(ImageViewCode)
             {
                 case REGULATOR_CODE:
-
                     regulator_iv.setImageBitmap(decodedByte);
                     break;
-
                 case HOSE_CODE:
-
                     hose_iv.setImageBitmap(decodedByte);
                     break;
-
                 case INSTALLATION_CODE:
-
                     installation_iv.setImageBitmap(decodedByte);
                     break;
-
                 case STOVE_CODE:
-
                     stove_iv.setImageBitmap(decodedByte);
                     break;
             }
-
         }
-    }*/
+    }
 
 
     /**
      * Saving stored image path to saved instance state
      */
-
 
 
     /**
@@ -438,23 +549,23 @@ public class UploadPhoto extends Fragment
     }*/
 
 
-    /*@Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        imageStoragePath = savedInstanceState.getString(KEY_IMAGE_STORAGE_PATH);
-    }*/
-
-
-
-    public void restoreFromBundle(Bundle savedInstanceState,int CODE) {
+//    @Override
+//    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+//        super.onViewStateRestored(savedInstanceState);
+//        imageStoragePath = savedInstanceState.getString(KEY_IMAGE_STORAGE_PATH);
+//    }
+    public void restoreFromBundle(Bundle savedInstanceState, int CODE)
+    {
         if (savedInstanceState != null)
         {
             if (savedInstanceState.containsKey(KEY_IMAGE_STORAGE_PATH))
             {
                 imageStoragePath = savedInstanceState.getString(KEY_IMAGE_STORAGE_PATH);
 
-                if (!TextUtils.isEmpty(imageStoragePath)) {
-                    if (imageStoragePath.substring(imageStoragePath.lastIndexOf(".")).equals("." + IMAGE_EXTENSION) ) {
+                if (!TextUtils.isEmpty(imageStoragePath))
+                {
+                    if (imageStoragePath.substring(imageStoragePath.lastIndexOf(".")).equals("." + IMAGE_EXTENSION))
+                    {
                         previewCapturedImage(CODE);
                     }
                 }
@@ -463,100 +574,145 @@ public class UploadPhoto extends Fragment
     }
 
 
-    private void previewCapturedImage(int CODE) {
-        DatabaseHelperUser databaseHelperUser=new DatabaseHelperUser(getContext());
+
+
+    private int getCountOfCapturedImages()
+    {
+        return count;
+    }
+
+    private void saveCapturedImage()
+    {
+        imageArray=new String[5];
+        fileNameArray=new String[5];
+
+        DatabaseHelperUser databaseHelperUser = new DatabaseHelperUser(getContext());
+
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        regulatorBitmap.compress(Bitmap.CompressFormat.JPEG, 60, baos); //bm is the bitmap object
+        byte[] b = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+        Toast.makeText(getContext(), "" + encodedImage, Toast.LENGTH_SHORT).show();
+        String filename = CameraUtils.getOutputMediaFile().getName();
+        fileNameArray[0]=filename;
+        imageArray[0]=encodedImage;
+
+
+
+        ByteArrayOutputStream baos1 = new ByteArrayOutputStream();
+        stoveBitmap.compress(Bitmap.CompressFormat.JPEG, 60, baos1); //bm is the bitmap object
+        byte[] b1 = baos1.toByteArray();
+        String encodedImage1 = Base64.encodeToString(b1, Base64.DEFAULT);
+        Toast.makeText(getContext(), "" + encodedImage1, Toast.LENGTH_SHORT).show();
+        String filename1 = CameraUtils.getOutputMediaFile().getName();
+        fileNameArray[1]=filename1;
+        imageArray[1]=encodedImage1;
+
+
+
+        ByteArrayOutputStream baos2 = new ByteArrayOutputStream();
+        hoseBitmap.compress(Bitmap.CompressFormat.JPEG, 60, baos2); //bm is the bitmap object
+        byte[] b2 = baos2.toByteArray();
+        String encodedImage2 = Base64.encodeToString(b2, Base64.DEFAULT);
+        Toast.makeText(getContext(), "" + encodedImage2, Toast.LENGTH_SHORT).show();
+        String filename2 = CameraUtils.getOutputMediaFile().getName();
+        fileNameArray[2]=filename2;
+        imageArray[2]=encodedImage2;
+
+
+
+        ByteArrayOutputStream baos3 = new ByteArrayOutputStream();
+        installationBitmap.compress(Bitmap.CompressFormat.JPEG, 60, baos3); //bm is the bitmap object
+        byte[] b3 = baos3.toByteArray();
+        String encodedImage3 = Base64.encodeToString(b3, Base64.DEFAULT);
+        Toast.makeText(getContext(), "" + encodedImage3, Toast.LENGTH_SHORT).show();
+        String filename3 = CameraUtils.getOutputMediaFile().getName();
+        fileNameArray[3]=filename3;
+        imageArray[3]=encodedImage3;
+
+
+
+        ByteArrayOutputStream baos4 = new ByteArrayOutputStream();
+        signatureBitmap.compress(Bitmap.CompressFormat.JPEG, 60, baos4); //bm is the bitmap object
+        byte[] b4 = baos4.toByteArray();
+        String encodedImage4 = Base64.encodeToString(b4, Base64.DEFAULT);
+        Toast.makeText(getContext(), "" + encodedImage4, Toast.LENGTH_SHORT).show();
+        String filename4 = CameraUtils.getOutputMediaFile().getName();
+        fileNameArray[4]=filename4;
+        imageArray[4]=encodedImage4;
+
+        String[] CODE={"1","2","3","4","5"};
+        databaseHelperUser.setPhotos(fileNameArray, imageArray, CODE);
+
+    }
+
+
+    //TODO Checkpoint Function
+
+    private void previewCapturedImage(int CODE)
+    {
 
         try
         {
-            //Bitmap bitmap = CameraUtils.optimizeBitmap(BITMAP_SAMPLE_SIZE, imageStoragePath);
-            //imgPreview.setVisibility(View.VISIBLE);
+
             switch (CODE)
             {
                 case REGULATOR_CODE:
-                    Bitmap bitmap = CameraUtils.optimizeBitmap(BITMAP_SAMPLE_SIZE, imageStoragePath);
-                    regulator_iv.setImageBitmap(bitmap);
-                    //Bitmap bm = BitmapFactory.decodeFile(imageStoragePath);
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 60, baos); //bm is the bitmap object
-                    byte[] b = baos.toByteArray();
-                    String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-                    Toast.makeText(getContext(), ""+encodedImage, Toast.LENGTH_SHORT).show();
-
-                    String filename=CameraUtils.getOutputMediaFile().getName();
-
-                    databaseHelperUser.setPhotos(filename,encodedImage, REGULATOR_CODE);
-
+                    regulatorBitmap = CameraUtils.optimizeBitmap(BITMAP_SAMPLE_SIZE, imageStoragePath);
+                    regulator_iv.setImageBitmap(regulatorBitmap);
 
 
                     break;
 
                 case STOVE_CODE:
-                    Bitmap bitmap1 = CameraUtils.optimizeBitmap(BITMAP_SAMPLE_SIZE, imageStoragePath);
-                    stove_iv.setImageBitmap(bitmap1);
-                    ByteArrayOutputStream baos1 = new ByteArrayOutputStream();
-                    bitmap1.compress(Bitmap.CompressFormat.JPEG, 60, baos1); //bm is the bitmap object
-                    byte[] b1 = baos1.toByteArray();
-                    String encodedImage1 = Base64.encodeToString(b1, Base64.DEFAULT);
-                    Toast.makeText(getContext(), ""+encodedImage1, Toast.LENGTH_SHORT).show();
-
-                    String filename1=CameraUtils.getOutputMediaFile().getName();
-                    databaseHelperUser.setPhotos(filename1,encodedImage1, STOVE_CODE);
+                    stoveBitmap = CameraUtils.optimizeBitmap(BITMAP_SAMPLE_SIZE, imageStoragePath);
+                    stove_iv.setImageBitmap(stoveBitmap);
 
 
                     break;
 
                 case HOSE_CODE:
-                    Bitmap bitmap2 = CameraUtils.optimizeBitmap(BITMAP_SAMPLE_SIZE, imageStoragePath);
-                    hose_iv.setImageBitmap(bitmap2);
-                    ByteArrayOutputStream baos2 = new ByteArrayOutputStream();
-                    bitmap2.compress(Bitmap.CompressFormat.JPEG, 60, baos2); //bm is the bitmap object
-                    byte[] b2 = baos2.toByteArray();
-                    String encodedImage2 = Base64.encodeToString(b2, Base64.DEFAULT);
-                    Toast.makeText(getContext(), ""+encodedImage2, Toast.LENGTH_SHORT).show();
+                    hoseBitmap = CameraUtils.optimizeBitmap(BITMAP_SAMPLE_SIZE, imageStoragePath);
+                    hose_iv.setImageBitmap(hoseBitmap);
 
-                    String filename2=CameraUtils.getOutputMediaFile().getName();
-                    databaseHelperUser.setPhotos(filename2,encodedImage2, HOSE_CODE);
                     break;
 
                 case INSTALLATION_CODE:
-                    Bitmap bitmap3 = CameraUtils.optimizeBitmap(BITMAP_SAMPLE_SIZE, imageStoragePath);
-                    installation_iv.setImageBitmap(bitmap3);
-                    ByteArrayOutputStream baos3 = new ByteArrayOutputStream();
-                    bitmap3.compress(Bitmap.CompressFormat.JPEG, 60, baos3); //bm is the bitmap object
-                    byte[] b3 = baos3.toByteArray();
-                    String encodedImage3 = Base64.encodeToString(b3, Base64.DEFAULT);
-                    Toast.makeText(getContext(), ""+encodedImage3, Toast.LENGTH_SHORT).show();
-                    String filename3=CameraUtils.getOutputMediaFile().getName();
-                    databaseHelperUser.setPhotos(filename3,encodedImage3, INSTALLATION_CODE);
+                   installationBitmap = CameraUtils.optimizeBitmap(BITMAP_SAMPLE_SIZE, imageStoragePath);
+                    installation_iv.setImageBitmap(installationBitmap);
+
+                    break;
+
+                case SIGNATURE:
+                    signatureBitmap = CameraUtils.optimizeBitmap(BITMAP_SAMPLE_SIZE, imageStoragePath);
+                    signature_iv.setImageBitmap(stoveBitmap);
+
                     break;
             }
 
-            // Bitmap bitmap = CameraUtils.optimizeBitmap(BITMAP_SAMPLE_SIZE, imageStoragePath);
 
 
 
+        }
 
-
-
-
-
-        } catch (NullPointerException e) {
+        catch (NullPointerException e)
+        {
             e.printStackTrace();
         }
     }
 
 
 
-    private void captureImage(int CODE) {
-
+    private void captureImage(int CODE)
+    {
         switch (CODE)
         {
-            case REGULATOR_CODE:
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                case REGULATOR_CODE:
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
                 File file = CameraUtils.getOutputMediaFile();
-                if (file != null)
-                {
+                if (file != null) {
                     imageStoragePath = file.getAbsolutePath();
                 }
 
@@ -571,7 +727,8 @@ public class UploadPhoto extends Fragment
                 Intent intent1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
                 File file1 = CameraUtils.getOutputMediaFile();
-                if (file1 != null) {
+                if (file1 != null)
+                {
                     imageStoragePath = file1.getAbsolutePath();
                 }
 
@@ -605,11 +762,24 @@ public class UploadPhoto extends Fragment
                     imageStoragePath = file3.getAbsolutePath();
                 }
 
+
                 Uri fileUri3 = CameraUtils.getOutputMediaFileUri(getContext(), file3);
                 intent3.putExtra(MediaStore.EXTRA_OUTPUT, fileUri3);
 
                 // start the image capture Intent
                 startActivityForResult(intent3, INSTALLATION_CODE);
+                break;
+
+            case SIGNATURE:
+                File file4 = CameraUtils.getOutputMediaFile();
+                if (file4 != null) {
+                    imageStoragePath = file4.getAbsolutePath();
+                }
+
+                Uri fileUri4 = CameraUtils.getOutputMediaFileUri(getContext(), file4);
+
+                //intent1.putExtra(MediaStore.EXTRA_OUTPUT, fileUri4);
+
                 break;
         }
 
@@ -620,28 +790,19 @@ public class UploadPhoto extends Fragment
     {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REGULATOR_CODE)
-        {
-            if (resultCode == RESULT_OK )
-            {
+        if (requestCode == REGULATOR_CODE) {
+            if (resultCode == RESULT_OK) {
                 // Refreshing the gallery
                 CameraUtils.refreshGallery(getContext(), imageStoragePath);
                 // successfully captured the image
                 // display it in image view
                 previewCapturedImage(REGULATOR_CODE);
-            }
-
-            else if (resultCode == RESULT_CANCELED)
-            {
+            } else if (resultCode == RESULT_CANCELED) {
                 // user cancelled Image capture
                 Toast.makeText(getContext(),
                         "User cancelled image capture", Toast.LENGTH_SHORT)
                         .show();
-            }
-
-
-            else
-            {
+            } else {
                 // failed to capture image
                 Toast.makeText(getContext(), "Sorry! Failed to capture image", Toast.LENGTH_SHORT).show();
             }
@@ -649,10 +810,9 @@ public class UploadPhoto extends Fragment
         }
 
 
-
         else if (requestCode == HOSE_CODE)
         {
-            if (resultCode == RESULT_OK )
+            if (resultCode == RESULT_OK)
             {
                 // Refreshing the gallery
                 CameraUtils.refreshGallery(getContext(), imageStoragePath);
@@ -669,42 +829,44 @@ public class UploadPhoto extends Fragment
                         .show();
             }
 
-
-
             else
-            {
+                {
                 // failed to capture image
                 Toast.makeText(getContext(), "Sorry! Failed to capture image", Toast.LENGTH_SHORT).show();
             }
 
-        }
-
-
-
-        else if (requestCode == INSTALLATION_CODE)
-        {
-            if (resultCode == RESULT_OK )
-            {
+        } else if (requestCode == INSTALLATION_CODE) {
+            if (resultCode == RESULT_OK) {
                 // Refreshing the gallery
                 CameraUtils.refreshGallery(getContext(), imageStoragePath);
                 // successfully captured the image
                 // display it in image view
                 previewCapturedImage(INSTALLATION_CODE);
-            }
-
-            else if (resultCode == RESULT_CANCELED)
-            {
+            } else if (resultCode == RESULT_CANCELED) {
                 // user cancelled Image capture
                 Toast.makeText(getContext(),
                         "User cancelled image capture", Toast.LENGTH_SHORT)
                         .show();
+            } else {
+                // failed to capture image
+                Toast.makeText(getContext(),
+                        "Sorry! Failed to capture image", Toast.LENGTH_SHORT)
+                        .show();
             }
 
-
-
-
-            else
-            {
+        } else if (requestCode == STOVE_CODE) {
+            if (resultCode == RESULT_OK) {
+                // Refreshing the gallery
+                CameraUtils.refreshGallery(getContext(), imageStoragePath);
+                // successfully captured the image
+                // display it in image view
+                previewCapturedImage(STOVE_CODE);
+            } else if (resultCode == RESULT_CANCELED) {
+                // user cancelled Image capture
+                Toast.makeText(getContext(),
+                        "User cancelled image capture", Toast.LENGTH_SHORT)
+                        .show();
+            } else {
                 // failed to capture image
                 Toast.makeText(getContext(),
                         "Sorry! Failed to capture image", Toast.LENGTH_SHORT)
@@ -715,29 +877,20 @@ public class UploadPhoto extends Fragment
 
 
 
-        else if (requestCode == STOVE_CODE)
-        {
-            if (resultCode == RESULT_OK )
-            {
+
+        else if (requestCode == Constants.SIGNATURE) {
+            if (resultCode == RESULT_OK) {
                 // Refreshing the gallery
                 CameraUtils.refreshGallery(getContext(), imageStoragePath);
                 // successfully captured the image
                 // display it in image view
                 previewCapturedImage(STOVE_CODE);
-            }
-
-            else if (resultCode == RESULT_CANCELED)
-            {
+            } else if (resultCode == RESULT_CANCELED) {
                 // user cancelled Image capture
                 Toast.makeText(getContext(),
                         "User cancelled image capture", Toast.LENGTH_SHORT)
                         .show();
-            }
-
-
-
-            else
-            {
+            } else {
                 // failed to capture image
                 Toast.makeText(getContext(),
                         "Sorry! Failed to capture image", Toast.LENGTH_SHORT)
@@ -747,5 +900,21 @@ public class UploadPhoto extends Fragment
         }
     }
 
-}
 
+
+    public void replaceFragment(Fragment fragment,boolean addToBackStack,Context context)
+    {
+        android.app.FragmentTransaction transaction = ((FragmentActivity) context).getFragmentManager().beginTransaction();
+        if (addToBackStack)
+        {
+            transaction.addToBackStack(fragment.getClass().getSimpleName());
+        }
+
+
+        //transaction.add(R.id., fragment);
+        transaction.commit();
+        ((FragmentActivity) context).getFragmentManager().executePendingTransactions();
+
+    }
+
+}

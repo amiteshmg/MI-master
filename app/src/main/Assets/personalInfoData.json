@@ -1,0 +1,239 @@
+[{
+  "Active":true,
+  "CategoryId":1,
+  "Description":"Mobile number",
+  "FieldData":null,
+  "FieldType":"E",
+  "SubFieldType":"phone",
+  "InformationId":1,
+  "isCompulsory":0
+}
+
+,{
+  "Active":true,
+  "CategoryId":1,
+  "Description":"Email-id",
+  "FieldData":null,
+  "FieldType":"E",
+  "SubFieldType":"textEmailAddress",
+  "InformationId":2,
+  "isCompulsory":0
+}
+
+,{
+  "Active":true,
+  "CategoryId":1,
+  "Description":"Date of birth",
+   "FieldData":null,
+  "FieldType":"E",
+  "SubFieldType":"date",
+  "InformationId":3,
+  "isCompulsory":1
+}
+
+
+,{
+  "Active":true,
+  "CategoryId":1,
+  "Description":null,
+  "FieldData":"VIP,Using credit card,High consumption Consumer",
+  "FieldType":"C",
+  "SubFieldType":null,
+  "InformationId":4,
+  "isCompulsory":0
+}
+
+
+,{
+  "Active":true,
+  "CategoryId":1,
+  "Description":"Gender",
+  "FieldData":"Select one,Male,Female",
+  "FieldType":"S",
+  "SubFieldType":null,
+  "InformationId":5,
+  "isCompulsory":0
+}
+
+
+,{
+  "Active":true,
+  "CategoryId":1,
+  "Description":"Father/Spouse ",
+  "FieldData":"Select one,Father,Spouse",
+  "FieldType":"S",
+  "SubFieldType":null,
+  "InformationId":6,
+  "isCompulsory":0
+}
+
+
+,{
+  "Active":true,
+  "CategoryId":1,
+  "Description":"Father/spouse name",
+  "FieldData":null,
+  "FieldType":"E",
+  "SubFieldType":"text",
+  "InformationId":7,
+  "isCompulsory":0
+}
+
+
+,{
+  "Active":true,
+  "CategoryId":1,
+  "Description":"Number of family members",
+  "FieldData":null,
+  "FieldType":"E",
+  "SubFieldType":"text",
+  "InformationId":8,
+  "isCompulsory":0
+}
+
+
+,{
+  "Active":true,
+  "CategoryId":1,
+  "Description":"Gap between 2 refills",
+  "FieldData":"Select one,100 days,75 days,50 days,25 days",
+  "FieldType":"E",
+  "SubFieldType":"numberDecimal",
+  "InformationId":9
+}
+
+
+,{
+  "Active":true,
+  "CategoryId":1,
+  "Description":"How do you book your refill",
+  "FieldData":"Select one,Manual,Phone,Online,Other",
+  "FieldType":"S",
+  "SubFieldType":null,
+  "InformationId":10,
+  "isCompulsory":0
+}
+
+
+,{
+  "Active":true,
+  "CategoryId":1,
+  "Description":"Type of house accomodation",
+  "FieldData":"Select one,Own,Rent",
+  "FieldType":"S",
+  "SubFieldType":null,
+  "InformationId":11,
+  "isCompulsory":0
+}
+
+
+,{
+  "Active":true,
+  "CategoryId":1,
+  "Description":"Ration card/Affidavit",
+  "FieldData":"Select one,Ration card,Affidavit",
+  "FieldType":"S",
+  "SubFieldType":null,
+  "InformationId":12,
+  "isCompulsory":0
+}
+
+
+,{
+  "Active":true,
+  "CategoryId":1,
+  "Description":null,
+  "FieldData":"Used Piped Gas",
+  "FieldType":"C",
+  "SubFieldType":null,
+  "InformationId":13,
+  "isCompulsory":0
+}
+
+
+,{
+  "Active":true,
+  "CategoryId":1,
+  "Description":"Two Wheeler",
+  "FieldData":null,
+  "FieldType":"E",
+  "SubFieldType":"numberDecimal",
+  "InformationId":14,
+  "isCompulsory":0
+}
+
+
+,{
+  "Active":true,
+  "CategoryId":1,
+  "Description":"Four Wheeler",
+  "FieldData":null,
+  "FieldType":"E",
+  "SubFieldType":"numberDecimal",
+  "InformationId":15,
+  "isCompulsory":0
+}
+
+
+,{
+  "Active":true,
+  "CategoryId":1,
+  "Description":"Four Wheeler",
+  "FieldData":null,
+  "FieldType":"E",
+  "SubFieldType":"numberDecimal",
+  "InformationId":16,
+  "isCompulsory":0
+}
+
+
+,{
+  "Active":true,
+  "CategoryId":1,
+  "Description":"Pan Card No.",
+  "FieldData":null,
+  "FieldType":"E",
+  "SubFieldType":"text",
+  "InformationId":17,
+  "isCompulsory":0
+}
+
+
+,{
+  "Active":true,
+  "CategoryId":1,
+  "Description":"Passport No.",
+  "FieldData":null,
+  "FieldType":"E",
+  "SubFieldType":"text",
+  "InformationId":18,
+  "isCompulsory":0
+}
+
+
+,{
+  "Active":true,
+  "CategoryId":1,
+  "Description":"Voter ID",
+  "FieldData":null,
+  "FieldType":"E",
+  "SubFieldType":"text",
+  "InformationId":19,
+  "isCompulsory":0
+}
+
+
+,{
+  "Active":true,
+  "CategoryId":1,
+  "Description":"Driving License No.",
+  "FieldData":null,
+  "FieldType":"E",
+  "SubFieldType":"text",
+  "InformationId":20,
+  "isCompulsory":0
+}
+
+
+
+]

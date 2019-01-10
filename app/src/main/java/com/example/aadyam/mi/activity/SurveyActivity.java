@@ -1,6 +1,7 @@
 package com.example.aadyam.mi.activity;
 
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.example.aadyam.mi.Utils.Constants;
 import com.example.aadyam.mi.database.DatabaseHelperUser;
 import com.example.aadyam.mi.R;
 import com.example.aadyam.mi.fragment.Cylinder;
@@ -71,6 +73,7 @@ public class SurveyActivity extends FragmentActivity
 
 
     private TabLayout tabLayout;
+    private TextView displayName,displayId;
     private ViewPager viewPager1;
     Toolbar toolbar1;
 
@@ -85,20 +88,18 @@ public class SurveyActivity extends FragmentActivity
 
 
 
-
-
-
-
-
-
-
-
-
-
      //TODO code present up is new
         toolbar1 = (Toolbar) findViewById(R.id.toolbar1);
+        displayName=findViewById(R.id.display_name_tv);
+        displayId=findViewById(R.id.display_id_tv);
+
+        SharedPreferences sharedPreferences=getSharedPreferences(Constants.PREFS_NAME,MODE_PRIVATE);
+
+        displayName.setText(sharedPreferences.getString(Constants.CONSUMER_NAME,null));
+        displayId.setText(sharedPreferences.getString(Constants.CONSUMER_NO,null));
 
         setActionBar(toolbar1);
+
         databaseHelperUser=new DatabaseHelperUser(this);
         allotment=new Allotment();
         //CylinderRecyclerView=findViewById(R.id.)
@@ -110,6 +111,26 @@ public class SurveyActivity extends FragmentActivity
 
         List<AllotmentList> list=new ArrayList<>();
         }
+
+  /*  @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        *//*  if (getSupportFragmentManager().getBackStackEntryCount() == 1)
+        {
+            finish();
+        }
+
+        else
+            {
+            super.onBackPressed();
+            }*//*
+    }*/
+
+    public void setCurrentItem(int item, boolean smoothScroll)
+    {
+        viewPager1.setCurrentItem(item, smoothScroll);
+    }
 
 
     private void setupViewPager(ViewPager viewPager)
@@ -124,29 +145,18 @@ public class SurveyActivity extends FragmentActivity
         adapter.addFragment(new UploadPhoto(), "Upload Photo");
 
         viewPager.setAdapter(adapter);
-
     }
-
-    public void onClickSaveCylinderDetails()
-    {
-        Log.i("QUESTION DISPLAY","In questionDisplay");
-        //new DatabaseHelperUser(getBaseContext()).
-    }
-
 
 
     class ViewPagerAdapter1 extends FragmentPagerAdapter
     {
-
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
-
 
         ViewPagerAdapter1(FragmentManager manager)
         {
             super(manager);
         }
-
 
         @Override
         public Fragment getItem(int position)
@@ -166,19 +176,31 @@ public class SurveyActivity extends FragmentActivity
         {
             FragmentManager fragmentManager=getSupportFragmentManager();
             FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-
             mFragmentList.add(fragment);
+          //  fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
             mFragmentTitleList.add(title);
         }
 
+       /* public void notifyItemChanged(Object oldItem, Object newItem) {
+            if (mItems != null) {
+                for (ItemInfo itemInfo : mItems) {
+                    if (itemInfo.object.equals(oldItem)) {
+                        itemInfo.object = newItem;
+                    }
+                }
+            }
+            invalidate();
+        }*/
 
         @Override
         public CharSequence getPageTitle(int position)
         {
             return mFragmentTitleList.get(position);
         }
+
     }
+
 
 
 

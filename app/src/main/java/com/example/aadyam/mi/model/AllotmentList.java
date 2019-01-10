@@ -10,19 +10,24 @@ public class AllotmentList
 {
 
 
-    public String getJsonData() {
+    public String getJsonData()
+    {
         return JsonData;
     }
 
     private  String JsonData;
 
+
+
     @NonNull
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "{"+"address:"+address+" mobileNo:"+mobileNo+" Consumer Name:"+consumerName+" Consumer Number:"+consumerNo;
     }
 
-    public int getId() {
+    public int getId()
+    {
         return id;
     }
 
@@ -151,7 +156,7 @@ public class AllotmentList
         private Integer uploadedQuestions;
         @SerializedName("lastInspDate")
         @Expose
-        private Object lastInspDate;
+        private String lastInspDate;
         @SerializedName("lastupdateddate")
         @Expose
         private String lastupdateddate;
@@ -462,19 +467,23 @@ public class AllotmentList
             this.uploadedQuestions = uploadedQuestions;
         }
 
-        public Object getLastInspDate() {
+        public String getLastInspDate()
+        {
             return lastInspDate;
         }
 
-        public void setLastInspDate(Object lastInspDate) {
+        public void setLastInspDate(String lastInspDate)
+        {
             this.lastInspDate = lastInspDate;
         }
 
-        public String getLastupdateddate() {
+        public String getLastupdateddate()
+        {
             return lastupdateddate;
         }
 
-        public void setLastupdateddate(String lastupdateddate) {
+        public void setLastupdateddate(String lastupdateddate)
+        {
             this.lastupdateddate = lastupdateddate;
         }
 

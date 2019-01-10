@@ -2,14 +2,18 @@ package com.example.aadyam.mi.activity;
 
 import android.annotation.SuppressLint;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +26,8 @@ import com.example.aadyam.mi.R;
 import com.example.aadyam.mi.Utils.CameraUtils;
 import com.example.aadyam.mi.Utils.Constants;
 import com.example.aadyam.mi.Utils.SharedValues;
+import com.example.aadyam.mi.activity.session.AlertDialogManager;
+import com.example.aadyam.mi.activity.session.SessionManager;
 import com.example.aadyam.mi.model.Distributor;
 import com.example.aadyam.mi.rest.ApiClient;
 import com.example.aadyam.mi.rest.ApiInterface;
@@ -37,15 +43,19 @@ public class LoginActivity extends AppCompatActivity
 {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
-   EditText editText;
+    EditText editText;
     Button button;
     String number;
+    AlertDialogManager alert;
+    SessionManager sessionManager;
+
+
     SharedPreferences sharedPreferences;
     private TextView txtDescription;
 
     private ImageView imgPreview;
-
-
+    private EditText mobileNoEditText;
+    private AlertDialog.Builder builder;
 
     @Override
     public void onBackPressed()
@@ -54,17 +64,28 @@ public class LoginActivity extends AppCompatActivity
         moveTaskToBack(true);
     }
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState)
+    protected void onCreate(final Bundle savedInstanceState)
     {
 
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login);
+        sessionManager=new SessionManager(getApplicationContext());
+
+
 
         button=findViewById(R.id.btn_otp_generate);
 
-        editText=findViewById(R.id.input_number);
+       builder=new AlertDialog.Builder(getBaseContext());
+        builder.setMessage("Device Not Registered!");
+
+        builder.setCancelable(true);
+
+        mobileNoEditText=findViewById(R.id.input_number);
+
+       alert = new AlertDialogManager();
 
         //TODO : Code for sharedPreference . Uncomment later on
 
@@ -77,102 +98,111 @@ public class LoginActivity extends AppCompatActivity
         }
 
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
+        button.setOnClickListener(new View.OnClickListener()
+        {
+           /* @Override
             public void onClick(View v)
             {
-               // getDistributor();
+                if(mobileNoEditText.getText().toString()=="9823844616")
+                {
+
+                    LayoutInflater li = LayoutInflater.from(getBaseContext());
+                    View promptsView = li.inflate(R.layout.input_dialog, null);
+
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                            getBaseContext());
+
+                    // set prompts.xml to alertdialog builder
+                    alertDialogBuilder.setView(promptsView);
+
+                    final EditText userInput = (EditText) promptsView
+                            .findViewById(R.id.passCodeEditText);
+
+                    // set dialog message
+                    alertDialogBuilder
+                            .setCancelable(false)
+                            .setPositiveButton("OK",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog,int id) {
+                                            // get user input and set it to result
+                                            // edit text
+
+                                            if(userInput.getText().toString()=="7979")
+                                            {
+
+                                              proceed();
+                                            }
+                                            //result.setText(userInput.getText());
+                                        }
+                                    })
+                            .setNegativeButton("Cancel",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog,int id) {
+                                            dialog.cancel();
+                                        }
+                                    });
+
+                    // create alert dialog
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+
+                    // show it
+                    alertDialog.show();
+
+                }
+
+                else
+                    {
+                        builder.show();
+                }
+
+
+                // getDistributor();
                 //   login();
             }
         });
-
-
-    }
-
-
-
-
-
-    /*private void login()
-    {
-
-        if(!validate())
-        {
-            onLoginFailed();
-        }
-
-        button.setEnabled(false);
-
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
-                R.style.AppTheme);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
-        progressDialog.show();
-
-        //TODO : Implement sharedpreferences later on
-        *//*
-        number=editText.toString();
-
-        sharedPreferences.edit().putString("mobileNo",number);
-        *//*
-
-        // TODO: Implement your own authentication logic here.
-
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
-                        getDistributor();
-                        // onLoginFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
-    }
-
-
-   *//* @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_SIGNUP) {
-            if (resultCode == RESULT_OK) {
-
-                // TODO: Implement successful signup logic here
-                // By default we just finish the Activity and log them in automatically
-                this.finish();
-            }
-        }
-    }*//*
-
-    public void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-
-        button.setEnabled(true);
-    }
-
-    public void onLoginSuccess() {
-        button.setEnabled(true);
-        finish();
-    }
-
-
-    private boolean validate()
-    {
-        String number=editText.getText().toString();
-
-        boolean valid=true;
-
-        if(number.isEmpty() || !Patterns.PHONE.matcher(number).matches())
-        {
-            editText.setError("Please enter a valid mobile number");
-            valid = false;
-        }else
-        {
-            editText.setError(null);
-        }
-
-
-        return valid;
-    }
 */
+
+
+            public void onClick(View arg0)
+            {
+                // Get username, password from EditText
+                String mobileNo = mobileNoEditText.getText().toString();
+                //String password = txtPassword.getText().toString();
+
+                // Check if username, password is filled
+                if(mobileNo.trim().length() > 0 )
+                {
+                    // For testing puspose username, password is checked with sample data
+                    // username = test
+                    // password = test
+                    if(mobileNo.equals("9823844616") ){
+
+                        // Creating user login session
+                        // For testing i am stroing name, email as follow
+                        // Use user real data
+                        sessionManager.createLoginSession("Amitesh Gadade");
+
+                        // Staring MainActivity
+                        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(i);
+                        finish();
+
+                    }else{
+                        // username / password doesn't match
+                        alert.showAlertDialog(LoginActivity.this, "Login failed..", "Username/Password is incorrect", false);
+                    }
+                }else{
+                    // user didn't entered username or password
+                    // Show alert asking him to enter the details
+                    alert.showAlertDialog(LoginActivity.this, "Login failed..", "Please enter username and password", false);
+                }
+
+            }
+        });
+
+    }
+
+
     public void getDistributor()
     {
         number = editText.getText().toString();
@@ -184,7 +214,7 @@ public class LoginActivity extends AppCompatActivity
 
         //TODO :take number from login page
 
-         Call<Distributor> call = apiInterface.getDistributorDetails(number);
+        Call<Distributor> call = apiInterface.getDistributorDetails(number);
 
         call.enqueue(new Callback<Distributor>()
         {
@@ -226,7 +256,7 @@ public class LoginActivity extends AppCompatActivity
 
                 else if(response.body().getDistributorList().size()>0)
                 {
-                    Toast.makeText(LoginActivity.this, "Some error occurred! Please try again!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Some fail occurred! Please try again!", Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -247,7 +277,8 @@ public class LoginActivity extends AppCompatActivity
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
+    {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
@@ -258,28 +289,12 @@ public class LoginActivity extends AppCompatActivity
 
             public void run() {
 
+                SharedPreferences sharedPreferences=getSharedPreferences(Constants.PREFS_NAME,Context.MODE_PRIVATE);
+                final SharedPreferences.Editor editor=sharedPreferences.edit();
+                editor.putString(Constants.MOBILE_NO,"9823844616");
+                Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(i);
-
-                String loginFlag = new SharedValues(getApplicationContext()).loginFlag();
-
-
-
-
-              /*  if (loginFlag.equalsIgnoreCase(Constants.strTrue)) {
-
-
-                        Intent intent = new Intent(SplashScreenActivity.this, NavigationDrawerActivitySerEng.class);
-                        startActivity(intent);
-
-
-
-                } else {
-
-                    Intent i = new Intent(SplashScreenActivity.this, OTPActivity.class);
-                    startActivity(i);
-                }*/
-
                 finish();
             }
         }, 2000);

@@ -106,7 +106,7 @@ import com.example.aadyam.mi.activity.InspectionDisplayActivity;
         if (networkInfo != null && networkInfo.isConnected()) {
             return true;
         } else {
-            // display error
+            // display fail
             return  false;
         }
     }

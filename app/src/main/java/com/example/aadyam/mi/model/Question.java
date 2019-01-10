@@ -22,8 +22,6 @@ public class Question {
         this.questionList = questionList;
     }
 
-
-
         private String Active;
 
         private String Description;
