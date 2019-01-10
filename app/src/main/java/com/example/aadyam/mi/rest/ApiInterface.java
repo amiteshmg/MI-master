@@ -40,12 +40,14 @@ public interface ApiInterface
     @GET("InspectionDenied")
     Call<DeniedInspection>denyInspection(@Query("AllotmentId") String AllotmentId, @Query("Deniedflag") int Deniedflag, @Query("notAvailableflag") int notAvailableflag);//?AllotmentId={ALLOTMENTID}&Deniedflag={DENIEDFLAG}&notAvailableflag={NOTAVAILABLEFLAG}
 
-    @GET("AllotmentList?DistributorId=8131&StaffRefNo=11710813100000006&ConsumerCount=0")
+    @GET("AllotmentList?DistributorId=8193&StaffRefNo=11710819300000002&ConsumerCount=99")
     Call<Allotment>getAllotmentList();
 
     /*@GET("AllotmentList")
     Call<Allotment>getAllotmentList(@Query("DistributorId") int Dist_id,@Query("StaffRefNo") String Staff_Ref_No,@Query("StaffRefNo") int Cons_count);
     */
+
+    //synchronize
 }
 
 
