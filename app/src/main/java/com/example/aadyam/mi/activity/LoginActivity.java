@@ -1,23 +1,18 @@
 package com.example.aadyam.mi.activity;
 
 import android.annotation.SuppressLint;
-
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,7 +20,6 @@ import android.widget.Toast;
 import com.example.aadyam.mi.R;
 import com.example.aadyam.mi.Utils.CameraUtils;
 import com.example.aadyam.mi.Utils.Constants;
-import com.example.aadyam.mi.Utils.SharedValues;
 import com.example.aadyam.mi.activity.session.AlertDialogManager;
 import com.example.aadyam.mi.activity.session.SessionManager;
 import com.example.aadyam.mi.model.Distributor;

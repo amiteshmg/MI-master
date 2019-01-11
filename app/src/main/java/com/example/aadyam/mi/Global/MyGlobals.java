@@ -51,7 +51,7 @@ import com.example.aadyam.mi.Utils.CameraUtils;
 import com.example.aadyam.mi.Utils.Constants;
 import com.example.aadyam.mi.activity.MainActivity;
 import com.example.aadyam.mi.activity.SurveyActivity;
-import com.example.aadyam.mi.adapter.QuestionAdapter;
+
 import com.example.aadyam.mi.database.DatabaseHelperUser;
 import com.example.aadyam.mi.model.Allotment;
 import com.example.aadyam.mi.model.AllotmentList;
@@ -102,7 +102,7 @@ public class MyGlobals
     private int size;
     private int[] informationCategoryID;
     private String[] informationDescription;
-
+    SharedPreferences sharedPreferences;
 
 
     // constructor
@@ -324,7 +324,7 @@ public class MyGlobals
 
 
 
-    @SuppressLint({"ResourceType", "NewApi"})
+  /*  @SuppressLint({"ResourceType", "NewApi"})
     public void dynamicUserInformation(LinearLayout fragmentLinearLayout, final Context context, View v,final List<PersonalInfoList> personalInfoList) throws JSONException
     {
 
@@ -413,7 +413,7 @@ public class MyGlobals
                 public void afterTextChanged(Editable s)
                 {
 
-                /*
+                *//*
                  * Active : true
                  * CategoryId : 1
                  * Description : Mobile number
@@ -422,7 +422,7 @@ public class MyGlobals
                  * SubFieldType : phone
                  * InformationId : 1
                  * isCompulsory : 0
-                 */
+                 *//*
 
                 informationAnswer[finalJ1] = editText.getText().toString();
                 informationId[finalJ1] = personalInfoList.get(finalJ1).getInformationId();
@@ -603,7 +603,7 @@ public class MyGlobals
 
                 //int count=0;
 
-              /*  for(int i=0;i<personalInfoList.size();i++)
+              *//*  for(int i=0;i<personalInfoList.size();i++)
                 {
 
                     if(answer[i]!=null)
@@ -611,7 +611,7 @@ public class MyGlobals
                         count++;
                     }
 
-                }*/
+                }*//*
 
                 String mobileNo;
 
@@ -662,7 +662,7 @@ public class MyGlobals
 
         return list;
     }
-
+*/
 
 
 
@@ -684,6 +684,7 @@ public class MyGlobals
     @SuppressLint("NewApi")
     public void dynamicQuestion(LinearLayout fragmentLinearLayout, final Context context, View v, final List<QuestionList> questionList)
     {
+        sharedPreferences=context.getSharedPreferences(Constants.PREFS_NAME,Context.MODE_PRIVATE);
 
          answer = new String[questionList.size()];
          questionID=new String[questionList.size()];
@@ -892,6 +893,7 @@ public class MyGlobals
 
         save.setOnClickListener(new View.OnClickListener()
         {
+            @SuppressLint("ApplySharedPref")
             @Override
             public void onClick(View v)
             {
@@ -919,7 +921,7 @@ public class MyGlobals
                     }
 
                 }
-
+                sharedPreferences.edit().putInt(Constants.CYLINDER_SAVE,0).commit();
 
                 if(count==questionList.size())
                 {
@@ -927,6 +929,26 @@ public class MyGlobals
                     {
                         databaseHelperUser.putAnswerEntryInDatabase(answer[j], questionID[j], questionDescription[j], categoryID[j], allotmentDate, areaName, consumerName, consumerNo, isCompleted, uniqueConsumerId, allottedId);
                     }
+                        sharedPreferences.edit().putInt(Constants.CYLINDER_SAVE,1).commit();
+
+                 /*   switch (categoryID[0])
+                    {
+                        case "1":
+                            sharedPreferences.edit().putBoolean(Constants.CYLINDER_SAVE, true).commit();
+                            break;
+                        case "2":
+                            sharedPreferences.edit().putBoolean(Constants.REGULATOR_SAVE, true).commit();
+                            break;
+                        case "3":
+                            sharedPreferences.edit().putBoolean(Constants.RUBBER_HOSE_SAVE, true).commit();
+                            break;
+                        case "4":
+                            sharedPreferences.edit().putBoolean(Constants.STOVE_SAVE, true).commit();
+                            break;
+                        case "5":
+                            sharedPreferences.edit().putBoolean(Constants.GENERAL_SAVE, true).commit();
+                            break;
+                    }*/
 
                     Toast.makeText(context, "Saved SuccessFully", Toast.LENGTH_SHORT).show();
                     ((SurveyActivity)context).setCurrentItem(Integer.parseInt(questionList.get(0).getCategoryId()), true);
@@ -935,6 +957,8 @@ public class MyGlobals
 
                 else
                     {
+                        sharedPreferences.edit().putInt(Constants.CYLINDER_SAVE,0);
+                        //sharedPreferences.edit().putBoolean(Constants.CYLINDER_SAVE,false);
                         Toast.makeText(context, "Answer all questions ", Toast.LENGTH_SHORT).show();
                     }
             }

@@ -1,7 +1,6 @@
 package com.example.aadyam.mi.fragment;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,7 +19,6 @@ import com.example.aadyam.mi.Utils.Constants;
 import com.example.aadyam.mi.activity.InspectionDisplayActivity;
 import com.example.aadyam.mi.database.DatabaseHelperUser;
 
-import java.util.Objects;
 
 
 public class Fragment_total extends Fragment
@@ -74,8 +72,6 @@ public class Fragment_total extends Fragment
         assert getFragmentManager() != null;
         getFragmentManager().beginTransaction().detach(this).attach(this).commit();
     }
-
-
 
 
     @Override
@@ -153,18 +149,17 @@ public class Fragment_total extends Fragment
 //        setCounters();
 
 
+
   //      initializeListCounters(view);
         allotted_pending_layout.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-
                 Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
                 intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_ALLOTTED_PENDING);
+                intent.putExtra(Constants.FRAG_TYPE,0);
                 startActivity(intent);
-
-
             }
         });
 
@@ -288,46 +283,6 @@ public class Fragment_total extends Fragment
             }
         });
       //  setButtonClicks();
-
-
-    }
-
-
-
-    private void setButtonClicks()
-    {
-
-
-
-
-    }
-
-
-    private void initializeLayouts(View view)
-    {
-
-
-
-    }
-
-
-    private void initializeListCounters(View view)
-    {
-
-
-
-    }
-
-
-
-
-
-
-    public void setCounters()
-    {
-
-
-
     }
 
 

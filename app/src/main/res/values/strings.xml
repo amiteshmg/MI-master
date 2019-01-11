@@ -101,6 +101,7 @@
     <string name="spinner_empty_text">Fields cannot be kept empty</string>
     <string name="spinner_default_item">Select one,</string>
     <string name="prev">Prev</string>
+    <string name="submit">Submit</string>
 
 
 </resources>

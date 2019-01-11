@@ -7,9 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -21,18 +19,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.aadyam.mi.activity.LoginActivity;
-import com.example.aadyam.mi.activity.MainActivity;
-import com.example.aadyam.mi.database.DatabaseHelperUser;
 import com.example.aadyam.mi.Global.MyGlobals;
 import com.example.aadyam.mi.R;
 import com.example.aadyam.mi.Utils.Constants;
 import com.example.aadyam.mi.activity.SurveyActivity;
 import com.example.aadyam.mi.database.DatabaseHelperUser;
-import com.example.aadyam.mi.fragment.Fragment_total;
 import com.example.aadyam.mi.model.AllotmentList;
 import com.example.aadyam.mi.model.DeniedInspection;
-import com.example.aadyam.mi.model.Distributor;
 import com.example.aadyam.mi.rest.ApiClient;
 import com.example.aadyam.mi.rest.ApiInterface;
 
@@ -44,7 +37,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static android.content.Intent.getIntentOld;
 
 
 public class AllotmentAdapter extends RecyclerView.Adapter<AllotmentAdapter.MyViewHolder> /*implements View.OnClickListener*/ {

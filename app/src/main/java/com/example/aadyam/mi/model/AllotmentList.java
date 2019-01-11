@@ -111,7 +111,7 @@ public class AllotmentList
         private Integer isPrevNotAvailable;
         @SerializedName("IsSatisfactory")
         @Expose
-        private Object isSatisfactory;
+        private boolean isSatisfactory;
         @SerializedName("IsSyncCompleted")
         @Expose
         private Integer isSyncCompleted;
@@ -347,11 +347,11 @@ public class AllotmentList
             this.isPrevNotAvailable = isPrevNotAvailable;
         }
 
-        public Object getIsSatisfactory() {
+        public boolean getIsSatisfactory() {
             return isSatisfactory;
         }
 
-        public void setIsSatisfactory(Object isSatisfactory) {
+        public void setIsSatisfactory(boolean isSatisfactory) {
             this.isSatisfactory = isSatisfactory;
         }
 

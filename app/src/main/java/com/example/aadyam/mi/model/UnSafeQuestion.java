@@ -1,6 +1,5 @@
 package com.example.aadyam.mi.model;
 
-
 import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
@@ -8,11 +7,10 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Question {
+public class UnSafeQuestion {
 
-
-    @SerializedName("QuestionnaireListResult")
-   // @SerializedName("UnsafeQueListForAllInspIdResult")
+    @SerializedName("UnsafeQueListForAllInspIdResult")
+    // @SerializedName("UnsafeQueListForAllInspIdResult")
     private List<QuestionList> questionList;
 
 
@@ -29,17 +27,9 @@ public class Question {
 
     @NonNull
     @Override
-    public String toString() {
-        return "[ POJO Allotment : { "+questionList+" } ]";
+    public String toString()
+    {
+        return "[ POJO UnsafeQuestions : { "+questionList+" } ]";
     }
 
 }
-
-
-
-
-
-
-
-
-

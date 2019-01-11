@@ -33,6 +33,12 @@ public class Constants
     public static final String TAG = "MI_debugData";
     public static final String INSPECTION_ID = "InspectionId";
     public static final int SIGNATURE = 5;
+    public static final String FRAG_TYPE = "fragmentType";
+    public static final String CYLINDER_SAVE = "cylinderSave";
+    public static final String REGULATOR_SAVE = "regulatorSave";
+    public static final String RUBBER_HOSE_SAVE = "rubberHoseSave";
+    public static final String STOVE_SAVE  = "stoveSave";
+    public static final String GENERAL_SAVE = "generalSave";
 
 
     public static  String SERVER_URL="http://hpgasprodweb1t.hpcl.co.in/hp.svc/QuestionnaireList";
@@ -43,6 +49,59 @@ public class Constants
     public static final String warning="Warning";
     public static long StaffRefNo;
 
+    public static String FONT_REGULAR = "fonts/OpenSans-Regular.ttf";
+    public static String FONT_BOLD = "fonts/OpenSans-Bold.ttf";
+
+//Live Server
+
+   /* public static final String ServerUrl = "http://lpgmandatoryinspection.hpcl.co.in/MandatoryInspectionWebService/HP.svc/";
+    public static final String ServerUrl_Soap = "http://lpgmandatoryinspection.hpcl.co.in/MandatoryInspectionWebService/UploadFilesService.asmx";
+*/
+//Local server
+
+   /*public static final String ServerUrl = "http://192.168.2.21/HP.svc/";
+    public static final String ServerUrl_Soap = "http://http://192.168.2.21/UploadFilesService.asmx";*/
+
+
+//Test Aadyam server
+
+  /*public static final String ServerUrl = "http://aclpune.com/HPCLINSPSERVICE/HP.svc/";
+    public static final String ServerUrl_Soap = "http://aclpune.com/HPCLINSPSERVICE/UploadFilesService.asmx";
+*/
+
+ // UAT server
+    public static final String ServerUrl = "http://hpgasprodweb1t.hpcl.co.in/hp.svc/";
+    public static final String ServerUrl_Soap = "http://hpgasprodweb1t.hpcl.co.in/uploadfilesservice.asmx";
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static final String AllotmentList = ServerUrl + "AllotmentList?";
+    public static final String QuestionnaireList = ServerUrl + "QuestionnaireList";
+    public static final String SendOTPSMS = ServerUrl + "SendOTPSMS?";
+    public static final String NAMESPACE = "http://tempuri.org/";
+
+    //Sandeep
+    public static final String ActivateUserMechanic = ServerUrl + "ActivateUserMechanic?";
+    public static final String InspectionDenied = ServerUrl + "InspectionDenied?";
+
+    public static final String InspCompletedFlagInMobile = ServerUrl + "InspCompletedFlagInMobile?";
+
+    public static final String GET_UNSAFE_QUESTIONNAIRE = ServerUrl + "UnsafeQueListForAllInspId?";
+
+    public static final String IS_IN_MOBILE_METHOD_PostFile = "SetIsInMobileFlag";
+    public static final String IS_IN_MOBILE_SOAP_ACTION_PostFile = "http://tempuri.org/SetIsInMobileFlag";
+
+    public static final String LOG_ANALYTICS_METHOD_PostFile = "Analytics";
+    public static final String LOG_ANALYTICS_SOAP_ACTION_PostFile = "http://tempuri.org/Analytics";
+
+    public static final String METHOD_INSPECTION_DATA_PostFile = "InspectionData";
+    public static final String SOAP_ACTION_INSPECTION_DATA = "http://tempuri.org/InspectionData";
+
+    public static final String METHOD_UNSAFE_INSPECTION_DATA_PostFile = "UnsafeInspectionData";
+    public static final String SOAP_ACTION_UNSAFE_INSPECTION_DATA = "http://tempuri.org/UnsafeInspectionData";
+    public static final String GetReAllotment = ServerUrl + "GetReAllotment?";  // Delete reallocated ids from consumer table
+
+
     public static final int CYLINDER_FRAG_CODE=1;
     public static final int REGULATOR_FRAG_CODE=2;
     public static final int RUBBER_HOSE_FRAG_CODE=3;
@@ -50,6 +109,7 @@ public class Constants
     public static final int GENERAL_FRAG_CODE=5;
     public static final int PERSONAL_INFO_FRAG_CODE=6;
     public static final int UPLOAD_PHOTO_FRAG_CODE=7;
+
 
     public static int ConsumerCount;
     public static int DistributorId;

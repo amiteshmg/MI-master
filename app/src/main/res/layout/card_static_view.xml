@@ -26,10 +26,10 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="horizontal"
-        android:layout_marginLeft="@dimen/icon_padding">
+        >
 
         <TextView
             android:layout_width="match_parent"
@@ -52,7 +52,7 @@
     <!--consumer no row-->
 
     <LinearLayout
-        android:layout_marginLeft="@dimen/icon_padding"
+
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_weight="1"
@@ -61,7 +61,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="horizontal">
 
@@ -87,7 +87,7 @@
         <LinearLayout
             android:id="@+id/static_call_layout"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="horizontal">
 
@@ -166,7 +166,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="horizontal">
 
@@ -205,7 +205,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="horizontal">
 
@@ -250,7 +250,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="horizontal">
 
@@ -296,7 +296,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/icon_padding"
             android:layout_weight="1"
 

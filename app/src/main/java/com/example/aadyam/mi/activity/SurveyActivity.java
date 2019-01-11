@@ -46,10 +46,6 @@ public class SurveyActivity extends FragmentActivity
     private static final String TAG = SurveyActivity.class.getSimpleName();
 
 
-    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
-
-    private static final int CAMERA_CAPTURE_VIDEO_REQUEST_CODE = 200;
-
     // key to store image path in savedInstance state
     public static final String KEY_IMAGE_STORAGE_PATH = "image_path";
 

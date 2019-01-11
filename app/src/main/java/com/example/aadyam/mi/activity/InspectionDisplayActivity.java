@@ -1,23 +1,19 @@
 package com.example.aadyam.mi.activity;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-import com.example.aadyam.mi.adapter.StaticAdapter;
-import com.example.aadyam.mi.database.DatabaseHelperUser;
 import com.example.aadyam.mi.R;
 import com.example.aadyam.mi.Utils.Constants;
 import com.example.aadyam.mi.adapter.AllotmentAdapter;
-import com.example.aadyam.mi.fragment.Fragment_total;
+import com.example.aadyam.mi.adapter.StaticAdapter;
+import com.example.aadyam.mi.database.DatabaseHelperUser;
 import com.example.aadyam.mi.model.Allotment;
 import com.example.aadyam.mi.model.AllotmentList;
 
@@ -39,6 +35,7 @@ public class InspectionDisplayActivity extends AppCompatActivity
     AllotmentAdapter allotmentAdapter;
     StaticAdapter staticAdapter;
     List<AllotmentList> list;
+    int clickCode,fragType;
 
 
     @Override
@@ -60,6 +57,10 @@ public class InspectionDisplayActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        clickCode=getIntent().getIntExtra(Constants.CLICK_CODE,1000);
+        fragType=getIntent().getIntExtra(Constants.FRAG_TYPE,0);
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inspection_display);
         databaseHelperUser=new DatabaseHelperUser(this);
@@ -100,7 +101,8 @@ public class InspectionDisplayActivity extends AppCompatActivity
 
 
 
-        switch(getIntent().getIntExtra(Constants.CLICK_CODE,1000))
+
+        switch(clickCode)
         {
             case Constants.TOTAL_ALLOTTED_PENDING:
 
@@ -109,6 +111,7 @@ public class InspectionDisplayActivity extends AppCompatActivity
                 allotmentAdapter=new AllotmentAdapter(list, getApplicationContext());
                 recyclerView.setAdapter(allotmentAdapter);
                 recyclerView.setAdapter(new AllotmentAdapter(list, getApplicationContext()));
+
                 break;
 
 
@@ -178,7 +181,7 @@ public class InspectionDisplayActivity extends AppCompatActivity
                 break;
 
 
-            case  Constants.TOTAL_AGAINST_DENIED:
+            case Constants.TOTAL_AGAINST_DENIED:
                 allotment_title.setText("Total not available");
                 list=databaseHelperUser.getAllotmentEntries(Constants.TOTAL_AGAINST_DENIED);
                 staticAdapter=new StaticAdapter(list, getApplicationContext());

@@ -5,42 +5,23 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.aadyam.mi.activity.LoginActivity;
-import com.example.aadyam.mi.activity.MainActivity;
-import com.example.aadyam.mi.database.DatabaseHelperUser;
-import com.example.aadyam.mi.Global.MyGlobals;
 import com.example.aadyam.mi.R;
-import com.example.aadyam.mi.Utils.Constants;
-import com.example.aadyam.mi.activity.SurveyActivity;
 import com.example.aadyam.mi.database.DatabaseHelperUser;
 import com.example.aadyam.mi.model.AllotmentList;
-import com.example.aadyam.mi.model.Distributor;
-import com.example.aadyam.mi.rest.ApiClient;
-import com.example.aadyam.mi.rest.ApiInterface;
 
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static android.content.Intent.getIntentOld;
 
 
 public class StaticAdapter extends RecyclerView.Adapter<StaticAdapter.MyViewHolder>

@@ -1,20 +1,21 @@
 package com.example.aadyam.mi.activity;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
@@ -24,50 +25,60 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
-import com.example.aadyam.mi.Global.GPSTracker;
-import com.example.aadyam.mi.Global.MyGlobals;
+import com.androidquery.AQuery;
+import com.example.aadyam.mi.R;
+import com.example.aadyam.mi.Utils.Constants;
 import com.example.aadyam.mi.activity.session.AlertDialogManager;
 import com.example.aadyam.mi.activity.session.SessionManager;
 import com.example.aadyam.mi.database.DatabaseHelperUser;
-import com.example.aadyam.mi.R;
-import com.example.aadyam.mi.Utils.Constants;
 import com.example.aadyam.mi.fragment.Fragment_today;
 import com.example.aadyam.mi.fragment.Fragment_total;
-import com.example.aadyam.mi.fragment.PersonalInfo;
 import com.example.aadyam.mi.model.Allotment;
 import com.example.aadyam.mi.model.Distributor;
-import com.example.aadyam.mi.model.Personal;
-import com.example.aadyam.mi.model.PersonalInfoList;
 import com.example.aadyam.mi.rest.ApiClient;
 import com.example.aadyam.mi.rest.ApiInterface;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import com.androidquery.callback.AjaxCallback;
+import com.androidquery.callback.AjaxStatus;
+import com.androidquery.AQuery;
 
-public class MainActivity extends AppCompatActivity
+/*
+import com.aquery.AQuery;
+import com.aquery.*;
+*/
+
+
+
+public class MainActivity extends FragmentActivity
 {
 
     private DrawerLayout mDrawerLayout;
     ActionBarDrawerToggle drawerToggle;
+AQuery aQuery=new AQuery(this);
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
+
+    //AQuery aQuery=new AQuery(this);
+
 
     Toolbar toolbar;
     ProgressDialog progressDialog;
@@ -106,9 +117,14 @@ public class MainActivity extends AppCompatActivity
     // Session Manager Class
     SessionManager session;
     SwipeRefreshLayout swipeRefreshLayout;
+    TabLayout tabLayout;
+    ViewPager viewPager;
+    Date c;
+    NavigationView navigationView;
     //QuestionAsync questionAsync;
 
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @SuppressLint("CommitPrefEdits")
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -116,28 +132,31 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //setTitle(R.string.dashboard);
 
+        tabLayout = findViewById(R.id.tabs);
         swipeRefreshLayout=findViewById(R.id.swipeRefreshLayout);
-
         progressDialog=new ProgressDialog(getApplicationContext());
         session = new SessionManager(getApplicationContext());
-
-
-        setTitle(R.string.dashboard);
         databaseHelperUser=new DatabaseHelperUser(getApplicationContext());
+        mDrawerLayout=findViewById(R.id.drawer_layout);
+        toolbar = findViewById(R.id.toolbar);
+//        toolbar.setBackgroundDrawable();
+        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+/*
+//        getActionBar().setDisplayShowTitleEnabled(false);
+        getActionBar().setDisplayShowTitleEnabled(true);
+*/
+        navigationView = findViewById(R.id.navigation_view);
+        c=Calendar.getInstance().getTime();
+
         databaseHelperUser.getQuestion();
-
-        allotment=new Allotment();
-
-        Date c = Calendar.getInstance().getTime();
 
         Log.i("DATE", String.valueOf(c));
 
-        mDrawerLayout=findViewById(R.id.drawer_layout);
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setActionBar(toolbar);
 
-        drawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, 0, 0)
+       /* drawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, 0, 0)
         {
             public void onDrawerClosed(View view)
             {
@@ -150,10 +169,8 @@ public class MainActivity extends AppCompatActivity
             }
         };
 
-        mDrawerLayout.setDrawerListener(drawerToggle);
+        mDrawerLayout.setDrawerListener(drawerToggle);*/
 
-
-        NavigationView navigationView = findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -167,8 +184,6 @@ public class MainActivity extends AppCompatActivity
 
                         switch (id)
                         {
-
-
                             case R.id.logout:
 
                                 SharedPreferences sharedPreferences=getSharedPreferences(Constants.PREFS_NAME,Context.MODE_PRIVATE);
@@ -190,10 +205,29 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
 
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.drawer_icon);
+        Objects.requireNonNull(getActionBar()).setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeAsUpIndicator(R.drawable.drawer_icon);
 
-        final ViewPager viewPager = findViewById(R.id.viewpager);
+        viewPager = findViewById(R.id.viewpager);
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                int position = tab.getPosition();
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+
 
        /* swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
         {
@@ -209,18 +243,27 @@ public class MainActivity extends AppCompatActivity
            @Override
            public void onRefresh()
            {
-                databaseHelperUser.getAllotment();
-                Fragment fragment=getFragment(viewPager,1);
-                getSupportFragmentManager().beginTransaction().detach(fragment).add(fragment,"total").commit();
-                swipeRefreshLayout.clearFocus();
-                /* finish();
-                startActivity(getIntent());*/
+             /*   databaseHelperUser.getAllotment();
+                Fragment fragment=getFragment();
+                //Fragment fragment1=getFragment(viewPager,0);
+               Objects.requireNonNull(viewPager.getAdapter()).notifyDataSetChanged();
+
+               final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+               assert fragment != null;
+
+               ft.detach(fragment).attach(fragment).addToBackStack(null).commit();
+               //ft.addToBackStack(null);
+
+               */
+               swipeRefreshLayout.setRefreshing(false);
+
+
            }
        });
 
         setupViewPager(viewPager);
 
-        TabLayout tabLayout = findViewById(R.id.tabs);
+
         tabLayout.setupWithViewPager(viewPager);
 
     }
@@ -271,10 +314,18 @@ public class MainActivity extends AppCompatActivity
         viewPager.setAdapter(adapter);
     }
 
-    private Fragment getFragment(ViewPager viewPager,int position)
+    private Fragment getFragment()
     {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        switch (position)
+       /* if(tabLayout.getSelectedTabPosition()==1)
+        {
+            return adapter.getItem(0);
+        }
+
+        else if(tabLayout.getSelectedTabPosition()==2)
+            return adapter.getItem(1);
+*/
+       /* switch (position)
         {
             case 0:
               return adapter.getItem(position);
@@ -284,9 +335,9 @@ public class MainActivity extends AppCompatActivity
                 return adapter.getItem(position);
              //   adapter.getItem(position).refresh();
 
-        }
-
-        return null;
+        }*/
+        return adapter.getItem(1);
+        //return null;
     }
 
 
@@ -331,6 +382,7 @@ public class MainActivity extends AppCompatActivity
 
         void addFragment(Fragment fragment, String title)
         {
+
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             mFragmentList.add(fragment);

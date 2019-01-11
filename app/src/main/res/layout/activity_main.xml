@@ -25,14 +25,16 @@
             android:background="@android:color/transparent"
             android:theme="@style/Theme.AppCompat.Light">
 
-            <android.support.v7.widget.Toolbar
+            <Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimary"
                 app:layout_scrollFlags="scroll|enterAlways"
+                android:title="Dashboard"
                 app:popupTheme="@style/Widget.AppCompat.ActionBar"
-                app:titleTextColor="@color/white" />
+                android:titleTextColor="@color/white"
+                tools:targetApi="m" />
 
 
             <android.support.design.widget.TabLayout

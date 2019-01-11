@@ -1,50 +1,34 @@
 package com.example.aadyam.mi.database;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.location.LocationManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
-import android.support.constraint.solver.widgets.ConstraintAnchor;
 import android.util.Log;
 import android.widget.Toast;
-
 
 import com.example.aadyam.mi.R;
 import com.example.aadyam.mi.Utils.Constants;
 import com.example.aadyam.mi.model.Allotment;
 import com.example.aadyam.mi.model.AllotmentList;
-import com.example.aadyam.mi.model.PersonalInfoList;
 import com.example.aadyam.mi.model.Question;
 import com.example.aadyam.mi.model.QuestionList;
 import com.example.aadyam.mi.rest.ApiClient;
 import com.example.aadyam.mi.rest.ApiInterface;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.Random;
 
 import retrofit2.Call;
@@ -53,9 +37,11 @@ import retrofit2.Response;
 
 import static android.content.ContentValues.TAG;
 
+
 /**
  * Created by Aadyam on 10/22/2018.
  */
+
 
 public class DatabaseHelperUser extends SQLiteOpenHelper
 {
@@ -275,6 +261,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
         db.execSQL(SQL_CREATE_TABLE_ANSWERS);
         db.execSQL(SQL_CREATE_TABLE_PHOTOS);
         db.execSQL(SQL_CREATE_TABLE_LAYOUT_COUNT);
+        //db.execSQL();
         //getAllotmentOnCreate();
         //getAllotmentBeta();
 
@@ -493,7 +480,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
                 for(int i=0;i<size;i++)
                 {
-                    System.out.println("Data : "+response.body().getQuestionList().get(i).getDescription());
+                    Log.d(Constants.TAG,""+response.body().getQuestionList().get(i).getDescription());
                     String s1,s2,s3,s4,s5,s6,s7,s8,s9;
 
                     if(response.body().getQuestionList().get(i).getActive().equalsIgnoreCase("true"))
@@ -513,7 +500,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
                 }
 
-                Toast.makeText(context, "Questions Loaded!", Toast.LENGTH_SHORT).show();
+                Log.d(Constants.TAG, "Questions Loaded!");
 
             }
 
@@ -521,7 +508,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
             @Override
             public void onFailure(@NonNull Call<Question> call, @NonNull Throwable t)
             {
-                Log.e(TAG, "ERROR FOUND :" + t.toString());
+                Log.d(TAG, "ERROR FOUND :" + t.toString());
             }
         });
 
@@ -553,14 +540,14 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
         //long result = db.insert(TABLE_NAME_QUESTION, null, contentValues);
 
-        long id =  db.insertWithOnConflict(TABLE_NAME_QUESTION, null, contentValues, SQLiteDatabase.CONFLICT_IGNORE);
-        if (id == -1)
+        long result =  db.insertWithOnConflict(TABLE_NAME_QUESTION, null, contentValues, SQLiteDatabase.CONFLICT_IGNORE);
+        if (result == -1)
         {
             db.update(TABLE_NAME_QUESTION, contentValues, COL1_9+"="+QuestionID,null/* new String[] {"1"}*/);  // number 1 is the _id here, update to variable for your code
         }
 
 
-        System.out.println("Data: " + id);
+        Log.d(Constants.TAG,"QuestionInserted : " + result);
 
 
 
@@ -580,7 +567,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
     //TODO ---------------------------------------------ALLOTMENT METHODS---------------------------------------------------------
 
-    public void putAllotmentBeta(List<AllotmentList> list,int RandomInspectionNo)
+    public void putAllotmentBeta(List<AllotmentList> list)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         int size=list.size();
@@ -613,47 +600,44 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
             contentValues.put(COL3_18, list.get(i).getMobileNo());
             contentValues.put(COL3_19, list.get(i).getUniqueConsumerId());
             contentValues.put(COL3_20, list.get(i).getAllotmentId());
-            contentValues.put(COL3_21, RandomInspectionNo);
-           // contentValues.put(COL3_21, list.get(i).getInspFormId());
+            contentValues.put(COL3_21, list.get(i).getInspFormId());
+            contentValues.put(COL3_21, list.get(i).getInspFormId());
             contentValues.put(COL3_25,list.get(i).getLastInspDate());
+            contentValues.put(COL3_33,list.get(i).getIsSatisfactory());
+            contentValues.put(COL3_34,list.get(i).getIsMobCompleted());
+            //contentValues.put(COL3_35,list.get(i).getIsSatisfactory());
+            contentValues.put(COL3_36,list.get(i).getIsSyncCompleted());
+            contentValues.put(COL3_37,list.get(i).getIsInMobile());
+            //contentValues.put(COL3_38,list.get(i).getIsSatisfactory());
 
 
-                if (c == 1)
+            if (c == 1)
+            {
+                //long result = db.update(TABLE_NAME_ALLOTMENT, contentValues, COL3_20 + " = " + list.get(i).getAllotmentId(), null);
+                long result = db.replace(TABLE_NAME_ALLOTMENT, null,contentValues);
+                Log.i(Constants.TAG, "putAllotmentBeta" + result);
+
+                if (result != -1)
                 {
-                    long result = db.update(TABLE_NAME_ALLOTMENT, contentValues, COL3_8 + " = " + list.get(i).getConsumerNo(), null);
-
-                    Log.i(Constants.TAG, "" + result);
-
-                    if (result != -1)
-                    {
-                        Log.i(Constants.TAG, "Updated" + list.get(i).getConsumerName());
-                        Toast.makeText(context, "Updated!"+list.get(i).getConsumerName(), Toast.LENGTH_SHORT).show();
-                    }
+                    Log.d(Constants.TAG, "Updated" + list.get(i).getConsumerName());
+                    Toast.makeText(context, "Updated!"+list.get(i).getConsumerName(), Toast.LENGTH_SHORT).show();
                 }
+            }
 
 
-                else
-                {
-                    long result=db.insert(TABLE_NAME_ALLOTMENT,  null,contentValues);
-                    Log.i(Constants.TAG,"ALLOTMENT RESULT "+result);
-
-                    if(result!=-1)
-                    {
-                        Log.i(Constants.TAG, "Inserted!" + c);
-                    }
-
-                }
-
-
-          /*  else {
+            else
+            {
                 long result=db.insert(TABLE_NAME_ALLOTMENT,  null,contentValues);
-                Log.i(Constants.TAG,"ALLOTMENT RESULT "+result);
+                Log.d(Constants.TAG,"ALLOTMENT RESULT "+result);
+
                 if(result!=-1)
                 {
-                    Toast.makeText(context, "Created!"+c, Toast.LENGTH_SHORT).show();
+                    Log.d(Constants.TAG, "Inserted!" + c);
                 }
 
-            }*/
+            }
+
+
         }
 
     }
@@ -669,81 +653,35 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
         ApiInterface apiInterface;
         apiInterface=ApiClient.getClient().create(ApiInterface.class);
 
-
-
         //AllotmentList?UserId=8193&StaffRefNo=11710819300000002&ConsumerCount=0
         Call<Allotment> call = apiInterface.getAllotmentList();
 
-     /*   final ProgressDialog progressDialog;
-        progressDialog = new ProgressDialog(context.getApplicationContext());
-        progressDialog.setMax(100);
-        progressDialog.setMessage("Its loading....");
-        progressDialog.setTitle("ProgressDialog bar example");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        // show it
-        progressDialog.show();*/
-
-      /*  mProgressDialog = new ProgressDialog(context);
-        mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setMessage("Loading...");
-        mProgressDialog.show();
-*/
         call.enqueue(new Callback<Allotment>() {
             @Override
             public void onResponse(@NonNull Call<Allotment> call, @NonNull Response<Allotment> response)
             {
-               // hideDialog();
+                // hideDialog();
+                int size= 0;
+                if (response.body() != null)
+                {
+                    size = response.body().getAllotmentListResult().size();
+                }
 
-                Toast.makeText(context, ""+response.body().getAllotmentListResult().size(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, ""+size, Toast.LENGTH_SHORT).show();
                 Toast.makeText(context, "Connected. Fetched Allotment updates successfully! ", Toast.LENGTH_SHORT).show();
 
-                System.out.println(" DEMO "+response.body().getAllotmentListResult().get(1).getAddress());
+                assert response.body() != null;
+                Log.d(Constants.TAG," getAllotment Entered : DEMO DATA RESPONSE : "+response.body().getAllotmentListResult().get(1).getAddress());
 
                 assert response.body() != null;
-
-                int size=response.body().getAllotmentListResult().size();
                 Random rand = new Random();
 
                 // Generate random integers in range 0 to 999
-                int inspectionNo = rand.nextInt(50000);
-                int rand_int2 = rand.nextInt(50000);
+                /*int inspectionNo = rand.nextInt(50000);
+                int rand_int2 = rand.nextInt(50000);*/
                 List<AllotmentList> list=response.body().getAllotmentListResult();
-                putAllotmentBeta(list,inspectionNo);
-
+                putAllotmentBeta(list);
                 token[0] =true;
-
-                    /*  for(int i=0;i<size;i++)
-                    {
-
-                    String s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14,s15,s16,s17,s18,s19,s20,s21,s22,s23,s24,s25,s26,s27,s28,s29,s30,s31,s32,s33,s34,s35,s36,s37,s38,s39;
-                    s1=response.body().getAllotmentListResult().get(i).getInspFormId();
-                    s2=response.body().getAllotmentListResult().get(i).getAddress();
-                    s3=response.body().getAllotmentListResult().get(i).getAllottedDate();
-                    s4=response.body().getAllotmentListResult().get(i).getAreaName();
-                    s5=response.body().getAllotmentListResult().get(i).getAreaRefNo().toString();
-                    s6=response.body().getAllotmentListResult().get(i).getConsumerName();
-                    s7=response.body().getAllotmentListResult().get(i).getConsumerNo().toString();
-                    s8=response.body().getAllotmentListResult().get(i).getIsCompleted().toString();
-                    s9=response.body().getAllotmentListResult().get(i).getIsUnsafe().toString();
-                    s10=response.body().getAllotmentListResult().get(i).getIsUnsafeReallot().toString();
-                    s11=response.body().getAllotmentListResult().get(i).getIsDenied().toString();
-                    s12=response.body().getAllotmentListResult().get(i).getIsNotAvailable().toString();
-                    s13=response.body().getAllotmentListResult().get(i).getIsPrevDenied().toString();
-                    s14=response.body().getAllotmentListResult().get(i).getIsPrevNotAvailable().toString();
-                    s15=response.body().getAllotmentListResult().get(i).getRefInspFormId().toString();
-                    s16=response.body().getAllotmentListResult().get(i).getRefAllotmentId().toString();
-                    s17=response.body().getAllotmentListResult().get(i).getMobileNo().toString();
-                    s18=response.body().getAllotmentListResult().get(i).getUniqueConsumerId().toString();
-                    s19=response.body().getAllotmentListResult().get(i).getAllotmentId().toString();
-                    s20=response.body().getAllotmentListResult().get(i).getInspFormId();
-                    s21=response.body().getAllotmentListResult().get(i).getLastInspDate();
-                    count++;
-
-
-                    putAllotment(false,s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14,s15,s16,s17,s18,s19,s20,s21);
-
-
-                }*/
 
             }
 
@@ -760,207 +698,6 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
     }
 
 
-    public void showDialog() {
-
-        if(mProgressDialog != null && !mProgressDialog.isShowing())
-            mProgressDialog.show();
-    }
-
-    public void hideDialog() {
-
-        if(mProgressDialog != null && mProgressDialog.isShowing())
-            mProgressDialog.dismiss();
-    }
-
-    private void getAllotmentOnCreate()
-    {
-        ApiInterface apiInterface;
-        apiInterface=ApiClient.getClient().create(ApiInterface.class);
-
-        //AllotmentList?UserId=8193&StaffRefNo=11710819300000002&ConsumerCount=0
-        Call<Allotment> call = apiInterface.getAllotmentList();
-
-        call.enqueue(new Callback<Allotment>() {
-            @Override
-            public void onResponse(@NonNull Call<Allotment> call, @NonNull Response<Allotment> response)
-            {
-
-                Toast.makeText(context, ""+response.body().getAllotmentListResult().size(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(context, "Connected. Fetched Allotment updates successfully! ", Toast.LENGTH_SHORT).show();
-
-                System.out.println(" DEMO "+response.body().getAllotmentListResult().get(1).getAddress());
-
-                assert response.body() != null;
-
-                int size=response.body().getAllotmentListResult().size();
-
-                for(int i=0;i<size;i++)
-                {
-                    String s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14,s15,s16,s17,s18,s19,s20,s21,s22,s23,s24,s25,s26,s27,s28,s29,s30,s31,s32,s33,s34,s35,s36,s37,s38,s39;
-                    s1=response.body().getAllotmentListResult().get(i).getInspFormId();
-                    s2=response.body().getAllotmentListResult().get(i).getAddress();
-                    s3=response.body().getAllotmentListResult().get(i).getAllottedDate();
-                    s4=response.body().getAllotmentListResult().get(i).getAreaName();
-                    s5=response.body().getAllotmentListResult().get(i).getAreaRefNo().toString();
-                    s6=response.body().getAllotmentListResult().get(i).getConsumerName();
-                    s7=response.body().getAllotmentListResult().get(i).getConsumerNo().toString();
-                    s8=response.body().getAllotmentListResult().get(i).getIsCompleted().toString();
-                    s9=response.body().getAllotmentListResult().get(i).getIsUnsafe().toString();
-                    s10=response.body().getAllotmentListResult().get(i).getIsUnsafeReallot().toString();
-                    s11=response.body().getAllotmentListResult().get(i).getIsDenied().toString();
-                    s12=response.body().getAllotmentListResult().get(i).getIsNotAvailable().toString();
-                    s13=response.body().getAllotmentListResult().get(i).getIsPrevDenied().toString();
-                    s14=response.body().getAllotmentListResult().get(i).getIsPrevNotAvailable().toString();
-                    s15=response.body().getAllotmentListResult().get(i).getRefInspFormId().toString();
-                    s16=response.body().getAllotmentListResult().get(i).getRefAllotmentId().toString();
-                    s17=response.body().getAllotmentListResult().get(i).getMobileNo().toString();
-                    s18=response.body().getAllotmentListResult().get(i).getUniqueConsumerId().toString();
-                    s19=response.body().getAllotmentListResult().get(i).getAllotmentId().toString();
-                    s20=response.body().getAllotmentListResult().get(i).getInspFormId();
-                    s21=response.body().getAllotmentListResult().get(i).getLastInspDate();
-
-                    count++;
-
-
-                    putAllotment(true,s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14,s15,s16,s17,s18,s19,s20,s21);
-
-
-                }
-
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<Allotment> call, @NonNull Throwable t)
-            {
-                Toast.makeText(context, "DatabaseHelperUser getAllottment() OnFailure :"+t.toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-    }
-
-
-
-
-
-    /*private void setAllotmentCount(int count)
-    {
-        this.count=count;
-    }
-*/
-
-
-  /*  public int getAllotmentCount()
-    {
-        return count;
-    }
-*/
-
-
-    public void putAllotment(boolean firstRunInstance,String inspectionId ,String address,String allottedDate, String areaname, String arearefno ,String consumername ,String consumerno,String isCompleted ,String isUnsafe ,String isUnsafeReAllot ,String denied ,String not_available,String pre_denied ,String pre_not_available ,String ref_ins_formId ,String ref_allotment_id ,String mobileno ,String uniqueConsumerId ,String allotedid ,String inspection_no,String LastInspectionDate) {
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME_ANSWERS + " WHERE " + COL3_8 + "=" + consumerno, null);
-
-        int c = cursor.getCount();
-
-        ContentValues contentValues = new ContentValues();
-
-        contentValues.put(COL3_2, inspectionId);
-
-        contentValues.put(COL3_3, address);
-        contentValues.put(COL3_4, allottedDate);
-        contentValues.put(COL3_5, areaname);
-        contentValues.put(COL3_6, arearefno);
-        contentValues.put(COL3_7, consumername);
-        contentValues.put(COL3_8, consumerno);
-        contentValues.put(COL3_9, isCompleted);
-        contentValues.put(COL3_10, isUnsafe);
-        contentValues.put(COL3_11, isUnsafeReAllot);
-        contentValues.put(COL3_12, denied);
-        contentValues.put(COL3_13, not_available);
-        contentValues.put(COL3_14, pre_denied);
-        contentValues.put(COL3_15, pre_not_available);
-        contentValues.put(COL3_16, ref_ins_formId);
-        contentValues.put(COL3_17, ref_allotment_id);
-        contentValues.put(COL3_18, mobileno);
-        contentValues.put(COL3_19, uniqueConsumerId);
-        contentValues.put(COL3_20, allotedid);
-        contentValues.put(COL3_21, inspection_no);
-        contentValues.put(COL3_25,LastInspectionDate);
-
-
-        if(!firstRunInstance)
-        {
-            if (c == 1)
-            {
-                long result = db.update(TABLE_NAME_ALLOTMENT, contentValues, COL3_8 + " = " + consumerno, null);
-                Log.i(Constants.TAG, "" + result);
-
-                if (result != -1) {
-                    Log.i(Constants.TAG, "Updated" + c);
-                    //Toast.makeText(context, "Updated!"+c, Toast.LENGTH_SHORT).show();
-                }
-            }
-
-
-            else
-            {
-                long result=db.insert(TABLE_NAME_ALLOTMENT,  null,contentValues);
-                Log.i(Constants.TAG,"ALLOTMENT RESULT "+result);
-
-                if(result!=-1)
-                {
-                    Log.i(Constants.TAG, "Inserted!" + c);
-                }
-
-            }
-        }
-
-
-        else {
-            long result=db.insert(TABLE_NAME_ALLOTMENT,  null,contentValues);
-            Log.i(Constants.TAG,"ALLOTMENT RESULT "+result);
-            if(result!=-1)
-            {
-                Toast.makeText(context, "Created!"+c, Toast.LENGTH_SHORT).show();
-            }
-
-        }
-
-
-            //contentValues.put(COL3_22, instruction);
-            // contentValues.put(COL3_23, longitude);
-            // contentValues.put(COL3_24, latitude);
-            // contentValues.put(COL3_25, lastinspection);
-            // contentValues.put(COL3_26, cylinder_save);
-            // contentValues.put(COL3_27, regulator_save);
-            // contentValues.put(COL3_28, rubberhose_save);
-            // contentValues.put(COL3_29, stove_save);
-            // contentValues.put(COL3_30, general_save);
-            // contentValues.put(COL3_31, personal_save);
-
-            // contentValues.put(COL3_32, unsafe_save);
-            // contentValues.put(COL3_33, satisfactory);
-            // contentValues.put(COL3_34, mobile_completed);
-            // contentValues.put(COL3_35, web_mobile_completed);
-            // contentValues.put(COL3_36, SYNC_completed);
-            // contentValues.put(COL3_37, internet);
-            // contentValues.put(COL3_38, json_data);
-
-
-            //long result = db.insert(TABLE_NAME_ALLOTMENT, null, contentValues);
-
-         /*   int id = (int) db.insertWithOnConflict(TABLE_NAME_ALLOTMENT, null, contentValues, SQLiteDatabase.CONFLICT_IGNORE);
-
-            if (id == -1) {
-                db.update(TABLE_NAME_ALLOTMENT, contentValues, COL3_20 + "=" + allotedid, null*//* new String[] {"1"}*//*);
-            }
-
-            System.out.println("Data: " + id);
-            count++;*/
-
-    }
 
 
 
@@ -978,7 +715,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
             //TODO Apply logic here
 
             case Constants.TOTAL_ALLOTTED_PENDING:
-                String selectQuery = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_9+"=0 AND "+COL3_12+"=0 and "+COL3_13+"=0 ;";
+                String selectQuery = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_9+"=0 AND "+COL3_12+"=0 and "+COL3_13+"=0 and "+COL3_10+"=0";
                 cursor = db.rawQuery(selectQuery, null);
                 break;
 
@@ -1053,7 +790,6 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
 
 
-
         // looping through all rows and adding to list
         if(cursor.moveToFirst())
         {
@@ -1082,13 +818,8 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
                 allotment.setAllotmentId(cursor.getInt(19));
                 allotment.setLastInspDate(cursor.getString(24));
 
-                Gson gson=new Gson();
-                String json=gson.toJson(allotment);
-                allotment.setJsonData(json);
-
                 allotmentLists.add(allotment);
 //                Toast.makeText(context, ""+json, Toast.LENGTH_SHORT).show();
-
 
             } while (cursor.moveToNext());
         }
@@ -1099,14 +830,16 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
     }
 
 
-
     //---------------------------------ALLOTMENT SECTION ENDS------------------------------------------------
+
+
+
 
 
 
     //TODO----------------------------------------PHOTOS TABLE-----------------------------------------------------
 
-    public void setPhotos(String[] filename,String[] encodedImage,String[] CODE)
+    public void setPhotos(ArrayList<String> filename,ArrayList<String> encodedImage,String[] CODE)
     {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -1115,36 +848,36 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
         String  AllottedId=sharedPreferences.getString(Constants.ALLOTED_ID,null);
 
 
-        for(int i=0;i<filename.length;i++)
+        for(int i=0;i<filename.size();i++)
         {
 
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(COL6_3,encodedImage.get(i));
+            contentValues.put(COL6_5,filename.get(i));
+            contentValues.put(COL6_9,UniqueNo);
+            contentValues.put(COL6_10,AllottedId);
+            contentValues.put(COL6_10,AllottedId);
+            contentValues.put(COL6_11,CODE[i]);
 
+            Cursor cursor=db.rawQuery("SELECT * FROM "+TABLE_NAME_PHOTOS+" WHERE "+COL6_9+"="+UniqueNo+" AND "+COL6_11+"="+CODE[i],null);
+            int count=cursor.getCount();
 
-        ContentValues contentValues = new ContentValues();
+            if(count==1)
+            {
+                long result=db.update(TABLE_NAME_PHOTOS,contentValues,""+COL6_9+"="+UniqueNo+" AND "+COL6_11+"="+CODE[i],null);
+                if(result!=-1)
+                    Toast.makeText(context, "Updated!", Toast.LENGTH_SHORT).show();
+                Log.d(Constants.TAG, "Updated!");
+                //long result1=db.replace(TABLE_NAME_PHOTOS,null,contentValues);
+            }
 
-        contentValues.put(COL6_3,encodedImage[i]);
-        contentValues.put(COL6_5,filename[i]);
-        contentValues.put(COL6_9,UniqueNo);
-        contentValues.put(COL6_10,AllottedId);
-        contentValues.put(COL6_10,AllottedId);
-        contentValues.put(COL6_11,CODE[i]);
-
-        Cursor cursor=db.rawQuery("SELECT * FROM "+TABLE_NAME_PHOTOS+" WHERE "+COL6_9+"="+UniqueNo+" AND "+COL6_11+"="+CODE[i],null);
-        int count=cursor.getCount();
-
-        if(count==1)
-        {
-            long result=db.update(TABLE_NAME_PHOTOS,contentValues,""+COL6_9+"="+UniqueNo+" AND "+COL6_11+"="+CODE[i],null);
-            if(result!=-1)
-            Toast.makeText(context, "Updated!"+count, Toast.LENGTH_SHORT).show();
-            //long result1=db.replace(TABLE_NAME_PHOTOS,null,contentValues);
-        }
-
-        else
+            else
             {
                 long result = db.insert(TABLE_NAME_PHOTOS, null, contentValues);
                 if(result!=-1)
-                Toast.makeText(context, "Inserted!"+count, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Inserted!", Toast.LENGTH_SHORT).show();
+                Log.d(Constants.TAG, "Inserted!");
+
             }
 
         }
@@ -1153,68 +886,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
 
 
-    public void setAllotmentEntries(List<AllotmentList> allotmentLists)
-    {
-        int size=allotmentLists.size();
-
-        SQLiteDatabase db=this.getWritableDatabase();
-
-        ContentValues contentValues=new ContentValues();
-
-        //CREATE TABLE consumer( id INTEGER PRIMARY KEY,inspectionId TEXT,address TEXT,allotteddate TEXT, areaname TEXT, arearefno TEXT,consumername TEXT,consumerno TEXT,isCompleted TEXT,isUnsafe TEXT,isUnsafeReAllot TEXT,denied TEXT,not_available TEXT,pre_denied TEXT,pre_not_available TEXT,ref_ins_formId TEXT,ref_allotment_id TEXT,mobileno TEXT,uniqueConsumerId TEXT,allotedid TEXT,inspection_no TEXT,instruction TEXT,longitude TEXT,latitude TEXT,lastinspection TEXT,cylinder_save TEXT,regulator_save TEXT,rubberhose_save TEXT,stove_save TEXT,general_save TEXT,personal_save TEXT,unsafe_save TEXT,satisfactory TEXT,mobile_completed TEXT,web_mobile_completed TEXT,SYNC_completed TEXT,internet TEXT,json_data TEXT)
-
-        for(int i=0;i<size;i++)
-        {
-            //allotmentLists.get(i).setInspFormId();
-            contentValues.put(COL3_2,allotmentLists.get(i).getAllotmentId());
-            contentValues.put(COL3_3,allotmentLists.get(i).getAddress());
-            contentValues.put(COL3_4,allotmentLists.get(i).getAllottedDate());
-            contentValues.put(COL3_5,allotmentLists.get(i).getAreaName());
-            contentValues.put(COL3_6,allotmentLists.get(i).getAreaRefNo());
-            contentValues.put(COL3_7,allotmentLists.get(i).getConsumerName());
-            contentValues.put(COL3_8,allotmentLists.get(i).getConsumerNo());
-            contentValues.put(COL3_9,allotmentLists.get(i).getIsCompleted());
-            contentValues.put(COL3_10,allotmentLists.get(i).getIsUnsafe());
-            contentValues.put(COL3_11,allotmentLists.get(i).getIsUnsafeReallot());
-            contentValues.put(COL3_12,allotmentLists.get(i).getIsDenied());
-            contentValues.put(COL3_13,allotmentLists.get(i).getIsNotAvailable());
-            contentValues.put(COL3_14,allotmentLists.get(i).getIsPrevDenied());
-            contentValues.put(COL3_15,allotmentLists.get(i).getIsPrevNotAvailable());
-            contentValues.put(COL3_16,allotmentLists.get(i).getRefInspFormId());
-            contentValues.put(COL3_17,allotmentLists.get(i).getRefAllotmentId());
-            contentValues.put(COL3_18,allotmentLists.get(i).getMobileNo());
-            contentValues.put(COL3_19,allotmentLists.get(i).getUniqueConsumerId());
-            contentValues.put(COL3_20,allotmentLists.get(i).getAllotmentId());
-            contentValues.put(COL3_21,allotmentLists.get(i).getInspFormId());
-
-            long result=db.insert(TABLE_NAME_ALLOTMENT,null,contentValues);
-
-        }
-    }
-
-    public int getAnswerCount()
-    {
-        SQLiteDatabase db=this.getReadableDatabase();
-        String countQuery="SELECT * FROM "+TABLE_NAME_ANSWERS;
-        Cursor cursor=db.rawQuery(countQuery,null);
-        int count=cursor.getCount();
-        cursor.close();
-        return  count;
-
-
-    }
-
-
-
-    public void putOfflineAnswers()
-    {
-
-
-    }
-
-
-
-
+    //retrieves base64string from database w.r.t imageviewCODE and allotedId
     public String getPhotoEntry(int imageViewCode,String allottedId)
     {
         SQLiteDatabase db=this.getWritableDatabase();
@@ -1229,70 +901,61 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
         else
             return null;
 
-
-        /*if(cursor.moveToFirst())
-        {
-            do {
-
-                return cursor.getString(8);
-            }
-
-            while(cursor.moveToNext());
-        }*/
     }
 
 
+
+    //inserts induvidual answer entry into Database
     public void putAnswerEntryInDatabase(String answer,String questionId,String quesDescription,String categoryId,String allottedDate,String areaName,String consumerName, String consumerNo,String isCompleted,String uniqueConsumerId,String allottedId)
     {
         SQLiteDatabase db=this.getWritableDatabase();
-
-
 
         Cursor cursor=db.rawQuery("SELECT * FROM "+TABLE_NAME_ANSWERS+" WHERE "+COL4_8+"="+consumerNo+" AND "+COL4_2+"="+questionId ,null);
 
         int c=cursor.getCount();
 
-                ContentValues cv = new ContentValues();
-                cv.put(COL4_2, questionId);
-                cv.put(COL4_3, quesDescription);
-                cv.put(COL4_12, categoryId);
-                cv.put(COL4_4, answer);
-                cv.put(COL4_6, areaName);
-                cv.put(COL4_7, consumerName);
-                cv.put(COL4_5,allottedDate);
-                cv.put(COL4_8, consumerNo);
-                cv.put(COL4_9,isCompleted);
-                cv.put(COL4_10, uniqueConsumerId);
-                cv.put(COL4_11, allottedId);
+        ContentValues cv = new ContentValues();
+        cv.put(COL4_2, questionId);
+        cv.put(COL4_3, quesDescription);
+        cv.put(COL4_12, categoryId);
+        cv.put(COL4_4, answer);
+        cv.put(COL4_6, areaName);
+        cv.put(COL4_7, consumerName);
+        cv.put(COL4_5,allottedDate);
+        cv.put(COL4_8, consumerNo);
+        cv.put(COL4_9,isCompleted);
+        cv.put(COL4_10, uniqueConsumerId);
+        cv.put(COL4_11, allottedId);
 
-                System.out.println("Before update Count : "+count);
+        System.out.println("Before update Count : "+count);
 
-                if(c==1)
-                {
-                    long result=db.update(TABLE_NAME_ANSWERS,  cv,COL2_2+" = "+consumerNo+" AND "+COL4_2+" = "+questionId,null);
-                    Log.i(Constants.TAG,""+result);
-                    if(result!=-1)
-                    {
-                        Log.i(Constants.TAG,"Updated");
-                        //Toast.makeText(context, "Updated!"+c, Toast.LENGTH_SHORT).show();
+        if(c==1)
+        {
+            long result=db.update(TABLE_NAME_ANSWERS,  cv,COL2_2+" = "+consumerNo+" AND "+COL4_2+" = "+questionId,null);
+            Log.i(Constants.TAG,""+result);
+            if(result!=-1)
+            {
+                Log.i(Constants.TAG,"Updated");
+                //Toast.makeText(context, "Updated!"+c, Toast.LENGTH_SHORT).show();
 
-                    }
+            }
 
-                }
+        }
 
 
-                else
-                {
-                    long result=db.insert(TABLE_NAME_ANSWERS,  null,cv);
-                    Log.i(Constants.TAG,"ANSWER RESULT "+result);
-                    if(result!=-1)
-                    {
-                        Log.i(Constants.TAG,"Inserted!");
-                    }
-                }
+        else
+        {
+            long result=db.insert(TABLE_NAME_ANSWERS,  null,cv);
+            Log.i(Constants.TAG,"ANSWER RESULT "+result);
+            if(result!=-1)
+            {
+                Log.i(Constants.TAG,"Inserted!");
+            }
+        }
     }
 
 
+    //temporarily updates the allotment entry to denied till reflected to server
     public void moveEntryToDenied(Integer consumerNo)
     {
         ContentValues cv = new ContentValues();
@@ -1303,13 +966,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
     }
 
 
-  /*  public void fillTables()
-    {
-        getQuestion();
-        getAllotment();
-    }*/
-
-
+    //temporarily updates the allotment entry to not Available till reflected to server
     public void moveEntryToNotAvailable(Integer consumerNo)
     {
         ContentValues cv = new ContentValues();
@@ -1322,7 +979,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
 
 
-//informationAnswer[j], informationCategoryID[j], informationDescription[j], informationCategoryID[j], allotmentDate, areaName, consumerName, consumerNo, isCompleted, uniqueConsumerId, allottedId)
+    //Stores the personalinfo table with the infromation gathered from the respective user
     public boolean putInformationEntryInDatabase(String dateofbirth, String vip,String gender,String usingcreditcardcheckbox,String motherName ,String highConsumerCheckBox ,String fatherName, String refillGap ,String fatherSpouseName, String bookRefill, String familyMember ,String typeOfHouse ,String rationCardAffidavit ,String twoWheeler ,String affidavitDate ,String fourWheeler ,String rationCardNo ,String pipeGas ,String panCardNo,String passportNo ,String voterId ,String licenseNo,String mobileNo ,String emailId , String consumerNo)
     {
         //boolean isSuccess=false;
@@ -1341,7 +998,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
         //unique_consumer_id TEXT,allotedid TEXT,inspectionid TEXT, dateofbirth TEXT, vip TEXT,gender TEXT,usingcreditcard TEXT,mothername TEXT,highconsumer TEXT,father TEXT,refills TEXT,fatherspousename TEXT,book_refill TEXT, familymember TEXT, typeofhouse TEXT,rationcard TEXT,two_wheeler TEXT,affidavitdate TEXT,four_wheeler TEXT,rationcardno TEXT,pipegas TEXT,pancardno TEXT,passportno TEXT,voterid TEXT,licenseno TEXT,mobileno TEXT,emailid TEXT,json_data TEXT)
         ContentValues cv = new ContentValues();
 
-       JSONObject jsonObject=new JSONObject();
+        JSONObject jsonObject=new JSONObject();
         try
         {
             jsonObject.put("VIP",vip);
@@ -1375,8 +1032,6 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
         //vip, gender, using credit_card,mother_name,high_consumption,father_spouse_name,refill_gap,booking_mode,family_member_count,accomodation,ration_affidavit,two_wheeler,four_wheeler,ration_card_no,using_piped_gas,pan_card_no,passport,voter_id,license,mobileNo,email
 
         String jsonData=jsonObject.toString();
-        //TODO put personal info in Database anyway
-
 
         // cv.put(COL5_1,sharedPreferences.getString(Constants) );
         cv.put(COL5_2,uniqueConsumerId );
@@ -1417,43 +1072,38 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
             if(result!=-1)
             {
-                Log.i(Constants.TAG,"Updated"+c);
-               ///isSuccess=true;
+                Log.d(Constants.TAG,"Updated"+c);
+                ///isSuccess=true;
                 Toast.makeText(context, "Updated!", Toast.LENGTH_SHORT).show();
                 return true;
             }
             else
-                {
-                    return false;
-                }
-
+            {
+                return false;
+            }
         }
-
 
         else
         {
             long result=db.insert(TABLE_NAME_PERSONAL_INFO,  null,cv);
-            Log.i(Constants.TAG,"INFORMATION RESULT "+result);
+            Log.d(Constants.TAG,"INFORMATION RESULT "+result);
 
             if(result!=-1)
             {
                 Toast.makeText(context, "Inserted!", Toast.LENGTH_SHORT).show();
-                Log.i(Constants.TAG, "Inserted!"+c);
-
+                Log.d(Constants.TAG, "Inserted!"+c);
                 return true;
-
-
             }
 
             else {
                 return false;
             }
-
         }
 
-        //return isSuccess;
     }
 
+
+    //puts the extra dynamic information into the allotmentList table in database, which is needed to send to server along with ConsumerInfo JSONString
     public void putExtraAllotedUserData(String alloted_id,String inspection_no,String instruction, double latitude, double longitude)
     {
         SQLiteDatabase db=this.getWritableDatabase();
@@ -1468,18 +1118,19 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
         if(result!=1)
         {
             Toast.makeText(context, "Updated!", Toast.LENGTH_SHORT).show();
+            Log.d(Constants.TAG,"Updated!");
         }
 
 
     }
 
+
+    //converts the parameters into a JSON Array string to POST to server
     public String getConsumerJsonString(String allottedId,double latitude,double longitude,String instruction,String dateString)
     {
-      /*  LocationManager locMan = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        @SuppressLint("MissingPermission") long networkTS = locMan.getLastKnownLocation(LocationManager.NETWORK_PROVIDER).getTime();*/
-
         JSONArray jsonArray=new JSONArray();
         JSONObject jsonObject=new JSONObject();
+
         try
         {
             jsonObject.put("AltId",allottedId);
@@ -1498,15 +1149,16 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
         jsonArray.put(jsonObject);
 
         return jsonArray.toString();
-        }
+    }
 
 
 
+    //get the json_data entry of the respective user from allotmentList table in database
     public String getPersonalJsonString(String uniqueNo)
     {
         SQLiteDatabase db=this.getReadableDatabase();
         Cursor cursor=db.rawQuery("Select * from "+TABLE_NAME_PERSONAL_INFO+" where "+COL5_2+" = "+uniqueNo,null);
-        String data;
+
         if (cursor.moveToFirst()){
             do{
                 return cursor.getString(28);
@@ -1518,6 +1170,9 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
         return null;
     }
 
+
+
+    //fetch all QuestionAnswer entries of respective user from answers table in database
     public String getAnswerJsonString(String unique)
     {
         SQLiteDatabase db=this.getWritableDatabase();
@@ -1553,7 +1208,13 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
         }
 
-        System.out.println("jsonArrayQuestions@@@@@@@@" + jsonArrayQuestions);
+        Log.d(Constants.TAG,"jsonArrayQuestions@@@@@@@@" + jsonArrayQuestions);
         return jsonArrayQuestions.toString();
+    }
+
+    public void deleteAllTableEntries(String allotted_id, String uniqueNo)
+    {
+
+
     }
 }
