@@ -44,7 +44,10 @@
                 android:background="@color/colorPrimary"
                 app:tabGravity="fill"
                 app:tabMode="scrollable"
-                app:tabTextColor="@color/white">
+                app:tabTextColor="@color/white"
+                app:tabIndicatorColor="@color/red"
+                app:tabIndicatorHeight="2dp"
+                >
 
             </android.support.design.widget.TabLayout>
 
@@ -54,24 +57,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+
                 <android.support.v4.view.ViewPager
                     android:id="@+id/viewpager"
-
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-
                     app:layout_behavior="@string/appbar_scrolling_view_behavior"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    />
 
             </android.support.v4.widget.SwipeRefreshLayout>
-
 
         </android.support.design.widget.AppBarLayout>
 
     </LinearLayout>
+
+
 
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation_view"
@@ -82,7 +86,8 @@
         android:theme="@style/Theme.AppCompat.Light"
         app:headerLayout="@layout/nav_header"
         app:itemIconTint="@color/colorPrimary"
-        app:menu="@menu/drawer_view" />
+        app:menu="@menu/drawer_view"
+        />
 
 
 </android.support.v4.widget.DrawerLayout>

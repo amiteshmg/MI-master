@@ -52,18 +52,19 @@ public class Constants
     public static String FONT_REGULAR = "fonts/OpenSans-Regular.ttf";
     public static String FONT_BOLD = "fonts/OpenSans-Bold.ttf";
 
-//Live Server
+    //Live Server
 
-   /* public static final String ServerUrl = "http://lpgmandatoryinspection.hpcl.co.in/MandatoryInspectionWebService/HP.svc/";
+    /* public static final String ServerUrl = "http://lpgmandatoryinspection.hpcl.co.in/MandatoryInspectionWebService/HP.svc/";
     public static final String ServerUrl_Soap = "http://lpgmandatoryinspection.hpcl.co.in/MandatoryInspectionWebService/UploadFilesService.asmx";
-*/
-//Local server
+    */
+    //Local server
 
    /*public static final String ServerUrl = "http://192.168.2.21/HP.svc/";
     public static final String ServerUrl_Soap = "http://http://192.168.2.21/UploadFilesService.asmx";*/
 
 
-//Test Aadyam server
+
+    //Test Aadyam server
 
   /*public static final String ServerUrl = "http://aclpune.com/HPCLINSPSERVICE/HP.svc/";
     public static final String ServerUrl_Soap = "http://aclpune.com/HPCLINSPSERVICE/UploadFilesService.asmx";

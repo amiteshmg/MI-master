@@ -261,6 +261,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
         db.execSQL(SQL_CREATE_TABLE_ANSWERS);
         db.execSQL(SQL_CREATE_TABLE_PHOTOS);
         db.execSQL(SQL_CREATE_TABLE_LAYOUT_COUNT);
+        //getAllotment();
         //db.execSQL();
         //getAllotmentOnCreate();
         //getAllotmentBeta();
@@ -570,15 +571,17 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
     public void putAllotmentBeta(List<AllotmentList> list)
     {
         SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("delete from "+ TABLE_NAME_ALLOTMENT);
         int size=list.size();
+
 
         ContentValues contentValues;
 
         for(int i=0;i<size;i++)
         {
-            Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME_ANSWERS + " WHERE " + COL3_8 + "=" + list.get(i).getConsumerNo(), null);
+           /* Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME_ANSWERS + " WHERE " + COL3_8 + "=" + list.get(i).getConsumerNo(), null);
             int c = cursor.getCount();
-
+*/
             contentValues= new ContentValues();
 
             contentValues.put(COL3_2, list.get(i).getInspFormId());
@@ -611,7 +614,15 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
             //contentValues.put(COL3_38,list.get(i).getIsSatisfactory());
 
 
-            if (c == 1)
+
+            long result=db.insert(TABLE_NAME_ALLOTMENT,  null,contentValues);
+            Log.d(Constants.TAG,"ALLOTMENT RESULT "+result);
+
+            if(result!=-1)
+            {
+                Log.d(Constants.TAG, "Inserted!");
+            }
+          /*  if (c == 1)
             {
                 //long result = db.update(TABLE_NAME_ALLOTMENT, contentValues, COL3_20 + " = " + list.get(i).getAllotmentId(), null);
                 long result = db.replace(TABLE_NAME_ALLOTMENT, null,contentValues);
@@ -635,7 +646,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
                     Log.d(Constants.TAG, "Inserted!" + c);
                 }
 
-            }
+            }*/
 
 
         }
@@ -696,6 +707,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
         return token[0];
     }
+
 
 
 
@@ -1104,7 +1116,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
 
     //puts the extra dynamic information into the allotmentList table in database, which is needed to send to server along with ConsumerInfo JSONString
-    public void putExtraAllotedUserData(String alloted_id,String inspection_no,String instruction, double latitude, double longitude)
+    public void putExtraAllotedUserData(String alloted_id,String instruction, double latitude, double longitude)
     {
         SQLiteDatabase db=this.getWritableDatabase();
 
@@ -1117,7 +1129,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
         if(result!=1)
         {
-            Toast.makeText(context, "Updated!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, "Updated!", Toast.LENGTH_SHORT).show();
             Log.d(Constants.TAG,"Updated!");
         }
 

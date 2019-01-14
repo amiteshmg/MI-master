@@ -1,23 +1,14 @@
 package com.example.aadyam.mi;
 
 import android.app.IntentService;
-import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.content.Context;
 import android.content.SharedPreferences;
-
-import com.androidquery.AQuery;
-import com.androidquery.callback.AjaxCallback;
-import com.androidquery.callback.AjaxStatus;
-import com.example.aadyam.mi.Utils.Constants;
-import com.example.aadyam.mi.activity.soap.InspectionDataSoapHelper;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in

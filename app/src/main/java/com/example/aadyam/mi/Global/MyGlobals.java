@@ -5,6 +5,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.arch.core.executor.DefaultTaskExecutor;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -190,8 +191,25 @@ public class MyGlobals
 
 
 
+public ArrayList<Integer> getAllotmentEntriesCount()
+{
+    DatabaseHelperUser databaseHelperUser=new DatabaseHelperUser(mContext);
+    ArrayList<Integer> countData=new ArrayList<>();
 
+    countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_ALLOTTED_PENDING).size());
+    countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_UNSAFE).size());
+    countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_DENIED).size());
+    countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_NOT_AVAILABLE).size());
+    countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_REALLOTTED_UNSAFE).size());
+    countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_REALLOTTED_DENIED).size());
+    countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_REALLOTTED_NOT_AVAILABLE).size());
+    countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_TOTAL).size());
+    countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_AGAINST_UNSAFE).size());
+    countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_AGAINST_DENIED).size());
+    countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_AGAINST_NOT_AVAILABLE).size());
 
+    return  countData;
+}
 
     //method to abstract allotmentList from the retrofit body and pass to addQuestion method one by one
     public int getAllotmentCount()

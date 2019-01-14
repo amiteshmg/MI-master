@@ -1,4 +1,4 @@
-package com.example.aadyam.mi.activity.soap;
+package com.example.aadyam.mi.soap;
 
 import android.content.Context;
 
@@ -101,7 +101,8 @@ public class InspectionDataSoapHelper
             sharedPreferences = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
             editor = sharedPreferences.edit();
 
-            try {
+            try
+            {
 
              /*   if (logArrayList.size() > 0) {
                     logArrayList.clear();
@@ -110,8 +111,8 @@ public class InspectionDataSoapHelper
                 SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
                 addParameters(parameters, Request);
 
-             /*   try {
-
+             /*
+                try {
                     // added by Vinayak
                     LogAllModel logDetailModel = new LogAllModel();
                     logDetailModel.setLogPriority("");
@@ -123,16 +124,20 @@ public class InspectionDataSoapHelper
                     logDetailModel.setLogSubmited("");
                     logDetailModel.setException("");
                     logDetailModel.setLogKey("");
-
                     logArrayList.add(logDetailModel);
                     System.out.println("logArrayList@@" + logArrayList);
-
                     new Logger(context).saveLog(logArrayList);
 
-                } catch (Exception e) {
+                }
 
+                catch (Exception e)
+                {
                     e.printStackTrace();
-                }*/
+                }
+
+
+                */
+
 
                 SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 soapEnvelope.dotNet = true;

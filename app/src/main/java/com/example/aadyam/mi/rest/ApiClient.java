@@ -15,6 +15,8 @@ public class ApiClient
            // Gson=new GsonBuilder().setLenient().create();
             //http://lpgmandatoryinspection.hpcl.co.in/mandatoryinspectionwebservice/hp.svc/
             String BASE_URL = "http://hpgasprodweb1t.hpcl.co.in/hp.svc/";
+            //String BASE_URL = "http://lpgmandatoryinspection.hpcl.co.in/mandatoryinspectionwebservice/hp.svc/";
+
             retrofit=new Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
         }
 

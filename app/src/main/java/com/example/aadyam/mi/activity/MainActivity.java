@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,20 +23,20 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.androidquery.AQuery;
+import com.example.aadyam.mi.Global.MyGlobals;
 import com.example.aadyam.mi.R;
 import com.example.aadyam.mi.Utils.Constants;
-import com.example.aadyam.mi.activity.session.AlertDialogManager;
-import com.example.aadyam.mi.activity.session.SessionManager;
+import com.example.aadyam.mi.session.AlertDialogManager;
+import com.example.aadyam.mi.session.SessionManager;
 import com.example.aadyam.mi.database.DatabaseHelperUser;
 import com.example.aadyam.mi.fragment.Fragment_today;
 import com.example.aadyam.mi.fragment.Fragment_total;
@@ -56,10 +55,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import com.androidquery.callback.AjaxCallback;
-import com.androidquery.callback.AjaxStatus;
-import com.androidquery.AQuery;
-
 /*
 import com.aquery.AQuery;
 import com.aquery.*;
@@ -71,41 +66,23 @@ public class MainActivity extends FragmentActivity
 {
 
     private DrawerLayout mDrawerLayout;
-    ActionBarDrawerToggle drawerToggle;
-AQuery aQuery=new AQuery(this);
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
 
     //AQuery aQuery=new AQuery(this);
-
-
     Toolbar toolbar;
     ProgressDialog progressDialog;
     DatabaseHelperUser databaseHelperUser;
 
-
     int UserId,ConsumerCount;
     long StaffRefNo;
-    Allotment allotment;
-    List<Allotment> allotmentLists;
-    private String number;
-
-    // Activity request codes
-    public  static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
-    public static final int CAMERA_CAPTURE_VIDEO_REQUEST_CODE = 200;
-
-    // key to store image path in savedInstance state
-    public static final String KEY_IMAGE_STORAGE_PATH = "image_path";
 
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
 
     // Bitmap sampling size
-    public static final int BITMAP_SAMPLE_SIZE = 8;
-
-    // Gallery directory name to store the images or videos
-    public static final String GALLERY_DIRECTORY_NAME="MI Images";
+     public static final String GALLERY_DIRECTORY_NAME="MI Images";
 
     // Image and Video file extensions
     public static final String IMAGE_EXTENSION = "jpg";
@@ -113,7 +90,7 @@ AQuery aQuery=new AQuery(this);
 
     // Alert Dialog Manager
     AlertDialogManager alert = new AlertDialogManager();
-    private FragmentRefreshListener fragmentRefreshListener;
+
     // Session Manager Class
     SessionManager session;
     SwipeRefreshLayout swipeRefreshLayout;
@@ -132,7 +109,6 @@ AQuery aQuery=new AQuery(this);
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //setTitle(R.string.dashboard);
 
         tabLayout = findViewById(R.id.tabs);
         swipeRefreshLayout=findViewById(R.id.swipeRefreshLayout);
@@ -141,12 +117,8 @@ AQuery aQuery=new AQuery(this);
         databaseHelperUser=new DatabaseHelperUser(getApplicationContext());
         mDrawerLayout=findViewById(R.id.drawer_layout);
         toolbar = findViewById(R.id.toolbar);
-//        toolbar.setBackgroundDrawable();
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
-/*
-//        getActionBar().setDisplayShowTitleEnabled(false);
-        getActionBar().setDisplayShowTitleEnabled(true);
-*/
+
         navigationView = findViewById(R.id.navigation_view);
         c=Calendar.getInstance().getTime();
 
@@ -156,23 +128,9 @@ AQuery aQuery=new AQuery(this);
 
         setActionBar(toolbar);
 
-       /* drawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, 0, 0)
-        {
-            public void onDrawerClosed(View view)
-            {
-                toolbar.setTitle(R.string.app_name);
-            }
-
-            public void onDrawerOpened(View drawerView)
-            {
-                toolbar.setTitle(R.string.app_name);
-            }
-        };
-
-        mDrawerLayout.setDrawerListener(drawerToggle);*/
-
         navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
+                new NavigationView.OnNavigationItemSelectedListener()
+                {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem)
                     {
@@ -196,6 +154,8 @@ AQuery aQuery=new AQuery(this);
                                 startActivity(i);
 
                             case R.id.sync_entries:
+
+                                syncFragments();
 
                         }
 
@@ -229,149 +189,117 @@ AQuery aQuery=new AQuery(this);
 
 
 
-       /* swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
-        {
-            @Override
-            public void onRefresh()
-            {
-                Toast.makeText(MainActivity.this, "Refresh", Toast.LENGTH_SHORT).show();
-            }
-        });*/
-
-
-       swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+       swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+       {
            @Override
            public void onRefresh()
            {
-             /*   databaseHelperUser.getAllotment();
-                Fragment fragment=getFragment();
-                //Fragment fragment1=getFragment(viewPager,0);
-               Objects.requireNonNull(viewPager.getAdapter()).notifyDataSetChanged();
-
-               final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-               assert fragment != null;
-
-               ft.detach(fragment).attach(fragment).addToBackStack(null).commit();
-               //ft.addToBackStack(null);
-
-               */
-               swipeRefreshLayout.setRefreshing(false);
-
-
+                syncFragments();
+                swipeRefreshLayout.setRefreshing(false);
            }
        });
 
-        setupViewPager(viewPager);
-
-
-        tabLayout.setupWithViewPager(viewPager);
-
+       setupViewPager(viewPager);
+       tabLayout.setupWithViewPager(viewPager);
     }
 
 
-
-
-
-    public FragmentRefreshListener getFragmentRefreshListener() {
-        return fragmentRefreshListener;
-    }
-
-
-
-
-
-
-    @Override
-    protected void onRestart()
+    private void syncFragments()
     {
-        super.onRestart();
+        Fragment[] fragment=getFragment();
+        databaseHelperUser.getAllotment();
+        viewPager.getAdapter().notifyDataSetChanged();
+        final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        assert fragment != null;
+        ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+
+        for(int j=0;j<fragment.length;j++)
+            ft.remove(fragment[j]).add(fragment[j],null).disallowAddToBackStack();
+
+        ft.commit();
     }
 
-
-
-    @Override
-    public void onBackPressed()
-    {
-        super.onBackPressed();
-    }
-
-
-
-    @Override
-    protected void onStart()
-    {
-        super.onStart();
-    }
 
 
     //to add fragments to ViewPager
     private void setupViewPager(ViewPager viewPager)
     {
-
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new Fragment_today(), "Today's Inspection");
         adapter.addFragment(new Fragment_total(), "Total Inspection");
         viewPager.setAdapter(adapter);
     }
 
-    private Fragment getFragment()
+
+    private Fragment[] getFragment()
     {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-       /* if(tabLayout.getSelectedTabPosition()==1)
-        {
-            return adapter.getItem(0);
-        }
+        Fragment[] fragment=new Fragment[2];
+        fragment[0]=adapter.getItem(1);
+        fragment[1]=adapter.getItem(2);
 
-        else if(tabLayout.getSelectedTabPosition()==2)
-            return adapter.getItem(1);
-*/
-       /* switch (position)
-        {
-            case 0:
-              return adapter.getItem(position);
-
-
-            case 1:
-                return adapter.getItem(position);
-             //   adapter.getItem(position).refresh();
-
-        }*/
-        return adapter.getItem(1);
-        //return null;
+        return fragment;
     }
 
 
     //adapt the viewpager to the tabLayout
     class ViewPagerAdapter extends FragmentPagerAdapter
     {
+        @NonNull
+        @Override
+        public Object instantiateItem(@NonNull ViewGroup container, int position)
+        {
+            return super.instantiateItem(container, position);
+
+        }
+
 
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
+        private ArrayList<Integer> countData;
+
+
+
         ViewPagerAdapter(FragmentManager manager)
         {
             super(manager);
+         //   countData=new MyGlobals(getApplicationContext()).getAllotmentEntriesCount();
+          //  notifyDataSetChanged();
         }
 
 
         @Override
         public Fragment getItem(int position)
         {
+
+
             switch (position)
             {
                 case 0 : return new Fragment_today();
-
                 case 1 : return new Fragment_total();
-
+                default: return new Fragment_total();
             }
-            return null;
+
         }
 
 
+        @Override
+        public int getItemPosition(@NonNull Object object)
+        {
+           /* if (object instanceof Fragment_total)
+            {
+                ((Fragment_total) object).update(countData);
+            }
 
+            else if(object instanceof  Fragment_today)
+            {
+                ((Fragment_today) object).update(countData);
+            }
+            //don't return POSITION_NONE, avoid fragment recreation.
+            return super.getItemPosition(object);*/
+           return POSITION_NONE;
 
-
-
-
+        }
 
         @Override
         public int getCount()
@@ -469,11 +397,6 @@ AQuery aQuery=new AQuery(this);
         });
 
     }
-
-    public interface FragmentRefreshListener{
-        void onRefresh();
-    }
-
 
 
 }

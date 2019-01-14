@@ -1,4 +1,4 @@
-package com.example.aadyam.mi.activity.session;
+package com.example.aadyam.mi.session;
 
 
 

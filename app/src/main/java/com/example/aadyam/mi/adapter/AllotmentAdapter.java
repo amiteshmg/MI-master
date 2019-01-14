@@ -2,6 +2,7 @@ package com.example.aadyam.mi.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,6 +23,8 @@ import android.widget.Toast;
 import com.example.aadyam.mi.Global.MyGlobals;
 import com.example.aadyam.mi.R;
 import com.example.aadyam.mi.Utils.Constants;
+import com.example.aadyam.mi.activity.InspectionDisplayActivity;
+import com.example.aadyam.mi.activity.MainActivity;
 import com.example.aadyam.mi.activity.SurveyActivity;
 import com.example.aadyam.mi.database.DatabaseHelperUser;
 import com.example.aadyam.mi.model.AllotmentList;
@@ -177,6 +180,7 @@ public class AllotmentAdapter extends RecyclerView.Adapter<AllotmentAdapter.MyVi
                         //notifyItemRemoved(position);
                         //notifyItemRemoved(position);
                         //notifyDataSetChanged();
+                        ((InspectionDisplayActivity)context).finish();
 
                     }
                 });
@@ -207,13 +211,20 @@ public class AllotmentAdapter extends RecyclerView.Adapter<AllotmentAdapter.MyVi
                         databaseHelperUser.moveEntryToNotAvailable(allotmentList.get(position).getConsumerNo());
                         notifyDataSetChanged();
                         setDenied(allotmentList.get(position).getAllotmentId().toString(),1);
-
-
                         /*Fragment_total fragment_total=new Fragment_total();
                         fragment_total.refreshFragment();*/
+                        ProgressDialog progressDialog =new ProgressDialog(context);
+                        progressDialog.setMessage("Please wait");
+                        progressDialog.show();
+                        try {
+                            context.wait(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
 
-
-
+                        ((InspectionDisplayActivity)context).finish();
+                        ((InspectionDisplayActivity)context).overridePendingTransition(R.anim.slide_out_down,R.anim.slide_out_down);
+                        progressDialog.dismiss();
                     }
                 });
 

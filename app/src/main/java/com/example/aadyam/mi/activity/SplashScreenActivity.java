@@ -19,6 +19,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.example.aadyam.mi.R;
+import com.example.aadyam.mi.Utils.Constants;
 import com.example.aadyam.mi.database.DatabaseHelperUser;
 
 /**
@@ -26,16 +27,19 @@ import com.example.aadyam.mi.database.DatabaseHelperUser;
  * status bar and navigation/system bar) with user interaction.
  */
 
-public class SplashScreenActivity extends AppCompatActivity {
+public class SplashScreenActivity extends AppCompatActivity
+{
     private static int SPLASH_TIME_OUT = 5000;
     private static final int REQUEST = 112;
     TextView txtVersionCode;
     Dialog dialog;
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
+    //SharedPreferences sharedPreferences;
+    //SharedPreferences.Editor editor;
     Context context;
     DatabaseHelperUser databaseHelperUser;
     private String questionVersion;
+    SharedPreferences prefs = null;
+
 
     @SuppressLint({"CommitPrefEdits", "ApplySharedPref"})
     @Override
@@ -43,9 +47,10 @@ public class SplashScreenActivity extends AppCompatActivity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+        prefs = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
         context=getApplicationContext();
         databaseHelperUser = new DatabaseHelperUser(context);
-        databaseHelperUser.getAllotment();
+        //databaseHelperUser.getAllotment();
 
         if (Build.VERSION.SDK_INT >= 23)
         {
@@ -100,14 +105,23 @@ public class SplashScreenActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onStart() {
+    protected void onStart()
+    {
         super.onStart();
     }
 
     @SuppressLint("ApplySharedPref")
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
         super.onResume();
+        if (prefs.getBoolean("firstrun", true)) {
+            // Do first run stuff here then set 'firstrun' as false
+            // using the following line to edit/commit prefs
+
+            databaseHelperUser.getAllotment();
+            prefs.edit().putBoolean("firstrun", false).commit();
+        }
     }
 
     @Override

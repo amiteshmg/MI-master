@@ -12,12 +12,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -37,7 +37,8 @@ import com.androidquery.callback.AjaxStatus;
 import com.example.aadyam.mi.Global.GPSTracker;
 import com.example.aadyam.mi.Utils.CameraUtils;
 import com.example.aadyam.mi.Utils.Constants;
-import com.example.aadyam.mi.activity.soap.InspectionDataSoapHelper;
+import com.example.aadyam.mi.activity.MainActivity;
+import com.example.aadyam.mi.soap.InspectionDataSoapHelper;
 import com.example.aadyam.mi.database.DatabaseHelperUser;
 import com.example.aadyam.mi.Global.MyGlobals;
 import com.example.aadyam.mi.R;
@@ -53,15 +54,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 
 import static android.support.v7.app.AppCompatActivity.RESULT_CANCELED;
@@ -75,7 +72,9 @@ import static com.example.aadyam.mi.activity.MainActivity.MEDIA_TYPE_IMAGE;
  */
 
 
-public class UploadPhoto extends Fragment {
+public class UploadPhoto extends Fragment
+{
+
     private static final int SIGNATURE = 5;
     private static String imageStoragePath;
     private static final int BITMAP_SAMPLE_SIZE = 8;
@@ -101,7 +100,8 @@ public class UploadPhoto extends Fragment {
     SharedPreferences sharedPreferences;
     //Button save;
 
-    public UploadPhoto() {
+    public UploadPhoto()
+    {
         // Required empty public constructor
     }
 
@@ -114,11 +114,12 @@ public class UploadPhoto extends Fragment {
 
 
     @Override
-    public void onPause() {
+    public void onPause()
+    {
         super.onPause();
         // Toast.makeText(getContext(), "onPause()", Toast.LENGTH_SHORT).show();
-
         //TODO enter code to save image to database in Base64 format conversion
+
     }
 
 
@@ -296,7 +297,8 @@ public class UploadPhoto extends Fragment {
 
                                         //Log.i(Constants.TAG,userInput.getSignatureSvg());
 
-                                        Toast.makeText(context, ""+userInput.getSignatureSvg(), Toast.LENGTH_SHORT).show();
+                                        //Toast.makeText(context, ""+userInput.getSignatureBitmap(), Toast.LENGTH_SHORT).show();
+                                        Log.d(Constants.TAG, "saveCapturedImage: " +userInput.getSignatureBitmap());
                                     }
                                 })
                         .setNegativeButton("Cancel",
@@ -367,14 +369,23 @@ public class UploadPhoto extends Fragment {
             @Override
             public void onClick(View v) {
 
-              /*  boolean f1=sharedPreferences.getBoolean(Constants.CYLINDER_SAVE,false);
+                //getParentFragment().getFragmentManager().
+                /*  boolean f1=sharedPreferences.getBoolean(Constants.CYLINDER_SAVE,false);
                 boolean f2=sharedPreferences.getBoolean(Constants.REGULATOR_SAVE,false);
                 boolean f3=sharedPreferences.getBoolean(Constants.RUBBER_HOSE_SAVE,false);
                 boolean f4=sharedPreferences.getBoolean(Constants.STOVE_SAVE,false);
                 boolean f5=sharedPreferences.getBoolean(Constants.GENERAL_SAVE,false);*/
 
 
+                /*FragmentManager fm = getActivity().getSupportFragmentManager();
 
+                for(int i = 0; i < fm.getBackStackEntryCount(); ++i)
+                {
+                    fm.popBackStack();
+                }*/
+                ProgressDialog progressDialog=new ProgressDialog(context);
+                progressDialog.setMessage("Please wait..");
+                progressDialog.setCancelable(false);
                 progressDialog.show();
 
                 if(hoseBitmap!=null && regulatorBitmap!=null && installationBitmap!=null && signatureBitmap!=null && stoveBitmap!=null)
@@ -394,7 +405,7 @@ public class UploadPhoto extends Fragment {
                     DatabaseHelperUser databaseHelperUser=new DatabaseHelperUser(context);
                     double latitude,longitude;
                     String allotted_id=sharedPreferences.getString(Constants.ALLOTED_ID,null);
-                    //String inspection_id=sharedPreferences.getString(Constants.INSPECTION_ID,null);
+//                    String inspection_id=sharedPreferences.getString(Constants.INSPECTION_ID,null);
                     String unique=sharedPreferences.getString(Constants.UNIQUE_CONSUMER_NO,null);
 
                         // Check if GPS enabled
@@ -406,8 +417,8 @@ public class UploadPhoto extends Fragment {
                         longitude = gps.getLongitude();
                         String instruction=instruction_editText.getText().toString();
                         // \n is for new line
-                        Toast.makeText(context, "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
-                        databaseHelperUser.putExtraAllotedUserData(allotted_id,"3528821"/*inspection_id*/,instruction,latitude,longitude);
+                      //  Toast.makeText(context, "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+                        databaseHelperUser.putExtraAllotedUserData(allotted_id,instruction,latitude,longitude);
 
                         String consumerInfo=databaseHelperUser.getConsumerJsonString(allotted_id,latitude,longitude,instruction,dateString);
                         String personalInfo=databaseHelperUser.getPersonalJsonString(unique);
@@ -416,9 +427,12 @@ public class UploadPhoto extends Fragment {
 
 
 
-                        Toast.makeText(context, ""+consumerInfo, Toast.LENGTH_SHORT).show();
-                        Toast.makeText(context, ""+personalInfo, Toast.LENGTH_SHORT).show();
-                        Toast.makeText(context, ""+answerInfo, Toast.LENGTH_SHORT).show();
+                            // Toast.makeText(context, ""+consumerInfo, Toast.LENGTH_SHORT).show();
+                            Log.d(Constants.TAG, "onClick: "+consumerInfo);
+                            Log.d(Constants.TAG, "onClick: "+personalInfo);
+                            Log.d(Constants.TAG, "onClick: "+answerInfo);
+                            // Toast.makeText(context, ""+personalInfo, Toast.LENGTH_SHORT).show();
+                            // Toast.makeText(context, ""+answerInfo, Toast.LENGTH_SHORT).show();
 
                         boolean isSuccess=inspectionWebService(consumerInfo,personalInfo,answerInfo,allotted_id);
 
@@ -427,12 +441,20 @@ public class UploadPhoto extends Fragment {
                             progressDialog.dismiss();
                             Toast.makeText(context, "Entry uploaded sucessfully!", Toast.LENGTH_SHORT).show();
                             databaseHelperUser.deleteAllTableEntries(allotted_id,uniqueNo);
+                            //FragmentManager fm = getActivity().getSupportFragmentManager();
+                            /*for(int i = 0; i < getActivity().getSupportFragmentManager().getBackStackEntryCount(); ++i) {
+                                getActivity().getSupportFragmentManager().popBackStack();
+                            }
+*/
+                            Intent i = new Intent(getActivity(), MainActivity.class);
+// set the new task and clear flags
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(i);
                         }
 
                         else
                             {
                                 Toast.makeText(context, "Exception! Internal error occured! Please try again ", Toast.LENGTH_SHORT).show();
-
                             }
 
                     }
@@ -464,10 +486,8 @@ public class UploadPhoto extends Fragment {
 
 
 
-
             }
         });
-
 
 
 
@@ -648,7 +668,8 @@ public class UploadPhoto extends Fragment {
 
         imageByte.add(baos.toByteArray());
         String encodedImage = Base64.encodeToString(imageByte.get(0), Base64.DEFAULT);
-        Toast.makeText(getContext(), "" + encodedImage, Toast.LENGTH_SHORT).show();
+       //Toast.makeText(getContext(), "" + encodedImage, Toast.LENGTH_SHORT).show();
+        Log.d(Constants.TAG, "saveCapturedImage: " + encodedImage);
         String filename = CameraUtils.getOutputMediaFile().getName();
         fileNameArray.add(filename);
         imageArray.add(encodedImage);
@@ -659,7 +680,8 @@ public class UploadPhoto extends Fragment {
         stoveBitmap.compress(Bitmap.CompressFormat.JPEG, 60, baos1); //bm is the bitmap object
         imageByte.add(baos1.toByteArray());
         String encodedImage1 = Base64.encodeToString(imageByte.get(1), Base64.DEFAULT);
-        Toast.makeText(getContext(), "" + encodedImage, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), "" + encodedImage, Toast.LENGTH_SHORT).show();
+        Log.d(Constants.TAG, "saveCapturedImage: " + encodedImage1);
         String filename1 = CameraUtils.getOutputMediaFile().getName();
         fileNameArray.add(filename1);
         imageArray.add(encodedImage1);
@@ -668,7 +690,8 @@ public class UploadPhoto extends Fragment {
         hoseBitmap.compress(Bitmap.CompressFormat.JPEG, 60, baos2); //bm is the bitmap object
         imageByte.add(baos2.toByteArray());
         String encodedImage2 = Base64.encodeToString(imageByte.get(2), Base64.DEFAULT);
-        Toast.makeText(getContext(), "" + encodedImage2, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), "" + encodedImage2, Toast.LENGTH_SHORT).show();
+        Log.d(Constants.TAG, "saveCapturedImage: " + encodedImage2);
         String filename2 = CameraUtils.getOutputMediaFile().getName();
         fileNameArray.add(filename2);
         imageArray.add(encodedImage2);
@@ -679,7 +702,8 @@ public class UploadPhoto extends Fragment {
         installationBitmap.compress(Bitmap.CompressFormat.JPEG, 60, baos3); //bm is the bitmap object
         imageByte.add(baos3.toByteArray());
         String encodedImage3 = Base64.encodeToString(imageByte.get(3), Base64.DEFAULT);
-        Toast.makeText(getContext(), "" + encodedImage, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), "" + encodedImage, Toast.LENGTH_SHORT).show();
+        Log.d(Constants.TAG, "saveCapturedImage: " + encodedImage3);
         String filename3 = CameraUtils.getOutputMediaFile().getName();
         fileNameArray.add(filename3);
         imageArray.add(encodedImage3);
@@ -689,12 +713,14 @@ public class UploadPhoto extends Fragment {
         signatureBitmap.compress(Bitmap.CompressFormat.JPEG, 60, baos4); //bm is the bitmap object
         imageByte.add(baos4.toByteArray());
         String encodedImage4 = Base64.encodeToString(imageByte.get(4), Base64.DEFAULT);
-        Toast.makeText(getContext(), "" + encodedImage, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), "" + encodedImage, Toast.LENGTH_SHORT).show();
+        Log.d(Constants.TAG, "saveCapturedImage: " + encodedImage4);
         String filename4 = CameraUtils.getOutputMediaFile().getName();
         fileNameArray.add(filename4);
         imageArray.add(encodedImage4);
 
-        if(!new MyGlobals(context).isNetworkConnected()) {
+        if(!new MyGlobals(context).isNetworkConnected())
+        {
             String[] CODE = {"1", "2", "3", "4", "5"};
             databaseHelperUser.setPhotos(fileNameArray, imageArray, CODE);
         }
@@ -844,23 +870,32 @@ public class UploadPhoto extends Fragment {
     {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REGULATOR_CODE) {
-            if (resultCode == RESULT_OK) {
+        if (requestCode == REGULATOR_CODE)
+        {
+            if (resultCode == RESULT_OK)
+            {
                 // Refreshing the gallery
                 CameraUtils.refreshGallery(getContext(), imageStoragePath);
                 // successfully captured the image
                 // display it in image view
                 previewCapturedImage(REGULATOR_CODE);
-            } else if (resultCode == RESULT_CANCELED) {
+            }
+
+
+            else if (resultCode == RESULT_CANCELED)
+            {
                 // user cancelled Image capture
                 Toast.makeText(getContext(),
                         "User cancelled image capture", Toast.LENGTH_SHORT)
                         .show();
-            } else {
-                // failed to capture image
-                Toast.makeText(getContext(), "Sorry! Failed to capture image", Toast.LENGTH_SHORT).show();
             }
 
+
+            else
+                {
+                // failed to capture image
+                Toast.makeText(getContext(), "Sorry! Failed to capture image", Toast.LENGTH_SHORT).show();
+                }
         }
 
 
@@ -908,24 +943,34 @@ public class UploadPhoto extends Fragment {
                         .show();
             }
 
-        } else if (requestCode == STOVE_CODE) {
-            if (resultCode == RESULT_OK) {
+        }
+
+        else if (requestCode == STOVE_CODE)
+        {
+            if (resultCode == RESULT_OK)
+            {
                 // Refreshing the gallery
                 CameraUtils.refreshGallery(getContext(), imageStoragePath);
                 // successfully captured the image
                 // display it in image view
                 previewCapturedImage(STOVE_CODE);
-            } else if (resultCode == RESULT_CANCELED) {
+            }
+
+            else if (resultCode == RESULT_CANCELED)
+            {
                 // user cancelled Image capture
                 Toast.makeText(getContext(),
                         "User cancelled image capture", Toast.LENGTH_SHORT)
                         .show();
-            } else {
+            }
+
+            else
+                {
                 // failed to capture image
                 Toast.makeText(getContext(),
                         "Sorry! Failed to capture image", Toast.LENGTH_SHORT)
                         .show();
-            }
+                }
 
         }
 
