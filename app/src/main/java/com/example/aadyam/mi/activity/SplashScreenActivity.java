@@ -41,7 +41,7 @@ public class SplashScreenActivity extends AppCompatActivity
     SharedPreferences prefs = null;
 
 
-    @SuppressLint({"CommitPrefEdits", "ApplySharedPref"})
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -49,7 +49,7 @@ public class SplashScreenActivity extends AppCompatActivity
         setContentView(R.layout.activity_splash_screen);
         prefs = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
         context=getApplicationContext();
-        databaseHelperUser = new DatabaseHelperUser(context);
+        databaseHelperUser = new DatabaseHelperUser(context,this);
         //databaseHelperUser.getAllotment();
 
         if (Build.VERSION.SDK_INT >= 23)
@@ -110,15 +110,17 @@ public class SplashScreenActivity extends AppCompatActivity
         super.onStart();
     }
 
-    @SuppressLint("ApplySharedPref")
+
     @Override
     protected void onResume()
     {
         super.onResume();
-        if (prefs.getBoolean("firstrun", true)) {
+
+
+        if (prefs.getBoolean("firstrun", true))
+        {
             // Do first run stuff here then set 'firstrun' as false
             // using the following line to edit/commit prefs
-
             databaseHelperUser.getAllotment();
             prefs.edit().putBoolean("firstrun", false).commit();
         }
@@ -168,19 +170,20 @@ public class SplashScreenActivity extends AppCompatActivity
     }
 
 
+
     public void proceed()
     {
-        new Handler().postDelayed(new Runnable() {
-
+        new Handler().postDelayed(new Runnable()
+        {
             public void run()
             {
                 Intent i = new Intent(SplashScreenActivity.this, MainActivity.class);
                 startActivity(i);
                 finish();
-
             }
         }, SPLASH_TIME_OUT);
     }
+
 
 
  /*   public class AsyncTaskBar extends AsyncTask<Void, Integer, Void>
@@ -216,6 +219,7 @@ public class SplashScreenActivity extends AppCompatActivity
                 bar.setProgress(values[0]);
             }
         }
+
 
         @Override
         protected void onPostExecute(Void result) {

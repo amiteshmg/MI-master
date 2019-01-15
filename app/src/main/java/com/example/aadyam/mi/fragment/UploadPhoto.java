@@ -72,6 +72,7 @@ import static com.example.aadyam.mi.activity.MainActivity.MEDIA_TYPE_IMAGE;
  */
 
 
+@SuppressWarnings("ALL")
 public class UploadPhoto extends Fragment
 {
 
@@ -118,7 +119,7 @@ public class UploadPhoto extends Fragment
     {
         super.onPause();
         // Toast.makeText(getContext(), "onPause()", Toast.LENGTH_SHORT).show();
-        //TODO enter code to save image to database in Base64 format conversion
+
 
     }
 
@@ -728,8 +729,8 @@ public class UploadPhoto extends Fragment
     }
 
 
-    //TODO Checkpoint Function
 
+    //set image to imageView of respective types
     private void previewCapturedImage(int CODE)
     {
 
@@ -901,6 +902,7 @@ public class UploadPhoto extends Fragment
 
         else if (requestCode == HOSE_CODE)
         {
+
             if (resultCode == RESULT_OK)
             {
                 // Refreshing the gallery
@@ -913,9 +915,7 @@ public class UploadPhoto extends Fragment
             else if (resultCode == RESULT_CANCELED)
             {
                 // user cancelled Image capture
-                Toast.makeText(getContext(),
-                        "User cancelled image capture", Toast.LENGTH_SHORT)
-                        .show();
+                Toast.makeText(getContext(), "User cancelled image capture", Toast.LENGTH_SHORT).show();
             }
 
             else
@@ -924,24 +924,32 @@ public class UploadPhoto extends Fragment
                 Toast.makeText(getContext(), "Sorry! Failed to capture image", Toast.LENGTH_SHORT).show();
             }
 
-        } else if (requestCode == INSTALLATION_CODE) {
-            if (resultCode == RESULT_OK) {
+        }
+
+        else if (requestCode == INSTALLATION_CODE)
+        {
+
+            if (resultCode == RESULT_OK)
+            {
                 // Refreshing the gallery
                 CameraUtils.refreshGallery(getContext(), imageStoragePath);
                 // successfully captured the image
                 // display it in image view
                 previewCapturedImage(INSTALLATION_CODE);
-            } else if (resultCode == RESULT_CANCELED) {
-                // user cancelled Image capture
-                Toast.makeText(getContext(),
-                        "User cancelled image capture", Toast.LENGTH_SHORT)
-                        .show();
-            } else {
-                // failed to capture image
-                Toast.makeText(getContext(),
-                        "Sorry! Failed to capture image", Toast.LENGTH_SHORT)
-                        .show();
             }
+
+            else if (resultCode == RESULT_CANCELED)
+            {
+                // user cancelled Image capture
+                Toast.makeText(getContext(), "User cancelled image capture", Toast.LENGTH_SHORT).show();
+            }
+
+
+            else
+                {
+                // failed to capture image
+                Toast.makeText(getContext(), "Sorry! Failed to capture image", Toast.LENGTH_SHORT).show();
+                }
 
         }
 
@@ -956,20 +964,18 @@ public class UploadPhoto extends Fragment
                 previewCapturedImage(STOVE_CODE);
             }
 
+
             else if (resultCode == RESULT_CANCELED)
             {
                 // user cancelled Image capture
-                Toast.makeText(getContext(),
-                        "User cancelled image capture", Toast.LENGTH_SHORT)
-                        .show();
+                Toast.makeText(getContext(), "User cancelled image capture", Toast.LENGTH_SHORT).show();
             }
+
 
             else
                 {
                 // failed to capture image
-                Toast.makeText(getContext(),
-                        "Sorry! Failed to capture image", Toast.LENGTH_SHORT)
-                        .show();
+                Toast.makeText(getContext(), "Sorry! Failed to capture image", Toast.LENGTH_SHORT).show();
                 }
 
         }
@@ -977,23 +983,24 @@ public class UploadPhoto extends Fragment
 
 
 
-        else if (requestCode == Constants.SIGNATURE) {
-            if (resultCode == RESULT_OK) {
+        else if (requestCode == Constants.SIGNATURE)
+        {
+            if (resultCode == RESULT_OK)
+            {
                 // Refreshing the gallery
                 CameraUtils.refreshGallery(getContext(), imageStoragePath);
                 // successfully captured the image
                 // display it in image view
                 previewCapturedImage(STOVE_CODE);
-            } else if (resultCode == RESULT_CANCELED) {
+            }
+
+            else if (resultCode == RESULT_CANCELED)
+            {
                 // user cancelled Image capture
-                Toast.makeText(getContext(),
-                        "User cancelled image capture", Toast.LENGTH_SHORT)
-                        .show();
+                Toast.makeText(getContext(), "User cancelled image capture", Toast.LENGTH_SHORT).show();
             } else {
                 // failed to capture image
-                Toast.makeText(getContext(),
-                        "Sorry! Failed to capture image", Toast.LENGTH_SHORT)
-                        .show();
+                Toast.makeText(getContext(), "Sorry! Failed to capture image", Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -1015,9 +1022,6 @@ public class UploadPhoto extends Fragment
         ((FragmentActivity) context).getFragmentManager().executePendingTransactions();
 
     }
-
-
-
 
 
 
@@ -1049,6 +1053,8 @@ public class UploadPhoto extends Fragment
                     }
                 });
 
+                @SuppressWarnings("unchecked")
+
 
                 LinkedHashMap recordHashMap = new LinkedHashMap<>();
 
@@ -1056,8 +1062,9 @@ public class UploadPhoto extends Fragment
                 recordHashMap.put("PersonalInfo", personalInfo);
                 recordHashMap.put("QuestionsInfo", answerInfo);
 
-                if (fileNameArray.size() == 5) {
 
+                if (fileNameArray.size() == 5)
+                {
                     recordHashMap.put("Img1", fileNameArray.get(0));
                     recordHashMap.put("Img2", fileNameArray.get(1));
                     recordHashMap.put("Img3", fileNameArray.get(2));
@@ -1066,15 +1073,14 @@ public class UploadPhoto extends Fragment
                 }
 
 
-
-            if (imageByte.size() > 4)
-            {
-                recordHashMap.put("img1Byt", imageByte.get(0));
-                recordHashMap.put("img2Byt", imageByte.get(1));
-                recordHashMap.put("img3Byt", imageByte.get(2));
-                recordHashMap.put("img4Byt", imageByte.get(3));
-                recordHashMap.put("img5Byt", imageByte.get(4));
-            }
+                if (imageByte.size() == 5)
+                {
+                    recordHashMap.put("img1Byt", imageByte.get(0));
+                    recordHashMap.put("img2Byt", imageByte.get(1));
+                    recordHashMap.put("img3Byt", imageByte.get(2));
+                    recordHashMap.put("img4Byt", imageByte.get(3));
+                    recordHashMap.put("img5Byt", imageByte.get(4));
+                }
 
                 InspectionDataSoapHelper helper=new InspectionDataSoapHelper();
 
@@ -1082,11 +1088,9 @@ public class UploadPhoto extends Fragment
                 Log.d(Constants.TAG, "inspectionWebService LinkedHashMap : "+recordHashMap.get(i));
                 String response=helper.getSoapRequest(context, Constants.NAMESPACE, Constants.METHOD_INSPECTION_DATA_PostFile, Constants.ServerUrl_Soap, Constants.SOAP_ACTION_INSPECTION_DATA, recordHashMap);
 
-
                 Toast.makeText(context, ""+response, Toast.LENGTH_SHORT).show();
                 if(response==null)
                 token=true;
-
     }
 
     catch (Exception e)
@@ -1107,18 +1111,11 @@ public class UploadPhoto extends Fragment
                 logDetailModel.setLogKey("");
                 logArrayList.add(logDetailModel);
                 new Logger(InspectionDataService.this).saveLog(logArrayList);*/
-
-
                 System.out.println("Exception@@" + e.getMessage());
-            token=false;
-
+                token=false;
         }
 
         return token;
     }
-
-
-
-
 
 }

@@ -2,20 +2,29 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     >
 
+    <item
+        android:id="@+id/action_search_view"
+        android:icon="@android:drawable/ic_menu_search"
+        android:orderInCategory="100"
+        android:title="Search"
+        app:showAsAction="always"
+        app:actionViewClass="android.support.v7.widget.SearchView" />
 
-    <item android:id="@+id/common_menu_settings"
-        android:icon="@drawable/person_icon"
-        android:title="@string/app_name"
-        app:showAsAction="always" />
 
-    <item android:id="@+id/common_menu_settings1"
-        android:icon="@drawable/home_icon"
-        android:title="@string/dashboard"
+<group>
+    <item android:id="@+id/english_settings"
+
+        android:title="English"
+        android:checkable="true"
+        android:checked="true"
        />
+    <item android:id="@+id/hindi_settings"
 
-    <item android:id="@+id/common_menu_settings2"
-        android:icon="@drawable/building_icon"
-        android:title="@string/demo_input_text"
-        app:showAsAction="always" />
+        android:title="Hindi"
+        android:checkable="true"
+
+        />
+</group>
+
 </menu>
 

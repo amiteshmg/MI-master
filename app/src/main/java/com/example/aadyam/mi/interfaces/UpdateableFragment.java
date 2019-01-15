@@ -4,5 +4,5 @@ import java.util.ArrayList;
 
 public interface UpdateableFragment
 {
-    public void update(ArrayList<Integer> xyzData);
+    public void update();
 }

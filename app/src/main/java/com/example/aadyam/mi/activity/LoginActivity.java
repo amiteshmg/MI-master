@@ -16,7 +16,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.aadyam.mi.R;
 import com.example.aadyam.mi.Utils.CameraUtils;
 import com.example.aadyam.mi.Utils.Constants;
@@ -25,18 +24,15 @@ import com.example.aadyam.mi.session.SessionManager;
 import com.example.aadyam.mi.model.Distributor;
 import com.example.aadyam.mi.rest.ApiClient;
 import com.example.aadyam.mi.rest.ApiInterface;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-//import butterknife.BindView;
 
 
 public class LoginActivity extends AppCompatActivity
 {
     private static final String TAG = "LoginActivity";
-    private static final int REQUEST_SIGNUP = 0;
+
     EditText editText;
     Button button;
     String number;
@@ -44,10 +40,10 @@ public class LoginActivity extends AppCompatActivity
     SessionManager sessionManager;
 
 
-    SharedPreferences sharedPreferences;
-    private TextView txtDescription;
 
-    private ImageView imgPreview;
+
+
+
     private EditText mobileNoEditText;
     private AlertDialog.Builder builder;
 

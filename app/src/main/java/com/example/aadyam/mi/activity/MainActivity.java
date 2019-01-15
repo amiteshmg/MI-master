@@ -2,6 +2,7 @@ package com.example.aadyam.mi.activity;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -35,6 +37,7 @@ import com.androidquery.AQuery;
 import com.example.aadyam.mi.Global.MyGlobals;
 import com.example.aadyam.mi.R;
 import com.example.aadyam.mi.Utils.Constants;
+import com.example.aadyam.mi.interfaces.DataUpdateListener;
 import com.example.aadyam.mi.session.AlertDialogManager;
 import com.example.aadyam.mi.session.SessionManager;
 import com.example.aadyam.mi.database.DatabaseHelperUser;
@@ -66,6 +69,7 @@ public class MainActivity extends FragmentActivity
 {
 
     private DrawerLayout mDrawerLayout;
+    private List<DataUpdateListener> mListeners;
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
@@ -101,9 +105,35 @@ public class MainActivity extends FragmentActivity
     //QuestionAsync questionAsync;
 
 
+    public MainActivity()
+    {
+        mListeners = new ArrayList<>();
+    }
+
+    public synchronized void registerDataUpdateListener(DataUpdateListener listener)
+    {
+        mListeners.add(listener);
+    }
+
+    public synchronized void unregisterDataUpdateListener(DataUpdateListener listener)
+    {
+        mListeners.remove(listener);
+    }
+
+
+    public synchronized void dataUpdated()
+    {
+        for (DataUpdateListener listener : mListeners)
+        {
+            listener.onDataUpdate();
+        }
+    }
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @SuppressLint("CommitPrefEdits")
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -113,8 +143,9 @@ public class MainActivity extends FragmentActivity
         tabLayout = findViewById(R.id.tabs);
         swipeRefreshLayout=findViewById(R.id.swipeRefreshLayout);
         progressDialog=new ProgressDialog(getApplicationContext());
+        progressDialog.setMessage("Please wait..");
         session = new SessionManager(getApplicationContext());
-        databaseHelperUser=new DatabaseHelperUser(getApplicationContext());
+        databaseHelperUser=new DatabaseHelperUser(getApplicationContext(),this);
         mDrawerLayout=findViewById(R.id.drawer_layout);
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
@@ -165,6 +196,7 @@ public class MainActivity extends FragmentActivity
                     }
                 });
 
+
         Objects.requireNonNull(getActionBar()).setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeAsUpIndicator(R.drawable.drawer_icon);
 
@@ -177,12 +209,14 @@ public class MainActivity extends FragmentActivity
             }
 
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
+            public void onTabUnselected(TabLayout.Tab tab)
+            {
 
             }
 
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {
+            public void onTabReselected(TabLayout.Tab tab)
+            {
 
             }
         });
@@ -200,23 +234,45 @@ public class MainActivity extends FragmentActivity
        });
 
        setupViewPager(viewPager);
+
        tabLayout.setupWithViewPager(viewPager);
     }
 
 
+
     private void syncFragments()
     {
-        Fragment[] fragment=getFragment();
+
         databaseHelperUser.getAllotment();
-        viewPager.getAdapter().notifyDataSetChanged();
+        dataUpdated();
+//        viewPager.getAdapter().notifyDataSetChanged();
+
+        //viewPager.getAdapter().notifyDataSetChanged();
+
+        /*try
+        {
+            wait(3000);
+        }
+
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
+
+        */
+
+       // viewPager.getAdapter().notifyDataSetChanged();
+
+        /*Fragment fragment=getFragment();
+
         final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         assert fragment != null;
         ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+        ft.remove(fragment).add(fragment, null).disallowAddToBackStack();
+        ft.commit();*/
 
-        for(int j=0;j<fragment.length;j++)
-            ft.remove(fragment[j]).add(fragment[j],null).disallowAddToBackStack();
+       // progressDialog.dismiss();
 
-        ft.commit();
     }
 
 
@@ -225,32 +281,47 @@ public class MainActivity extends FragmentActivity
     private void setupViewPager(ViewPager viewPager)
     {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        //adapter.notifyDataSetChanged();
         adapter.addFragment(new Fragment_today(), "Today's Inspection");
         adapter.addFragment(new Fragment_total(), "Total Inspection");
         viewPager.setAdapter(adapter);
     }
 
 
-    private Fragment[] getFragment()
+    private Fragment getFragment()
     {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        Fragment[] fragment=new Fragment[2];
+
+        adapter.getItem(adapter.getItemPosition(adapter));
+        /*Fragment[] fragment=new Fragment[2];
         fragment[0]=adapter.getItem(1);
         fragment[1]=adapter.getItem(2);
-
-        return fragment;
+*/
+        return adapter.getItem(adapter.getItemPosition(adapter));
     }
 
 
     //adapt the viewpager to the tabLayout
-    class ViewPagerAdapter extends FragmentPagerAdapter
+    class ViewPagerAdapter extends FragmentStatePagerAdapter
     {
         @NonNull
         @Override
         public Object instantiateItem(@NonNull ViewGroup container, int position)
         {
-            return super.instantiateItem(container, position);
 
+            switch (position)
+            {
+               /* case 0 :
+                    Fragment_today fragment_today=new Fragment_today();
+                    fragment_today.onDataUpdate();
+                    break;
+                case 1 :
+                    Fragment_total fragment_total=new Fragment_total();
+                    fragment_total.onDataUpdate();
+                    break;*/
+            }
+
+            return super.instantiateItem(container, position);
         }
 
 
@@ -259,46 +330,40 @@ public class MainActivity extends FragmentActivity
         private ArrayList<Integer> countData;
 
 
-
         ViewPagerAdapter(FragmentManager manager)
         {
             super(manager);
-         //   countData=new MyGlobals(getApplicationContext()).getAllotmentEntriesCount();
-          //  notifyDataSetChanged();
         }
 
 
         @Override
         public Fragment getItem(int position)
         {
-
-
             switch (position)
             {
                 case 0 : return new Fragment_today();
                 case 1 : return new Fragment_total();
-                default: return new Fragment_total();
+                default: return null;
             }
-
         }
+
 
 
         @Override
         public int getItemPosition(@NonNull Object object)
         {
-           /* if (object instanceof Fragment_total)
+            if (object instanceof Fragment_total)
             {
-                ((Fragment_total) object).update(countData);
+                ((Fragment_total) object).onDataUpdate();
             }
 
             else if(object instanceof  Fragment_today)
             {
-                ((Fragment_today) object).update(countData);
+                ((Fragment_today) object).onDataUpdate();
             }
             //don't return POSITION_NONE, avoid fragment recreation.
-            return super.getItemPosition(object);*/
-           return POSITION_NONE;
-
+            return super.getItemPosition(object);
+           //return POSITION_NONE;
         }
 
         @Override
@@ -335,7 +400,8 @@ public class MainActivity extends FragmentActivity
 
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         switch (item.getItemId())
         {
             case android.R.id.home:
@@ -362,25 +428,21 @@ public class MainActivity extends FragmentActivity
     public void getDistributorDetails()
     {
         ApiInterface apiInterface;
-
         apiInterface=ApiClient.getClient().create(ApiInterface.class);
 
         //TODO :take number from login page
         SharedPreferences sharedPreferences=getSharedPreferences(Constants.PREFS_NAME,Context.MODE_PRIVATE);
-
         Call<Distributor> call = apiInterface.getDistributorDetails(sharedPreferences.getString("number","0"));
 
         call.enqueue(new Callback<Distributor>()
         {
             @Override
-            public void onResponse(@NonNull Call<Distributor> call, @NonNull Response<Distributor> response) {
-
-
+            public void onResponse(@NonNull Call<Distributor> call, @NonNull Response<Distributor> response)
+            {
                 assert response.body() != null;
                 UserId = response.body().getDistributorList().get(0).getDistributorId();
                 StaffRefNo = response.body().getDistributorList().get(0).getStaffRefNo();
                 ConsumerCount = 0;
-
                 Toast.makeText(MainActivity.this, ""+response.body().toString(), Toast.LENGTH_SHORT).show();
             }
 
@@ -391,12 +453,7 @@ public class MainActivity extends FragmentActivity
                 Toast.makeText(MainActivity.this, "NO "+t.getMessage() , Toast.LENGTH_SHORT).show();
             }
 
-
-
-
         });
 
     }
-
-
 }

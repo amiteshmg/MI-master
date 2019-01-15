@@ -23,7 +23,11 @@
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
-    <loaded-nodes />
+    <loaded-nodes>
+      <connection connection-id="ea10e0aa-abe3-40aa-9699-00477f4583e3">
+        <schema name="main" object-types="table, view, constraint, index, column, dataset trigger" />
+      </connection>
+    </loaded-nodes>
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="ea10e0aa-abe3-40aa-9699-00477f4583e3">
@@ -36,10 +40,20 @@
   <component name="DBNavigator.Project.DatasetFilterManager">
     <filter-list connection-id="ea10e0aa-abe3-40aa-9699-00477f4583e3" dataset="main.AllotmentList" active-filter-id="EMPTY_FILTER" />
     <filter-list connection-id="ea10e0aa-abe3-40aa-9699-00477f4583e3" dataset="main.DistributorDetails" active-filter-id="EMPTY_FILTER" />
-    <filter-list connection-id="ea10e0aa-abe3-40aa-9699-00477f4583e3" dataset="main.Photos" active-filter-id="" />
+    <filter-list connection-id="ea10e0aa-abe3-40aa-9699-00477f4583e3" dataset="main.Photos" active-filter-id="43836f84-247a-4977-8fae-7cd019c817bb">
+      <filter id="43836f84-247a-4977-8fae-7cd019c817bb" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND" />
+    </filter-list>
     <filter-list connection-id="ea10e0aa-abe3-40aa-9699-00477f4583e3" dataset="main.UnsafeQuestions" active-filter-id="EMPTY_FILTER" />
     <filter-list connection-id="ea10e0aa-abe3-40aa-9699-00477f4583e3" dataset="main.sqlite_sequence" active-filter-id="EMPTY_FILTER" />
-    <filter-list connection-id="ea10e0aa-abe3-40aa-9699-00477f4583e3" dataset="main.PersonalInfo" active-filter-id="" />
+    <filter-list connection-id="ea10e0aa-abe3-40aa-9699-00477f4583e3" dataset="main.layoutCount" active-filter-id="aaffbcf0-46e2-4e5f-8910-3b51fceff40d">
+      <filter id="aaffbcf0-46e2-4e5f-8910-3b51fceff40d" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND" />
+    </filter-list>
+    <filter-list connection-id="ea10e0aa-abe3-40aa-9699-00477f4583e3" dataset="main.PersonalInfo" active-filter-id="eb1d55f2-1b46-4419-9d8b-370b9bf6bf1a">
+      <filter id="eb1d55f2-1b46-4419-9d8b-370b9bf6bf1a" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND" />
+    </filter-list>
+    <filter-list connection-id="ea10e0aa-abe3-40aa-9699-00477f4583e3" dataset="main.QuestionList" active-filter-id="ef70e0b9-8e9e-4236-9b49-23b20a2c61c5">
+      <filter id="ef70e0b9-8e9e-4236-9b49-23b20a2c61c5" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND" />
+    </filter-list>
     <filter-list connection-id="ea10e0aa-abe3-40aa-9699-00477f4583e3" dataset="main.Answers" active-filter-id="EMPTY_FILTER" />
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
@@ -71,7 +85,7 @@
           <description value="" />
           <database-type value="SQLITE" />
           <config-type value="BASIC" />
-          <database-version value="3.2" />
+          <database-version value="3.21" />
           <driver-source value="BUILTIN" />
           <driver-library value="" />
           <driver value="" />

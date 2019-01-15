@@ -9,43 +9,104 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.aadyam.mi.R;
+import com.example.aadyam.mi.Utils.Constants;
 import com.example.aadyam.mi.database.DatabaseHelperUser;
 import com.example.aadyam.mi.model.AllotmentList;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 
-public class StaticAdapter extends RecyclerView.Adapter<StaticAdapter.MyViewHolder>
+public class StaticAdapter extends RecyclerView.Adapter<StaticAdapter.MyViewHolder> implements Filterable
 {
     private Context context;
     DatabaseHelperUser databaseHelperUser;
+    private List<AllotmentList> allotmentListFiltered;
+    private AllotmentAdapter.AllotmentListAdapterListener listener;
+
+    //private List<AllotmentList> allotmentList;
 
     //TODO Going null
 
     private List<AllotmentList> allotmentList;
 
-    public StaticAdapter(List<AllotmentList> AllotmentList, Context context) {
+    public StaticAdapter(List<AllotmentList> allotmentList, Context context, AllotmentAdapter.AllotmentListAdapterListener listener) {
         this.context = context;
-        this.allotmentList = AllotmentList;
+        this.allotmentList = allotmentList;
+        this.allotmentListFiltered=allotmentList;
         this.databaseHelperUser = new DatabaseHelperUser(context);
     }
 
 
-    public void setAllotmentList(List<AllotmentList> allotmentList) {
-        this.allotmentList = allotmentList;
-    }
 
-    public List<AllotmentList> getAllotmentList() {
-        return allotmentList;
+    @Override
+    public Filter getFilter() {
+        return new Filter()
+        {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence)
+            {
+                String charString = charSequence.toString();
+                if (charString.isEmpty())
+                {
+                    allotmentListFiltered = allotmentList;
+                }
+
+                else
+                {
+                    List<AllotmentList> filteredList = new ArrayList<>();
+
+                    for (AllotmentList row : allotmentList)
+                    {
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        if (row.getConsumerName().toLowerCase().contains(charString.toLowerCase()) || row.getMobileNo().toString().contains(charString.toLowerCase()))
+                        {
+                            Log.d(Constants.TAG, "performFiltering: "+row.getConsumerName());
+                            filteredList.add(row);
+                        }
+                    }
+                    allotmentListFiltered = filteredList;
+                }
+
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = allotmentListFiltered;
+                return filterResults;
+            }
+
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults filterResults)
+            {
+                if(filterResults!=null) {
+                    allotmentListFiltered = (ArrayList<AllotmentList>) filterResults.values;
+                    for (int i = 0; i < allotmentListFiltered.size(); i++)
+                        Log.d(Constants.TAG, "publishResults: " + allotmentListFiltered.get(i).getConsumerName());
+//                Toast.makeText(context, ""+allotmentListFiltered.get(1).getConsumerName(), Toast.LENGTH_SHORT).show();
+                    notifyDataSetChanged();
+                }
+              /*  if(!allotmentListFiltered.isEmpty())
+                {
+
+                }*/
+                // notifyDataSetChanged();
+            }
+
+        };
+
     }
 
 
@@ -72,6 +133,13 @@ public class StaticAdapter extends RecyclerView.Adapter<StaticAdapter.MyViewHold
             inspectionDate=itemView.findViewById(R.id.inspection_date_tv);
             call_layout = itemView.findViewById(R.id.static_call_layout);
            // alertDialog = new AlertDialog.Builder(itemView.getContext());
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // send selected contact in callback
+                    listener.onContactSelected(allotmentListFiltered.get(getAdapterPosition()));
+                }
+            });
         }
     }
 
@@ -91,51 +159,57 @@ public class StaticAdapter extends RecyclerView.Adapter<StaticAdapter.MyViewHold
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
 
         //used for loading data into each entry
-        final int pos;
-        pos = position + 1;
+        if(allotmentListFiltered.size()!=0) {
+            final DatabaseHelperUser databaseHelperUser = new DatabaseHelperUser(context);
+            //used for loading data into each entry
+
+            final AllotmentList allotmentList = allotmentListFiltered.get(position);
+
+            final int pos;
+
+            pos = position + 1;
 
 
+            holder.serial_no.setText("" + pos);
 
-        holder.serial_no.setText("" + pos);
+            holder.distributor_address.setText(allotmentList.getAreaName());
+            holder.user_address.setText(allotmentList.getAddress());
+            holder.consumer_no.setText(allotmentList.getConsumerNo().toString());
+            holder.name.setText(allotmentList.getConsumerName());
+            holder.contact_no.setText(allotmentList.getMobileNo().toString());
 
-        holder.distributor_address.setText(allotmentList.get(position).getAreaName());
-        holder.user_address.setText(allotmentList.get(position).getAddress());
-        holder.consumer_no.setText(allotmentList.get(position).getConsumerNo().toString());
-        holder.name.setText(allotmentList.get(position).getConsumerName());
-        holder.contact_no.setText(allotmentList.get(position).getMobileNo().toString());
+            holder.inspectionDate.setText(allotmentList.getLastInspDate());
 
-       holder.inspectionDate.setText(allotmentList.get(position).getLastInspDate());
+            holder.call_layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-        holder.call_layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                    holder.alertDialog.setMessage("Are you sure you want to CALL " + allotmentList.getConsumerName() + " on Number - " +  allotmentList.getMobileNo() + "?");
 
-                holder.alertDialog.setMessage("Are you sure you want to CALL " + allotmentList.get(position).getConsumerName() + " on Number - " + allotmentList.get(position).getMobileNo() + "?");
+                    holder.alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(Intent.ACTION_DIAL);
+                            intent.setData(Uri.parse("tel:" +  allotmentList.getMobileNo().toString()));
+                            intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                            context.startActivity(intent);
+                        }
 
-                holder.alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(Intent.ACTION_DIAL);
-                        intent.setData(Uri.parse("tel:" + allotmentList.get(position).getMobileNo().toString()));
-                        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                        context.startActivity(intent);
-                    }
+                    });
 
-                });
+                    holder.alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
-                holder.alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                        }
 
-                    }
+                    });
 
-                });
+                    holder.alertDialog.show();
+                }
+            });
 
-                holder.alertDialog.show();
-            }
-        });
-
-
+        }
 
     }
 
@@ -145,7 +219,7 @@ public class StaticAdapter extends RecyclerView.Adapter<StaticAdapter.MyViewHold
     @Override
     public int getItemCount ()
     {
-        return allotmentList.size();
+        return allotmentListFiltered.size();
     }
 
 }

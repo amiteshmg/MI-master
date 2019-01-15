@@ -1,5 +1,7 @@
 package com.example.aadyam.mi.database;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -198,6 +200,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
     private static final String COL5_26 = "mobileno";
     private static final String COL5_27 = "emailid";
     private static final String COL5_28 = "json_data";
+    Activity activity;
 
     //create table queries
 
@@ -221,6 +224,13 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
     {
         super(context, /*Environment.getExternalStorageDirectory() + File.separator + */DATABASE_NAME, null, DATABASE_VERSION);
         this.context=context;
+    }
+
+    public DatabaseHelperUser(Context context, Activity activity)
+    {
+        super(context, /*Environment.getExternalStorageDirectory() + File.separator + */DATABASE_NAME, null, DATABASE_VERSION);
+        this.context=context;
+        this.activity=activity;
     }
 
 
@@ -660,6 +670,9 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
     //method to abstract allotmentList from the retrofit body and pass to addQuestion method one by one
     public boolean getAllotment()
     {
+        /*final ProgressDialog progressDialog =new ProgressDialog(activity);
+        progressDialog.setMessage("Wait");
+        progressDialog.show();*/
         final boolean[] token = new boolean[1];
         ApiInterface apiInterface;
         apiInterface=ApiClient.getClient().create(ApiInterface.class);
@@ -693,6 +706,9 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
                 List<AllotmentList> list=response.body().getAllotmentListResult();
                 putAllotmentBeta(list);
                 token[0] =true;
+                //progressDialog.dismiss();
+
+
 
             }
 
@@ -702,6 +718,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
                 //hideDialog();
                 token[0]=false;
                 Toast.makeText(context, "No Response : "+t.toString(), Toast.LENGTH_SHORT).show();
+                //progressDialog.dismiss();
             }
         });
 
@@ -711,6 +728,25 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
 
 
+    public ArrayList<Integer> getAllotmentEntriesCount()
+    {
+        //DatabaseHelperUser databaseHelperUser=new DatabaseHelperUser(context);
+        ArrayList<Integer> countData=new ArrayList<>();
+
+        countData.add(getAllotmentEntries(Constants.TOTAL_ALLOTTED_PENDING).size());
+        countData.add(getAllotmentEntries(Constants.TOTAL_UNSAFE).size());
+        countData.add(getAllotmentEntries(Constants.TOTAL_DENIED).size());
+        countData.add(getAllotmentEntries(Constants.TOTAL_NOT_AVAILABLE).size());
+        countData.add(getAllotmentEntries(Constants.TOTAL_REALLOTTED_UNSAFE).size());
+        countData.add(getAllotmentEntries(Constants.TOTAL_REALLOTTED_DENIED).size());
+        countData.add(getAllotmentEntries(Constants.TOTAL_REALLOTTED_NOT_AVAILABLE).size());
+        countData.add(getAllotmentEntries(Constants.TOTAL_TOTAL).size());
+        countData.add(getAllotmentEntries(Constants.TOTAL_AGAINST_UNSAFE).size());
+        countData.add(getAllotmentEntries(Constants.TOTAL_AGAINST_DENIED).size());
+        countData.add(getAllotmentEntries(Constants.TOTAL_AGAINST_NOT_AVAILABLE).size());
+
+        return  countData;
+    }
 
 
     //fetching allotment entries from the mobile SQLiteDatabase
