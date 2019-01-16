@@ -68,10 +68,6 @@
         <activity android:name=".activity.LoginActivity" />
 
         <service
-            android:name=".MyService"
-            android:enabled="true"
-            android:exported="true" />
-        <service
             android:name=".InspectionDataService"
             android:exported="false"></service>
     </application>

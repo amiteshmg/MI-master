@@ -1,5 +1,6 @@
 package com.example.aadyam.mi.database;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -219,6 +220,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
     ProgressDialog mProgressDialog;
     //private Activity activityContext;
+    SQLiteDatabase db;
 
     public DatabaseHelperUser(Context context)
     {
@@ -297,11 +299,11 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
 
 
-    public void createQuestionTable()
-    {
-        SQLiteDatabase db=this.getWritableDatabase();
-        db.execSQL(SQL_CREATE_TABLE_QUESTIONS);
-    }
+//    public void createQuestionTable()
+//    {
+//        SQLiteDatabase db=this.getWritableDatabase();
+//        db.execSQL(SQL_CREATE_TABLE_QUESTIONS);
+//    }
 
 
 
@@ -1262,7 +1264,76 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
     public void deleteAllTableEntries(String allotted_id, String uniqueNo)
     {
+        SQLiteDatabase db=this.getWritableDatabase();
+
+        //answerentries
+        long result=db.delete(TABLE_NAME_ANSWERS,""+COL4_11+"="+allotted_id,null);
+
+        if(result!=-1)
+            Log.d(Constants.TAG, "deleted Answer Table Entries");
 
 
+        //personalinfo
+
+        long result1=db.delete(TABLE_NAME_PERSONAL_INFO,""+COL5_2+"="+uniqueNo,null);
+        if(result1!=-1)
+            Log.d(Constants.TAG, "deleted PersonalInfo Table Entries");
+
+
+        //photosdata - if exists
+        long result2;
+        for(int i=1;i<=5;i++)
+        result2=db.delete(TABLE_NAME_PHOTOS,""+COL6_10+"="+allotted_id+" and "+COL6_11+"="+i,null);
+
+
+
+    }
+
+    public void setFragmentStatusSaved(String uniqueConsumerId,int categoryId)
+    {
+        SQLiteDatabase db=this.getWritableDatabase();
+        ContentValues cv=new ContentValues();
+
+
+        switch (categoryId)
+        {
+            case 1:
+                cv.put(COL3_26,1);
+                db.update(TABLE_NAME_ALLOTMENT,cv,""+COL3_19+"="+uniqueConsumerId,null);
+                break;
+
+            case 2:
+                cv.put(COL3_27,1);
+                db.update(TABLE_NAME_ALLOTMENT,cv,""+COL3_19+"="+uniqueConsumerId,null);
+                break;
+
+            case 3:
+                cv.put(COL3_28,1);
+                db.update(TABLE_NAME_ALLOTMENT,cv,""+COL3_19+"="+uniqueConsumerId,null);
+                break;
+
+            case 4:
+                cv.put(COL3_29,1);
+                db.update(TABLE_NAME_ALLOTMENT,cv,""+COL3_19+"="+uniqueConsumerId,null);
+                break;
+
+            case 5:
+                cv.put(COL3_30,1);
+                db.update(TABLE_NAME_ALLOTMENT,cv,""+COL3_19+"="+uniqueConsumerId,null);
+                break;
+        }
+
+    }
+
+    public int getFragmentSaveEntries(String uniqueNo)
+    {
+        db=this.getWritableDatabase();
+        String condition=COL3_26+"=1 AND "+COL3_27+"=1 AND "+COL3_28+"=1 AND "+COL3_29+"=1 AND "+COL3_30+"=1";
+        String[] columns={COL3_26,COL3_27,COL3_28,COL3_29,COL3_30};
+
+        @SuppressLint("Recycle")
+        Cursor cursor=db.query(TABLE_NAME_ALLOTMENT,columns,""+COL3_19+"=?"+" AND "+condition,new String[]{uniqueNo},null,null,uniqueNo);
+
+        return cursor.getCount();
     }
 }

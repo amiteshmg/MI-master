@@ -207,7 +207,7 @@ public class Fragment_total extends Fragment implements DataUpdateListener
             {
                 Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
                 intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_ALLOTTED_PENDING);
-                intent.putExtra(Constants.FRAG_TYPE,0);
+                intent.putExtra(Constants.FRAG_TYPE,2);
                 startActivity(intent);
             }
         });

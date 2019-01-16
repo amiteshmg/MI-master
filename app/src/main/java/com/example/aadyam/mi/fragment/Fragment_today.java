@@ -35,7 +35,8 @@ public class Fragment_today extends Fragment implements DataUpdateListener
     public ArrayList<Integer> countData;
     DatabaseHelperUser databaseHelperUser;
 
-    public Fragment_today() {
+    public Fragment_today()
+    {
         // Required empty public constructor
     }
 
@@ -86,6 +87,7 @@ public class Fragment_today extends Fragment implements DataUpdateListener
                 if(!allotted_count_tv.getText().toString().equals("0"))
                 {
                     Intent intent = new Intent(getActivity(), InspectionDisplayActivity.class);
+                    intent.putExtra(Constants.FRAG_TYPE,1);
                     intent.putExtra(Constants.CLICK_CODE, Constants.TOTAL_ALLOTTED_PENDING);
                     startActivity(intent);
                 }
@@ -106,6 +108,7 @@ public class Fragment_today extends Fragment implements DataUpdateListener
                 {
                     Intent intent = new Intent(getActivity(), InspectionDisplayActivity.class);
                     intent.putExtra(Constants.CLICK_CODE, Constants.TOTAL_UNSAFE);
+                    intent.putExtra(Constants.FRAG_TYPE,1);
                     startActivity(intent);
                 }
                 else {
@@ -123,6 +126,7 @@ public class Fragment_today extends Fragment implements DataUpdateListener
                 {
                     Intent intent = new Intent(getActivity(), InspectionDisplayActivity.class);
                     intent.putExtra(Constants.CLICK_CODE, Constants.TOTAL_DENIED);
+                    intent.putExtra(Constants.FRAG_TYPE,1);
                     startActivity(intent);
                 }
                 else {
@@ -141,6 +145,7 @@ public class Fragment_today extends Fragment implements DataUpdateListener
                 {
                     Intent intent = new Intent(getActivity(), InspectionDisplayActivity.class);
                     intent.putExtra(Constants.CLICK_CODE, Constants.TOTAL_NOT_AVAILABLE);
+                    intent.putExtra(Constants.FRAG_TYPE,1);
                     startActivity(intent);
                 }
                 else {
@@ -159,6 +164,7 @@ public class Fragment_today extends Fragment implements DataUpdateListener
                 {
                     Intent intent = new Intent(getActivity(), InspectionDisplayActivity.class);
                     intent.putExtra(Constants.CLICK_CODE, Constants.TOTAL_REALLOTTED_UNSAFE);
+                    intent.putExtra(Constants.FRAG_TYPE,1);
                     startActivity(intent);
                 }
                 else {
@@ -177,6 +183,7 @@ public class Fragment_today extends Fragment implements DataUpdateListener
                 {
                     Intent intent = new Intent(getActivity(), InspectionDisplayActivity.class);
                     intent.putExtra(Constants.CLICK_CODE, Constants.TOTAL_REALLOTTED_DENIED);
+                    intent.putExtra(Constants.FRAG_TYPE,1);
                     startActivity(intent);
                 }
 
@@ -198,7 +205,7 @@ public class Fragment_today extends Fragment implements DataUpdateListener
                 {
                     Intent intent = new Intent(getActivity(), InspectionDisplayActivity.class);
                     intent.putExtra(Constants.CLICK_CODE, Constants.TOTAL_REALLOTTED_NOT_AVAILABLE);
-                    intent.putExtra(Constants.FRAG_TYPE,0);
+                    intent.putExtra(Constants.FRAG_TYPE,1);
                     startActivity(intent);
                 }
                 else {
@@ -218,6 +225,7 @@ public class Fragment_today extends Fragment implements DataUpdateListener
                 {
                     Intent intent = new Intent(getActivity(), InspectionDisplayActivity.class);
                     intent.putExtra(Constants.CLICK_CODE, Constants.TOTAL_TOTAL);
+                    intent.putExtra(Constants.FRAG_TYPE,1);
                     startActivity(intent);
                 }
                 else {
@@ -235,6 +243,7 @@ public class Fragment_today extends Fragment implements DataUpdateListener
                 {
                     Intent intent = new Intent(getActivity(), InspectionDisplayActivity.class);
                     intent.putExtra(Constants.CLICK_CODE, Constants.TOTAL_AGAINST_UNSAFE);
+                    intent.putExtra(Constants.FRAG_TYPE,1);
                     startActivity(intent);
                 }
                 else {
@@ -252,6 +261,7 @@ public class Fragment_today extends Fragment implements DataUpdateListener
                 {
                     Intent intent = new Intent(getActivity(), InspectionDisplayActivity.class);
                     intent.putExtra(Constants.CLICK_CODE, Constants.TOTAL_AGAINST_DENIED);
+                    intent.putExtra(Constants.FRAG_TYPE,1);
                     startActivity(intent);
 
                 }
@@ -263,33 +273,35 @@ public class Fragment_today extends Fragment implements DataUpdateListener
         });
 
 
-        against_not_available_layout.setOnClickListener(new View.OnClickListener() {
+        against_not_available_layout.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v) {
                 if(!against_not_available_count_tv.getText().toString().equals("0"))
                 {
                     Intent intent = new Intent(getActivity(), InspectionDisplayActivity.class);
                     intent.putExtra(Constants.CLICK_CODE, Constants.TOTAL_AGAINST_NOT_AVAILABLE);
+                    intent.putExtra(Constants.FRAG_TYPE,1);
                     startActivity(intent);
                 }
-                else {
-                    Toast.makeText(getContext(), "No entries!", Toast.LENGTH_SHORT).show();
-                }
 
+
+                else
+                    {
+                    Toast.makeText(getContext(), "No entries!", Toast.LENGTH_SHORT).show();
+                    }
             }
         });
-
     }
-
 
 
 
     @SuppressLint({"CutPasteId", "SetTextI18n"})
     private void setCountTextViews(View view)
     {
-        ArrayList<Integer> countData;// = new ArrayList<>();
+        ArrayList<Integer> countData;
         MyGlobals myGlobals=new MyGlobals(getContext());
-        //databaseHelperUser=new DatabaseHelperUser(getContext());
+
         countData =myGlobals.getAllotmentEntriesCount();
 
         allotted_pending_layout = view.findViewById(R.id.today_allotted_layout);
@@ -319,7 +331,6 @@ public class Fragment_today extends Fragment implements DataUpdateListener
         against_unsafe_count_tv = view.findViewById(R.id.today_against_unsafe_count_text);
         against_denied_count_tv = view.findViewById(R.id.today_against_denied_count_text);
         against_not_available_count_tv = view.findViewById(R.id.today_against_not_available_count_text);
-
         allotted_count_tv.setText(""+ countData.get(0));
         unsafe_count_tv.setText(""+ countData.get(1));
         denied_count_tv.setText(""+ countData.get(2));
@@ -331,6 +342,7 @@ public class Fragment_today extends Fragment implements DataUpdateListener
         against_unsafe_count_tv.setText(""+ countData.get(8));
         against_denied_count_tv.setText(""+ countData.get(9));
         against_not_available_count_tv.setText(""+ countData.get(10));
+
     }
 
 

@@ -1,26 +1,28 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+
     >
 
     <item
         android:id="@+id/action_search_view"
-        android:icon="@android:drawable/ic_menu_search"
+        android:icon="@drawable/search_icon"
         android:orderInCategory="100"
-        android:title="Search"
+        android:title="@string/search"
         app:showAsAction="always"
-        app:actionViewClass="android.support.v7.widget.SearchView" />
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        />
 
 
 <group>
     <item android:id="@+id/english_settings"
 
-        android:title="English"
+        android:title="@string/english"
         android:checkable="true"
         android:checked="true"
        />
     <item android:id="@+id/hindi_settings"
 
-        android:title="Hindi"
+        android:title="@string/hindi"
         android:checkable="true"
 
         />

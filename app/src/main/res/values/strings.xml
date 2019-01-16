@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Mandatory Inspection</string>
 
-    <!--TODO get JSON Object parsed here-->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="dashboard">Dashboard</string>
     <string name="inspection_heading">Total DEMO Inspection</string>
@@ -102,6 +102,9 @@
     <string name="spinner_default_item">Select one,</string>
     <string name="prev">Prev</string>
     <string name="submit">Submit</string>
+    <string name="search">Search</string>
+    <string name="english">English</string>
+    <string name="hindi">Hindi</string>
 
 
 </resources>

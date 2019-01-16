@@ -94,6 +94,7 @@ public class UploadPhoto extends Fragment
     EditText instruction_editText;
     SignaturePad signaturePad;
     int count=0;
+    Bundle savedInstanceState;
     private Context context;//=getContext();
     private Bitmap regulatorBitmap,stoveBitmap,hoseBitmap,installationBitmap,signatureBitmap;
     private ProgressDialog progressDialog;
@@ -125,79 +126,80 @@ public class UploadPhoto extends Fragment
 
 
     @Override
-    public void onStart() {
+    public void onStart()
+    {
         super.onStart();
-
+      /*  context=getContext();
+        sharedPreferences=context.getSharedPreferences(Constants.PREFS_NAME,Context.MODE_PRIVATE);
+        final String uniqueNo=sharedPreferences.getString(Constants.UNIQUE_CONSUMER_NO,null);
+        String allottedId=sharedPreferences.getString(Constants.ALLOTED_ID,null);
+        initializeComponents(getView(),savedInstanceState);
+        setSavedPhotos(allottedId);*/
         Log.i("FRAGMENT LIFECYCLE", "onStart()");
+
         //Toast.makeText(getContext(), "onStart()", Toast.LENGTH_SHORT).show();
     }
 
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable final Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable final Bundle savedInstanceState)
+    {
         context=getContext();
         progressDialog=new ProgressDialog(context);
         progressDialog.setMessage("Please wait..");
         progressDialog.setCancelable(false);
 
-        submit = view.findViewById(R.id.button_submit);
 
-        //save = view.findViewById(R.id.button_save);
-
-        instruction_editText=view.findViewById(R.id.consumer_instruction_editext);
-        super.onViewCreated(view, savedInstanceState);
-
-        //signaturePad=view.findViewById(R.id.);
-        assert context != null;
         sharedPreferences=context.getSharedPreferences(Constants.PREFS_NAME,Context.MODE_PRIVATE);
-
         final String uniqueNo=sharedPreferences.getString(Constants.UNIQUE_CONSUMER_NO,null);
         String allottedId=sharedPreferences.getString(Constants.ALLOTED_ID,null);
+        this.savedInstanceState=savedInstanceState;
 
-        // setPhotoView(Constants.REGULATOR_CODE,allottedId);
-        // setPhotoView(Constants.STOVE_CODE,allottedId);
-        // setPhotoView(Constants.HOSE_CODE,allottedId);
-        // setPhotoView(Constants.INSTALLATION_CODE,allottedId);
-        //  setPhotoView(Constants.SIGNATURE,allottedId);
+        initializeComponents(view,savedInstanceState);
 
-
-        new MyGlobals(getContext()).getJSON();
-        stove_iv = view.findViewById(R.id.stove_iv);
-        regulator_iv = view.findViewById(R.id.regulator_iv);
-        hose_iv = view.findViewById(R.id.hose_iv);
-        installation_iv = view.findViewById(R.id.installation_iv);
-        signature_iv = view.findViewById(R.id.signature_iv);
+        //setSavedPhotos(allottedId);
 
         LinearLayout layout = view.findViewById(R.id.signature_layout);
-        stove_iv.setOnClickListener(new View.OnClickListener() {
+        stove_iv.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
-                if (CameraUtils.checkPermissions(getContext())) {
+            public void onClick(View view)
+            {
+                if (CameraUtils.checkPermissions(getContext()))
+                {
                     captureImage(STOVE_CODE);
                     // restoring storage image path from saved instance state
                     // otherwise the path will be null on device rotation
-
                     restoreFromBundle(savedInstanceState, STOVE_CODE);
-                } else {
-                    requestCameraPermission(MEDIA_TYPE_IMAGE, STOVE_CODE);
                 }
+
+
+                else
+                    {
+                        requestCameraPermission(MEDIA_TYPE_IMAGE, STOVE_CODE);
+                    }
 
             }
         });
 
 
-        regulator_iv.setOnClickListener(new View.OnClickListener() {
+        regulator_iv.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
-                if (CameraUtils.checkPermissions(getContext())) {
+            public void onClick(View view)
+            {
+                if (CameraUtils.checkPermissions(getContext()))
+                {
                     captureImage(REGULATOR_CODE);
                     // restoring storage image path from saved instance state
                     // otherwise the path will be null on device rotation
-
                     restoreFromBundle(savedInstanceState, REGULATOR_CODE);
-                } else {
-                    requestCameraPermission(MEDIA_TYPE_IMAGE, REGULATOR_CODE);
                 }
+
+                else
+                    {
+                    requestCameraPermission(MEDIA_TYPE_IMAGE, REGULATOR_CODE);
+                    }
 
 
             }
@@ -240,22 +242,18 @@ public class UploadPhoto extends Fragment
             @Override
             public void onClick(View v)
             {
-
-
                 // get prompts.xml view
                 LayoutInflater li = LayoutInflater.from(getContext());
                 View promptsView = li.inflate(R.layout.signature_capture_layout, null);
 
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                        context);
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 
                 // set prompts.xml to alertdialog builder
                 alertDialogBuilder.setView(promptsView);
 
                 userInput = (SignaturePad) promptsView.findViewById(R.id.signaturePad1);
-
-
-                userInput.setOnSignedListener(new SignaturePad.OnSignedListener() {
+                userInput.setOnSignedListener(new SignaturePad.OnSignedListener()
+                {
                     @Override
                     public void onStartSigning()
                     {
@@ -266,11 +264,11 @@ public class UploadPhoto extends Fragment
                     public void onSigned()
                     {
                         signatureBitmap=userInput.getSignatureBitmap();
-
                     }
 
                     @Override
-                    public void onClear() {
+                    public void onClear()
+                    {
 
                     }
                 });
@@ -280,120 +278,49 @@ public class UploadPhoto extends Fragment
                         {
                                     public void onClick(DialogInterface dialog,int id)
                                     {
-                                        // get user input and set it to result
-                                        // edit text
                                         signatureBitmap=userInput.getSignatureBitmap();
                                         signature_iv.setImageBitmap(signatureBitmap);
                                         DatabaseHelperUser databaseHelperUser=new DatabaseHelperUser(context);
                                         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                                         signatureBitmap.compress(Bitmap.CompressFormat.PNG, 60, byteArrayOutputStream);
-
                                         byte[] byteArray = byteArrayOutputStream .toByteArray();
-
                                         encoded4 = Base64.encodeToString(byteArray, Base64.DEFAULT);
-
-                                        //databaseHelperUser.setPhotos("Signature_",encoded,5);
-
                                         count++;
-
-                                        //Log.i(Constants.TAG,userInput.getSignatureSvg());
-
-                                        //Toast.makeText(context, ""+userInput.getSignatureBitmap(), Toast.LENGTH_SHORT).show();
                                         Log.d(Constants.TAG, "saveCapturedImage: " +userInput.getSignatureBitmap());
                                     }
                                 })
-                        .setNegativeButton("Cancel",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,int id) {
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,int id)
+                                    {
                                         dialog.cancel();
                                     }
                                 });
 
                 // create alert dialog
                 AlertDialog alertDialog = alertDialogBuilder.create();
-
                 // show it
                 alertDialog.show();
               //  restoreFromBundle(savedInstanceState, SIGNATURE);
-
             }
-
-
-
-
-               /* Signature fragment = new Signature();
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.viewpager, fragment);
-
-                fragmentTransaction.commit();
-*/
-
-
-                //IntentFilter intentFilter
-                /*Signature signature=new Signature();
-                FragmentManager fragmentManager = getFragmentManager();
-
-                FragmentTransaction fragmentTransaction =fragmentManager.beginTransaction();
-                fragmentTransaction.add(signature,"Signature");
-                fragmentTransaction.show(signature);*/
-                //fragmentTransaction.replace(R.id.viewpager,signature);
 
 
         });
 
 
-        /*save.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-
-                if(hoseBitmap!=null && regulatorBitmap!=null && installationBitmap!=null && signatureBitmap!=null && stoveBitmap!=null)
-                {
-                    saveCapturedImage();
-
-                }
-
-
-                else
-                    {
-                    Toast.makeText(context, "Capturing All images is Mandatory!", Toast.LENGTH_SHORT).show();
-                    }
-                // new QuestionAdapter(getContext()).updateAnswer(Constants.UPLOAD_PHOTO_FRAG_CODE);
-            }
-        });
-*/
 
         submit.setOnClickListener(new View.OnClickListener()
         {
 
             @Override
-            public void onClick(View v) {
-
-                //getParentFragment().getFragmentManager().
-                /*  boolean f1=sharedPreferences.getBoolean(Constants.CYLINDER_SAVE,false);
-                boolean f2=sharedPreferences.getBoolean(Constants.REGULATOR_SAVE,false);
-                boolean f3=sharedPreferences.getBoolean(Constants.RUBBER_HOSE_SAVE,false);
-                boolean f4=sharedPreferences.getBoolean(Constants.STOVE_SAVE,false);
-                boolean f5=sharedPreferences.getBoolean(Constants.GENERAL_SAVE,false);*/
-
-
-                /*FragmentManager fm = getActivity().getSupportFragmentManager();
-
-                for(int i = 0; i < fm.getBackStackEntryCount(); ++i)
-                {
-                    fm.popBackStack();
-                }*/
-                ProgressDialog progressDialog=new ProgressDialog(context);
-                progressDialog.setMessage("Please wait..");
-                progressDialog.setCancelable(false);
+            public void onClick(View v)
+            {
                 progressDialog.show();
+
+
 
                 if(hoseBitmap!=null && regulatorBitmap!=null && installationBitmap!=null && signatureBitmap!=null && stoveBitmap!=null)
                 {
-                        //if(new MyGlobals(context).isNetworkConnected())
                     saveCapturedImage();
-
                     @SuppressLint("SimpleDateFormat")
 
                     DateFormat dateFormat =  new SimpleDateFormat("dd/MM/yyyy");
@@ -409,24 +336,21 @@ public class UploadPhoto extends Fragment
 //                    String inspection_id=sharedPreferences.getString(Constants.INSPECTION_ID,null);
                     String unique=sharedPreferences.getString(Constants.UNIQUE_CONSUMER_NO,null);
 
-                        // Check if GPS enabled
-                        //if(sharedPreferences.getInt(Constants.CYLINDER_SAVE,0)==1)
-                        //if(gps.canGetLocation())
-                        if(sharedPreferences.getInt(Constants.CYLINDER_SAVE,0)==1)
+
+                    int count=databaseHelperUser.getFragmentSaveEntries(uniqueNo);
+
+                        if(count==1)
                         {
-                        latitude = gps.getLatitude();
-                        longitude = gps.getLongitude();
-                        String instruction=instruction_editText.getText().toString();
+                            latitude = gps.getLatitude();
+                            longitude = gps.getLongitude();
+                            String instruction=instruction_editText.getText().toString();
                         // \n is for new line
-                      //  Toast.makeText(context, "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
-                        databaseHelperUser.putExtraAllotedUserData(allotted_id,instruction,latitude,longitude);
+                        //  Toast.makeText(context, "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+                            databaseHelperUser.putExtraAllotedUserData(allotted_id,instruction,latitude,longitude);
 
-                        String consumerInfo=databaseHelperUser.getConsumerJsonString(allotted_id,latitude,longitude,instruction,dateString);
-                        String personalInfo=databaseHelperUser.getPersonalJsonString(unique);
-                        String answerInfo=databaseHelperUser.getAnswerJsonString(unique);
-
-
-
+                            String consumerInfo=databaseHelperUser.getConsumerJsonString(allotted_id,latitude,longitude,instruction,dateString);
+                            String personalInfo=databaseHelperUser.getPersonalJsonString(unique);
+                            String answerInfo=databaseHelperUser.getAnswerJsonString(unique);
 
                             // Toast.makeText(context, ""+consumerInfo, Toast.LENGTH_SHORT).show();
                             Log.d(Constants.TAG, "onClick: "+consumerInfo);
@@ -435,39 +359,45 @@ public class UploadPhoto extends Fragment
                             // Toast.makeText(context, ""+personalInfo, Toast.LENGTH_SHORT).show();
                             // Toast.makeText(context, ""+answerInfo, Toast.LENGTH_SHORT).show();
 
-                        boolean isSuccess=inspectionWebService(consumerInfo,personalInfo,answerInfo,allotted_id);
+                            boolean isSuccess=inspectionWebService(consumerInfo,personalInfo,answerInfo,allotted_id);
 
-                        if(isSuccess)
-                        {
-                            progressDialog.dismiss();
-                            Toast.makeText(context, "Entry uploaded sucessfully!", Toast.LENGTH_SHORT).show();
-                            databaseHelperUser.deleteAllTableEntries(allotted_id,uniqueNo);
+
+                            if(isSuccess)
+                            {
+
+                                Toast.makeText(context, "Entry uploaded sucessfully!", Toast.LENGTH_SHORT).show();
+                                databaseHelperUser.deleteAllTableEntries(allotted_id,uniqueNo);
+                                progressDialog.dismiss();
                             //FragmentManager fm = getActivity().getSupportFragmentManager();
                             /*for(int i = 0; i < getActivity().getSupportFragmentManager().getBackStackEntryCount(); ++i) {
                                 getActivity().getSupportFragmentManager().popBackStack();
                             }
 */
+
                             Intent i = new Intent(getActivity(), MainActivity.class);
-// set the new task and clear flags
+                            // set the new task and clear flags
                             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(i);
                         }
 
                         else
                             {
+                                progressDialog.dismiss();
                                 Toast.makeText(context, "Exception! Internal error occured! Please try again ", Toast.LENGTH_SHORT).show();
+
                             }
 
                     }
 
                     else
                     {
-                        if(progressDialog.isShowing())
-                        progressDialog.dismiss();
+
                         // Can't get location.
                         // GPS or network is not enabled.
                         // Ask user to enable GPS/network in settings.
                         Toast.makeText(context, "Answer all mandatory fields!", Toast.LENGTH_SHORT).show();
+                        if(progressDialog.isShowing())
+                            progressDialog.dismiss();
                         //gps.showSettingsAlert();
                     }
 
@@ -483,18 +413,49 @@ public class UploadPhoto extends Fragment
 
                     Toast.makeText(context, "Capturing All images is Mandatory!", Toast.LENGTH_SHORT).show();
                 }
-
-
-
-
             }
         });
-
-
 
     }
 
 
+    private void initializeComponents(View view,Bundle savedInstanceState)
+    {
+        context=getContext();
+        progressDialog=new ProgressDialog(context);
+        progressDialog.setMessage("Please wait..");
+        progressDialog.setCancelable(false);
+
+        submit = view.findViewById(R.id.button_submit);
+        instruction_editText=view.findViewById(R.id.consumer_instruction_editext);
+        super.onViewCreated(view, savedInstanceState);
+        assert context != null;
+
+
+        stove_iv = view.findViewById(R.id.stove_iv);
+        regulator_iv = view.findViewById(R.id.regulator_iv);
+        hose_iv = view.findViewById(R.id.hose_iv);
+        installation_iv = view.findViewById(R.id.installation_iv);
+        signature_iv = view.findViewById(R.id.signature_iv);
+    }
+
+    private void setSavedPhotos(String allottedId) {
+        if(setPhotoView(Constants.REGULATOR_CODE,allottedId))
+            setPhotoView(Constants.REGULATOR_CODE,allottedId);
+
+        if(setPhotoView(Constants.STOVE_CODE,allottedId))
+            setPhotoView(Constants.STOVE_CODE,allottedId);
+
+        if(setPhotoView(Constants.HOSE_CODE,allottedId))
+            setPhotoView(Constants.HOSE_CODE,allottedId);
+
+        if(setPhotoView(Constants.INSTALLATION_CODE,allottedId))
+            setPhotoView(Constants.INSTALLATION_CODE,allottedId);
+
+        if(setPhotoView(Constants.SIGNATURE,allottedId))
+            setPhotoView(Constants.SIGNATURE,allottedId);
+
+    }
 
 
     private void requestCameraPermission(final int type, final int CODE)
@@ -505,8 +466,10 @@ public class UploadPhoto extends Fragment
             @Override
             public void onPermissionsChecked(MultiplePermissionsReport report)
             {
-                if (report.areAllPermissionsGranted()) {
-                    if (type == MEDIA_TYPE_IMAGE) {
+                if (report.areAllPermissionsGranted())
+                {
+                    if (type == MEDIA_TYPE_IMAGE)
+                    {
                         // capture regulator picture
                         if (CODE == REGULATOR_CODE)
                             captureImage(REGULATOR_CODE);
@@ -526,7 +489,7 @@ public class UploadPhoto extends Fragment
 
                     else
                         {
-                        if (CODE == REGULATOR_CODE)
+                        if  (CODE == REGULATOR_CODE)
                             requestCameraPermission(MEDIA_TYPE_IMAGE, REGULATOR_CODE);
 
                         else if (CODE == STOVE_CODE)
@@ -595,7 +558,7 @@ public class UploadPhoto extends Fragment
 
 
 
-               public void setPhotoView(int ImageViewCode,String allottedId)
+               public boolean setPhotoView(int ImageViewCode,String allottedId)
             {
                 String imageString= new DatabaseHelperUser(context).getPhotoEntry(ImageViewCode,allottedId);
                 Toast.makeText(getContext(), ""+imageString, Toast.LENGTH_SHORT).show();
@@ -620,7 +583,13 @@ public class UploadPhoto extends Fragment
                     stove_iv.setImageBitmap(decodedByte);
                     break;
             }
+
+            return true;
         }
+
+        else {
+            return false;
+                }
     }
 
 
@@ -720,11 +689,9 @@ public class UploadPhoto extends Fragment
         fileNameArray.add(filename4);
         imageArray.add(encodedImage4);
 
-        if(!new MyGlobals(context).isNetworkConnected())
-        {
             String[] CODE = {"1", "2", "3", "4", "5"};
             databaseHelperUser.setPhotos(fileNameArray, imageArray, CODE);
-        }
+
 
     }
 

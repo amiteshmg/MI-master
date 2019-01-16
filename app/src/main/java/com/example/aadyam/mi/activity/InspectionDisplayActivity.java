@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.content.Context;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import android.widget.TextView;
@@ -22,6 +24,7 @@ import com.example.aadyam.mi.Utils.Constants;
 import com.example.aadyam.mi.adapter.AllotmentAdapter;
 import com.example.aadyam.mi.adapter.StaticAdapter;
 import com.example.aadyam.mi.database.DatabaseHelperUser;
+import com.example.aadyam.mi.interfaces.AllotmentListAdapterListener;
 import com.example.aadyam.mi.model.Allotment;
 import com.example.aadyam.mi.model.AllotmentList;
 
@@ -30,7 +33,7 @@ import java.util.List;
 
 
 @SuppressWarnings("ALL")
-public class InspectionDisplayActivity extends AppCompatActivity implements AllotmentAdapter.AllotmentListAdapterListener
+public class InspectionDisplayActivity extends AppCompatActivity implements AllotmentListAdapterListener
 {
     DatabaseHelperUser databaseHelperUser;
     RecyclerView recyclerView;
@@ -38,14 +41,13 @@ public class InspectionDisplayActivity extends AppCompatActivity implements Allo
     TextView number ,allotment_title;
     List<AllotmentList> allotments;
     Allotment allotment;
-
     AllotmentAdapter allotmentAdapter;
     StaticAdapter staticAdapter;
     List<AllotmentList> list;
     int clickCode,fragType;
     SearchView searchView;
     private int typeFlag;
-
+    Toolbar toolbar;
 
     @Override
     public void onBackPressed()
@@ -75,174 +77,174 @@ public class InspectionDisplayActivity extends AppCompatActivity implements Allo
         fragType=getIntent().getIntExtra(Constants.FRAG_TYPE,0);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inspection_display);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar= findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         databaseHelperUser=new DatabaseHelperUser(this);
         allotment=new Allotment();
         callLayout=findViewById(R.id.call_layout);
         number=findViewById(R.id.contact_no_tv);
         recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(InspectionDisplayActivity.this));
 
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
 
-
-
-
-        List<AllotmentList> list = new ArrayList<>();
+        recyclerView.setLayoutManager(llm);
+        list = new ArrayList<>();
 
 
         switch(clickCode)
         {
             case Constants.TOTAL_ALLOTTED_PENDING:
-
-                typeFlag=1;
-                getSupportActionBar().setTitle("Total Allottment pending");
-
-                list= databaseHelperUser.getAllotmentEntries(Constants.TOTAL_ALLOTTED_PENDING);
-                allotmentAdapter=new AllotmentAdapter(list, getApplicationContext(),this);
-
-                recyclerView.setAdapter(allotmentAdapter);
-                recyclerView.setAdapter(new AllotmentAdapter(list, getApplicationContext(),this));
-                allotmentAdapter.notifyDataSetChanged();
-
-
-                break;
+                    typeFlag=1;
+                    getSupportActionBar().setTitle("Total Allottment pending");
+                    list= databaseHelperUser.getAllotmentEntries(Constants.TOTAL_ALLOTTED_PENDING);
+                    allotmentAdapter=new AllotmentAdapter(list, getApplicationContext(),this);
+                    recyclerView.setAdapter(allotmentAdapter);
+                    recyclerView.setAdapter(new AllotmentAdapter(list, getApplicationContext(),this));
+                    allotmentAdapter.notifyDataSetChanged();
+                    break;
 
 
             case Constants.TOTAL_UNSAFE:
-                typeFlag=2;
-                getSupportActionBar().setTitle("Total Allottment pending");
-                list=databaseHelperUser.getAllotmentEntries(Constants.TOTAL_UNSAFE);
-
-                staticAdapter=new StaticAdapter(list,getApplicationContext(),this);
-                recyclerView.setAdapter(staticAdapter);
-                recyclerView.setAdapter(new StaticAdapter(list, getApplicationContext(),this));
-
-                break;
+                    typeFlag=2;
+                    getSupportActionBar().setTitle("Total Unsafe");
+                    list=databaseHelperUser.getAllotmentEntries(Constants.TOTAL_UNSAFE);
+                    staticAdapter=new StaticAdapter(list,getApplicationContext(),this);
+                    recyclerView.setAdapter(staticAdapter);
+                    recyclerView.setAdapter(new StaticAdapter(list, getApplicationContext(),this));
+                    break;
 
             case Constants.TOTAL_DENIED:
-                typeFlag=2;
-                getSupportActionBar().setTitle("Total Allottment pending");
-                list=databaseHelperUser.getAllotmentEntries(Constants.TOTAL_DENIED);
-                staticAdapter=new StaticAdapter(list, getApplicationContext(),this);
-                recyclerView.setAdapter(staticAdapter);
-                recyclerView.setAdapter(new StaticAdapter(list, getApplicationContext(),this));
-
-                break;
+                    typeFlag=2;
+                    getSupportActionBar().setTitle("Total Denied");
+                    list=databaseHelperUser.getAllotmentEntries(Constants.TOTAL_DENIED);
+                    staticAdapter=new StaticAdapter(list, getApplicationContext(),this);
+                    recyclerView.setAdapter(staticAdapter);
+                    recyclerView.setAdapter(new StaticAdapter(list, getApplicationContext(),this));
+                    break;
 
             case Constants.TOTAL_NOT_AVAILABLE:
-                typeFlag=2;
-                list=databaseHelperUser.getAllotmentEntries(Constants.TOTAL_NOT_AVAILABLE);
-                getSupportActionBar().setTitle("Total Allottment pending");
+                    typeFlag=2;
+                    list=databaseHelperUser.getAllotmentEntries(Constants.TOTAL_NOT_AVAILABLE);
+                    getSupportActionBar().setTitle("Total Available");
                     staticAdapter = new StaticAdapter(list, getApplicationContext(),this);
                     recyclerView.setAdapter(staticAdapter);
                     recyclerView.setAdapter(new StaticAdapter(list, getApplicationContext(),this));
-                ///allotmentAdapter.notifyDataSetChanged();
-
-
-                break;
+                    break;
 
             case Constants.TOTAL_REALLOTTED_UNSAFE:
-                typeFlag=1;
-                list=databaseHelperUser.getAllotmentEntries(Constants.TOTAL_REALLOTTED_UNSAFE);
-                getSupportActionBar().setTitle("Total Allottment pending");
+                    typeFlag=1;
+                    list=databaseHelperUser.getAllotmentEntries(Constants.TOTAL_REALLOTTED_UNSAFE);
+                    getSupportActionBar().setTitle("Total Re-allotted Unsafe");
                     allotmentAdapter = new AllotmentAdapter(list, getApplicationContext(),this);
                     recyclerView.setAdapter(allotmentAdapter);
                     recyclerView.setAdapter(new AllotmentAdapter(list, getApplicationContext(),this));
                     break;
 
             case Constants.TOTAL_REALLOTTED_DENIED:
-                typeFlag=1;
+                    typeFlag=1;
                     list=databaseHelperUser.getAllotmentEntries(Constants.TOTAL_REALLOTTED_DENIED);
-                    getSupportActionBar().setTitle("Total Allottment pending");
+                    getSupportActionBar().setTitle("Total Re-allotted Denied");
                     allotmentAdapter = new AllotmentAdapter(list, getApplicationContext(),this);
                     recyclerView.setAdapter(allotmentAdapter);
                     recyclerView.setAdapter(new AllotmentAdapter(list, getApplicationContext(),this));
-
                     break;
 
             case Constants.TOTAL_REALLOTTED_NOT_AVAILABLE:
-                typeFlag=1;
-                    getSupportActionBar().setTitle("Total reallotted not available");
+                    typeFlag=1;
+                    getSupportActionBar().setTitle("Total Re-allotted Not Available");
                     list=databaseHelperUser.getAllotmentEntries(Constants.TOTAL_REALLOTTED_NOT_AVAILABLE);
                     allotmentAdapter=new AllotmentAdapter(list, getApplicationContext(),this);
                     recyclerView.setAdapter(allotmentAdapter);
                     recyclerView.setAdapter(new AllotmentAdapter(list, getApplicationContext(),this));
-                allotmentAdapter.notifyDataSetChanged();
-
+                    allotmentAdapter.notifyDataSetChanged();
                     break;
 
             case Constants.TOTAL_TOTAL:
-                typeFlag=2;
+                    typeFlag=2;
                     getSupportActionBar().setTitle("Total");
                     list=databaseHelperUser.getAllotmentEntries(Constants.TOTAL_TOTAL);
                     staticAdapter=new StaticAdapter(list, getApplicationContext(),this);
                     recyclerView.setAdapter(staticAdapter);
                     recyclerView.setAdapter(new StaticAdapter(list, getApplicationContext(),this));
-
-                break;
+                    break;
 
             case Constants.TOTAL_AGAINST_UNSAFE:
-                typeFlag=2;
-                    getSupportActionBar().setTitle("Total against unsafe");
+                    typeFlag=2;
+                    getSupportActionBar().setTitle("Total Against Unsafe");
                     list=databaseHelperUser.getAllotmentEntries(Constants.TOTAL_AGAINST_UNSAFE);
                     staticAdapter=new StaticAdapter(list, getApplicationContext(),this);
                     recyclerView.setAdapter(staticAdapter);
                     recyclerView.setAdapter(new AllotmentAdapter(list, getApplicationContext(),this));
-
-                break;
+                    break;
 
 
             case Constants.TOTAL_AGAINST_DENIED:
                 typeFlag=2;
-                getSupportActionBar().setTitle("Total not available");
+                getSupportActionBar().setTitle("Total Against Denied");
                 list=databaseHelperUser.getAllotmentEntries(Constants.TOTAL_AGAINST_DENIED);
                 staticAdapter=new StaticAdapter(list, getApplicationContext(),this);
                 recyclerView.setAdapter(staticAdapter);
                 recyclerView.setAdapter(new StaticAdapter(list, getApplicationContext(),this));
-
                 break;
 
             case Constants.TOTAL_AGAINST_NOT_AVAILABLE:
                 typeFlag=2;
-                getSupportActionBar().setTitle("Total against not available");
+                getSupportActionBar().setTitle("Total Against Not Available");
                 list=databaseHelperUser.getAllotmentEntries(Constants.TOTAL_AGAINST_NOT_AVAILABLE);
                 staticAdapter=new StaticAdapter(list, getApplicationContext(),this);
                 recyclerView.setAdapter(staticAdapter);
                 recyclerView.setAdapter(new StaticAdapter(list, getApplicationContext(),this));
-
                 break;
         }
 
     }
 
-
+    private void initiateRecycler(int typeFlag, List<AllotmentList> list, String total_allotment_pending, Object object, RecyclerView recyclerView) {
+    }
 
 
     //method to adapt the changing allotment entries entered in the searchView
     public void searchFilter(String query)
     {
-        if(typeFlag ==1) {
+        if(typeFlag ==1)
+        {
             allotmentAdapter.getFilter().filter(query);
             if (allotmentAdapter.getItemCount() == 0)
                 recyclerView.setVisibility(View.INVISIBLE);
-            else{
+            else
+                {
+                    /*recyclerView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            allotmentAdapter.notifyDataSetChanged();
+                        }
+                    });*/
                 recyclerView.setVisibility(View.VISIBLE);
                 recyclerView.setAdapter(allotmentAdapter);
-            }
+                }
         }
-        else{
+
+        else
+            {
             staticAdapter.getFilter().filter(query);
+
             if (staticAdapter.getItemCount() == 0)
                 recyclerView.setVisibility(View.INVISIBLE);
-            else{
+
+            else
+                {
+                    /*recyclerView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            allotmentAdapter.notifyDataSetChanged();
+                        }
+                    });*/
                 recyclerView.setVisibility(View.VISIBLE);
                 recyclerView.setAdapter(staticAdapter);
-            }
+                }
         }
     }
-
-
 
 
     @Override
@@ -256,6 +258,15 @@ public class InspectionDisplayActivity extends AppCompatActivity implements Allo
         searchView.setSearchableInfo(searchManager
                 .getSearchableInfo(getComponentName()));
         searchView.setMaxWidth(Integer.MAX_VALUE);
+
+        //searchView.setBackgroundColor(R.color.white);
+        ImageView searchIcon = searchView.findViewById(android.support.v7.appcompat.R.id.search_button);
+        searchIcon.setImageDrawable(ContextCompat.getDrawable(InspectionDisplayActivity.this,R.drawable.search_icon));
+
+        //set color to searchview
+        SearchView.SearchAutoComplete searchAutoComplete = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        searchAutoComplete.setHintTextColor(getResources().getColor(android.R.color.white));
+        searchAutoComplete.setTextColor(getResources().getColor(android.R.color.white));
 
 
         // listening to search query text change
@@ -277,8 +288,8 @@ public class InspectionDisplayActivity extends AppCompatActivity implements Allo
                 searchFilter(query);
                 return false;
             }
-        });
 
+        });
         return true;
 
     }
@@ -298,7 +309,6 @@ public class InspectionDisplayActivity extends AppCompatActivity implements Allo
         }
 
         return super.onOptionsItemSelected(item);
-
     }
 
 
@@ -313,16 +323,20 @@ public class InspectionDisplayActivity extends AppCompatActivity implements Allo
     }
 */
 
+
     @Override
     public void onContactSelected(AllotmentList allotmentList)
     {
-        Toast.makeText(this, "Selected!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Selected!"+allotmentList.getConsumerName(), Toast.LENGTH_SHORT).show();
     }
+
 
 
     public void refreshAdapter()
     {
-
+        allotmentAdapter.notifyDataSetChanged();
         recyclerView.setAdapter(allotmentAdapter);
     }
+
+
 }

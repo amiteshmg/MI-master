@@ -8,6 +8,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -179,9 +181,18 @@ public class PersonalInfo extends Fragment {
             @Override
             public void onClick(View v)
             {
+
+
+                  dateOfBirth=  dateOfBirth_editText.getText().toString();
+                  emailId = emailId_editText.getText().toString();
+
+                if(!dateOfBirth.isEmpty() )
+                {
+
                 dateOfBirth = dateOfBirth_editText.getText().toString();
                 mobileNo = mobileNo_editText.getText().toString();
-                emailId = emailId_editText.getText().toString();
+
+
 
                 motherNameResult = motherName_editText.getText().toString();
                 fatherSpouseName=fatherSpouseName_editText.getText().toString();
@@ -284,20 +295,33 @@ public class PersonalInfo extends Fragment {
 
                 drivingLicense=drivingLicense_editText.getText().toString();
 
-                if(dateOfBirth!=null)
-                {
-                    boolean isSuccess=databaseHelperUser.putInformationEntryInDatabase(dateOfBirth,vipResult,genderResult,usingCreditCardResult,motherNameResult,highConsumptionConsumerResult,fatherSpouseResult,refillBookingModeResult,fatherSpouseName,refillBookingModeResult,familyMembers,houseAccommodationResult,rationCardAffidavitResult,twoWheelers,affidavitNo,fourWheelers,rationCardNo,usedPipeGasResult,panCard,passport,voterId,drivingLicense,mobileNo,emailId,consumerNo);
 
-                    if(isSuccess)
+                if(isValidEmail(emailId)) {
+                    boolean isSuccess = databaseHelperUser.putInformationEntryInDatabase(dateOfBirth, vipResult, genderResult, usingCreditCardResult, motherNameResult, highConsumptionConsumerResult, fatherSpouseResult, refillBookingModeResult, fatherSpouseName, refillBookingModeResult, familyMembers, houseAccommodationResult, rationCardAffidavitResult, twoWheelers, affidavitNo, fourWheelers, rationCardNo, usedPipeGasResult, panCard, passport, voterId, drivingLicense, mobileNo, emailId, consumerNo);
+
+                    if (isSuccess)
                     {
-                        ((SurveyActivity)context).setCurrentItem(6, true);
+                        ((SurveyActivity) context).setCurrentItem(6, true);
                     }
+
+                }
+
+
+                else
+                    {
+                        Toast.makeText(context, "Enter valid e-mail address", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
 
                 else {
-                    Toast.makeText(context, "Date of Birth is must!", Toast.LENGTH_SHORT).show();
-                     }
+                    Toast.makeText(context, "Date of birth is must", Toast.LENGTH_SHORT).show();
+                }
+
+
+
             }
+
         });
 
 
@@ -311,6 +335,11 @@ public class PersonalInfo extends Fragment {
                 ((SurveyActivity)context).setCurrentItem(6, true);
             }
         });
+    }
+
+    public static boolean isValidEmail(CharSequence target)
+    {
+        return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
     }
 
 

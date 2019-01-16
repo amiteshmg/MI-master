@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.example.aadyam.mi.R;
 import com.example.aadyam.mi.Utils.Constants;
 import com.example.aadyam.mi.database.DatabaseHelperUser;
+import com.example.aadyam.mi.interfaces.AllotmentListAdapterListener;
 import com.example.aadyam.mi.model.AllotmentList;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class StaticAdapter extends RecyclerView.Adapter<StaticAdapter.MyViewHold
     private Context context;
     DatabaseHelperUser databaseHelperUser;
     private List<AllotmentList> allotmentListFiltered;
-    private AllotmentAdapter.AllotmentListAdapterListener listener;
+    private AllotmentListAdapterListener listener;
 
     //private List<AllotmentList> allotmentList;
 
@@ -42,7 +43,8 @@ public class StaticAdapter extends RecyclerView.Adapter<StaticAdapter.MyViewHold
 
     private List<AllotmentList> allotmentList;
 
-    public StaticAdapter(List<AllotmentList> allotmentList, Context context, AllotmentAdapter.AllotmentListAdapterListener listener) {
+    public StaticAdapter(List<AllotmentList> allotmentList, Context context, AllotmentListAdapterListener listener) {
+        this.listener=listener;
         this.context = context;
         this.allotmentList = allotmentList;
         this.allotmentListFiltered=allotmentList;
@@ -221,6 +223,7 @@ public class StaticAdapter extends RecyclerView.Adapter<StaticAdapter.MyViewHold
     {
         return allotmentListFiltered.size();
     }
+
 
 }
 

@@ -1,9 +1,8 @@
 package com.example.aadyam.mi.activity;
 
-import android.app.ProgressDialog;
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -11,20 +10,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
-
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.example.aadyam.mi.R;
 import com.example.aadyam.mi.Utils.Constants;
 import com.example.aadyam.mi.database.DatabaseHelperUser;
-import com.example.aadyam.mi.R;
 import com.example.aadyam.mi.fragment.Cylinder;
 import com.example.aadyam.mi.fragment.General;
 import com.example.aadyam.mi.fragment.PersonalInfo;
@@ -33,59 +24,28 @@ import com.example.aadyam.mi.fragment.Rubberhose;
 import com.example.aadyam.mi.fragment.Stove;
 import com.example.aadyam.mi.fragment.UploadPhoto;
 import com.example.aadyam.mi.model.Allotment;
-import com.example.aadyam.mi.model.AllotmentList;
-import com.example.aadyam.mi.rest.ApiInterface;
-
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SurveyActivity extends FragmentActivity
 {
-
-    private static final String TAG = SurveyActivity.class.getSimpleName();
-
-
-    // key to store image path in savedInstance state
-    public static final String KEY_IMAGE_STORAGE_PATH = "image_path";
-
-    public static final int MEDIA_TYPE_IMAGE = 1;
-
-    public static final int MEDIA_TYPE_VIDEO = 2;
-
-    // Bitmap sampling size
-    public static final int BITMAP_SAMPLE_SIZE = 8;
-
-    // Gallery directory name to store the images or videos
-    public static final String GALLERY_DIRECTORY_NAME = "Hello Camera";
-
-    // Image and Video file extensions
-    public static final String IMAGE_EXTENSION = "jpg";
-
-    public static final String VIDEO_EXTENSION = "mp4";
-
-    private static String imageStoragePath;
-
-
-
-    private TabLayout tabLayout;
-    private TextView displayName,displayId;
-    private ViewPager viewPager1;
+    TabLayout tabLayout;
+    TextView displayName,displayId;
+    ViewPager viewPager1;
     Toolbar toolbar1;
 
     DatabaseHelperUser databaseHelperUser;
-    Allotment allotment;
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
+    @SuppressLint("NewApi")
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey);
 
-
-
-     //TODO code present up is new
-        toolbar1 = (Toolbar) findViewById(R.id.toolbar1);
+        toolbar1 = findViewById(R.id.toolbar1);
         displayName=findViewById(R.id.display_name_tv);
         displayId=findViewById(R.id.display_id_tv);
 
@@ -97,36 +57,23 @@ public class SurveyActivity extends FragmentActivity
         setActionBar(toolbar1);
 
         databaseHelperUser=new DatabaseHelperUser(this);
-        allotment=new Allotment();
-        //CylinderRecyclerView=findViewById(R.id.)
-        viewPager1 = (ViewPager) findViewById(R.id.viewpager1);
+        viewPager1 = findViewById(R.id.viewpager1);
         setupViewPager(viewPager1);
 
-        tabLayout = (TabLayout) findViewById(R.id.tabs1);
+        tabLayout = findViewById(R.id.tabs1);
         tabLayout.setupWithViewPager(viewPager1);
 
-        List<AllotmentList> list=new ArrayList<>();
-        }
+    }
 
-  /*  @Override
-    public void onBackPressed()
-    {
-        super.onBackPressed();
-        *//*  if (getSupportFragmentManager().getBackStackEntryCount() == 1)
-        {
-            finish();
-        }
 
-        else
-            {
-            super.onBackPressed();
-            }*//*
-    }*/
+
 
     public void setCurrentItem(int item, boolean smoothScroll)
     {
         viewPager1.setCurrentItem(item, smoothScroll);
     }
+
+
 
 
     private void setupViewPager(ViewPager viewPager)
@@ -139,26 +86,30 @@ public class SurveyActivity extends FragmentActivity
         adapter.addFragment(new General(), "General");
         adapter.addFragment(new PersonalInfo(), "Personal Information");
         adapter.addFragment(new UploadPhoto(), "Upload Photo");
-
         viewPager.setAdapter(adapter);
     }
 
 
+
     class ViewPagerAdapter1 extends FragmentPagerAdapter
     {
+
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
+
 
         ViewPagerAdapter1(FragmentManager manager)
         {
             super(manager);
         }
 
+
         @Override
         public Fragment getItem(int position)
         {
             return mFragmentList.get(position);
         }
+
 
 
         @Override
@@ -173,12 +124,12 @@ public class SurveyActivity extends FragmentActivity
             FragmentManager fragmentManager=getSupportFragmentManager();
             FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
             mFragmentList.add(fragment);
-          //  fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
             mFragmentTitleList.add(title);
         }
 
-       /* public void notifyItemChanged(Object oldItem, Object newItem) {
+       /* public void notifyItemChanged(Object oldItem, Object newItem)
+       {
             if (mItems != null) {
                 for (ItemInfo itemInfo : mItems) {
                     if (itemInfo.object.equals(oldItem)) {
@@ -189,16 +140,14 @@ public class SurveyActivity extends FragmentActivity
             invalidate();
         }*/
 
+
+
         @Override
         public CharSequence getPageTitle(int position)
         {
             return mFragmentTitleList.get(position);
         }
-
     }
-
-
-
 
 }
 

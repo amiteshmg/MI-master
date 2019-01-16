@@ -1,45 +1,25 @@
 package com.example.aadyam.mi.Global;
 
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.arch.core.executor.DefaultTaskExecutor;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputEditText;
 import android.text.Editable;
-import android.text.InputType;
-import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Base64;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -48,33 +28,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.aadyam.mi.R;
-import com.example.aadyam.mi.Utils.CameraUtils;
 import com.example.aadyam.mi.Utils.Constants;
-import com.example.aadyam.mi.activity.MainActivity;
 import com.example.aadyam.mi.activity.SurveyActivity;
-
 import com.example.aadyam.mi.database.DatabaseHelperUser;
-import com.example.aadyam.mi.model.Allotment;
-import com.example.aadyam.mi.model.AllotmentList;
-import com.example.aadyam.mi.model.PersonalInfoList;
 import com.example.aadyam.mi.model.QuestionList;
-import com.example.aadyam.mi.rest.ApiClient;
-import com.example.aadyam.mi.rest.ApiInterface;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.MultiplePermissionsReport;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -82,39 +44,20 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_OK;
-import static com.example.aadyam.mi.Utils.Constants.BITMAP_SAMPLE_SIZE;
-import static com.example.aadyam.mi.Utils.Constants.KEY_IMAGE_STORAGE_PATH;
-import static com.example.aadyam.mi.Utils.Constants.MEDIA_TYPE_IMAGE;
-import static com.example.aadyam.mi.Utils.Constants.imageStoragePath;
-
 
 public class MyGlobals
 {
     private Context mContext;
     private String[] answer,questionDescription,categoryID,questionID,informationAnswer;
 
-    private int[] informationId;
     private int size;
-    private int[] informationCategoryID;
-    private String[] informationDescription;
-    SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences;
 
 
     // constructor
     public MyGlobals(Context context)
     {
         this.mContext = context;
-    }
-
-    public String getUserName()
-    {
-        return "test";
     }
 
 
@@ -136,7 +79,7 @@ public class MyGlobals
 
 
 
-    public String readJSONFromAsset(String FileName)
+   /* public String readJSONFromAsset(String FileName)
     {
         String json;
         try
@@ -157,12 +100,12 @@ public class MyGlobals
         return json;
 
     }
+*/
 
 
 
 
-
-
+/*
     public AlertDialog.Builder dialogCreator(Context context,String msg,String positiveButtonLabel)
     {
         AlertDialog.Builder builder =new AlertDialog.Builder(context);
@@ -176,19 +119,19 @@ public class MyGlobals
         });
 
         return  builder;
-    }
+    }*/
 
 
 
 
 
-    public List<AllotmentList> getAllotment(int CLICK_CODE)
+    /*public List<AllotmentList> getAllotment(int CLICK_CODE)
     {
         DatabaseHelperUser databaseHelperUser=new DatabaseHelperUser(mContext);
         List<AllotmentList> list = databaseHelperUser.getAllotmentEntries(CLICK_CODE);
         return list;
     }
-
+*/
 
 
 public ArrayList<Integer> getAllotmentEntriesCount()
@@ -212,7 +155,7 @@ public ArrayList<Integer> getAllotmentEntriesCount()
 }
 
     //method to abstract allotmentList from the retrofit body and pass to addQuestion method one by one
-    public int getAllotmentCount()
+  /*  public int getAllotmentCount()
     {
         final int[] size = new int[1];
         ApiInterface apiInterface;
@@ -252,11 +195,11 @@ public ArrayList<Integer> getAllotmentEntriesCount()
     }
 
 
+*/
 
 
 
-
-    public void getJSON()
+   /* public void getJSON()
     {
         JSONObject student1 = new JSONObject();
         try
@@ -315,7 +258,7 @@ public ArrayList<Integer> getAllotmentEntriesCount()
         String jsonStr = studentsObj.toString();
         System.out.println("jsonString: "+jsonStr);
     }
-
+*/
 
 
 
@@ -841,20 +784,107 @@ public ArrayList<Integer> getAllotmentEntriesCount()
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
                     {
 
-                        if(position==0)
+
+                        if(questionList.get(finalJ2).getQuestionId().equals("13") && spinner.getSelectedItem().toString().equalsIgnoreCase("rubber"))
                         {
-                            answer[finalJ2]=null;
+
+                                spinner.setBackgroundColor(context.getResources().getColor(R.color.red));
+                                final AlertDialog.Builder alertDialog=new AlertDialog.Builder(context);
+
+                                alertDialog.setMessage("Do you want to change the Rubber Hose?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
+                                        AlertDialog.Builder alertDialog1=new AlertDialog.Builder(context);
+                                        final EditText input = new EditText(context);
+                                        input.setBackground(context.getResources().getDrawable(R.drawable.rectangle));
+                                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                                LinearLayout.LayoutParams.MATCH_PARENT);
+                                        input.setLayoutParams(lp);
+
+                                        new MyGlobals(context).popUpDatePicker(context,input);
+                                        alertDialog1.setView(input).setTitle("Suraksha Hose Expiry date").setMessage("New Suraksha hose expiry date").setPositiveButton("Ok", new DialogInterface.OnClickListener()
+                                        {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which)
+                                            {
+                                                input.getText().toString();
+                                                Toast.makeText(context, ""+input.getText().toString(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }).show();
+
+                                    }
+                                }).setNegativeButton("No", new DialogInterface.OnClickListener()
+                                    {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
+                                        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                            @Override
+                                            public void onDismiss(DialogInterface dialog) {
+                                                dialog.dismiss();
+
+                                            }
+                                        });
+                                    }
+                                }).show();
                         }
 
 
-                       else
-                           {
-                            answer[finalJ2] = spinner.getSelectedItem().toString();
-                            questionID[finalJ2] = questionList.get(finalJ2).getQuestionId();
-                            categoryID[finalJ2] = questionList.get(finalJ2).getCategoryId();
-                            questionDescription[finalJ2] = questionList.get(finalJ2).getDescription();
-                            //Toast.makeText(context, "" + answer[finalJ2], Toast.LENGTH_SHORT).show();
-                           }
+                        if(questionList.get(finalJ2).getQuestionId().equals("10"))
+                        {
+                            if(position==0)
+                            {
+                                spinner.setBackgroundColor(context.getResources().getColor(R.color.white));
+                                answer[finalJ2]=null;
+                            }
+
+
+                            else  if(position==1)
+                            {
+                                spinner.setBackgroundColor(context.getResources().getColor(R.color.white));
+                                answer[finalJ2] = spinner.getSelectedItem().toString();
+                                questionID[finalJ2] = questionList.get(finalJ2).getQuestionId();
+                                categoryID[finalJ2] = questionList.get(finalJ2).getCategoryId();
+                                questionDescription[finalJ2] = questionList.get(finalJ2).getDescription();
+                                //Toast.makeText(context, "" + answer[finalJ2], Toast.LENGTH_SHORT).show();
+                            }
+
+                            else
+                            {
+                                spinner.setBackgroundColor(context.getResources().getColor(R.color.red));
+                                answer[finalJ2] = spinner.getSelectedItem().toString();
+                                questionID[finalJ2] = questionList.get(finalJ2).getQuestionId();
+                                categoryID[finalJ2] = questionList.get(finalJ2).getCategoryId();
+                                questionDescription[finalJ2] = questionList.get(finalJ2).getDescription();
+                            }
+                        }
+
+
+                        else {
+
+                            if(position==0)
+                            {
+                                spinner.setBackgroundColor(context.getResources().getColor(R.color.white));
+                                answer[finalJ2]=null;
+                            }
+
+
+                            else
+                            {
+                                spinner.setBackgroundColor(context.getResources().getColor(R.color.white));
+                                answer[finalJ2] = spinner.getSelectedItem().toString();
+                                questionID[finalJ2] = questionList.get(finalJ2).getQuestionId();
+                                categoryID[finalJ2] = questionList.get(finalJ2).getCategoryId();
+                                questionDescription[finalJ2] = questionList.get(finalJ2).getDescription();
+                                //Toast.makeText(context, "" + answer[finalJ2], Toast.LENGTH_SHORT).show();
+                            }
+
+
+                        }
+
+
                     }
 
 
@@ -943,30 +973,16 @@ public ArrayList<Integer> getAllotmentEntriesCount()
 
                 if(count==questionList.size())
                 {
+                    int fragmentType= Integer.parseInt(questionList.get(0).getCategoryId());
+
                     for(int j=0;j<questionList.size();j++)
                     {
                         databaseHelperUser.putAnswerEntryInDatabase(answer[j], questionID[j], questionDescription[j], categoryID[j], allotmentDate, areaName, consumerName, consumerNo, isCompleted, uniqueConsumerId, allottedId);
-                    }
-                        sharedPreferences.edit().putInt(Constants.CYLINDER_SAVE,1).commit();
 
-                 /*   switch (categoryID[0])
-                    {
-                        case "1":
-                            sharedPreferences.edit().putBoolean(Constants.CYLINDER_SAVE, true).commit();
-                            break;
-                        case "2":
-                            sharedPreferences.edit().putBoolean(Constants.REGULATOR_SAVE, true).commit();
-                            break;
-                        case "3":
-                            sharedPreferences.edit().putBoolean(Constants.RUBBER_HOSE_SAVE, true).commit();
-                            break;
-                        case "4":
-                            sharedPreferences.edit().putBoolean(Constants.STOVE_SAVE, true).commit();
-                            break;
-                        case "5":
-                            sharedPreferences.edit().putBoolean(Constants.GENERAL_SAVE, true).commit();
-                            break;
-                    }*/
+
+                    }
+
+                    databaseHelperUser.setFragmentStatusSaved(uniqueConsumerId,Integer.parseInt(questionList.get(0).getCategoryId()));
 
                     Toast.makeText(context, "Saved SuccessFully", Toast.LENGTH_SHORT).show();
                     ((SurveyActivity)context).setCurrentItem(Integer.parseInt(questionList.get(0).getCategoryId()), true);
@@ -975,8 +991,6 @@ public ArrayList<Integer> getAllotmentEntriesCount()
 
                 else
                     {
-                        sharedPreferences.edit().putInt(Constants.CYLINDER_SAVE,0);
-                        //sharedPreferences.edit().putBoolean(Constants.CYLINDER_SAVE,false);
                         Toast.makeText(context, "Answer all questions ", Toast.LENGTH_SHORT).show();
                     }
             }

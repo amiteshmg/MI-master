@@ -29,6 +29,7 @@ import com.example.aadyam.mi.activity.InspectionDisplayActivity;
 import com.example.aadyam.mi.activity.MainActivity;
 import com.example.aadyam.mi.activity.SurveyActivity;
 import com.example.aadyam.mi.database.DatabaseHelperUser;
+import com.example.aadyam.mi.interfaces.AllotmentListAdapterListener;
 import com.example.aadyam.mi.model.AllotmentList;
 import com.example.aadyam.mi.model.DeniedInspection;
 import com.example.aadyam.mi.rest.ApiClient;
@@ -161,6 +162,8 @@ public class AllotmentAdapter extends RecyclerView.Adapter<AllotmentAdapter.MyVi
                         @Override
                         public void onClick(View view) {
                             // send selected contact in callback
+
+
                             listener.onContactSelected(allotmentListFiltered.get(getAdapterPosition()));
                         }
                     });
@@ -241,11 +244,16 @@ public class AllotmentAdapter extends RecyclerView.Adapter<AllotmentAdapter.MyVi
                                 public void onClick(DialogInterface dialog, int which) {
 
 
-                                    databaseHelperUser.moveEntryToDenied(allotmentList.getConsumerNo());
-                                    notifyDataSetChanged();
+                                    //databaseHelperUser.moveEntryToDenied(allotmentList.getConsumerNo());
+
                                     // setAllotmentList(allotmentList);
                                     //new AllotmentAdapter(getAllotmentList(),context);
                                     setDenied(allotmentList.getAllotmentId().toString(), 0);
+                                    notifyDataSetChanged();
+                                    Intent i = new Intent(context, MainActivity.class);
+                                    // set the new task and clear flags
+                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    context.startActivity(i);
                                     // notifyItemChanged(position);
                                     //notifyItemRemoved(position);
                                     //notifyItemRemoved(position);
@@ -269,6 +277,8 @@ public class AllotmentAdapter extends RecyclerView.Adapter<AllotmentAdapter.MyVi
                     });
 
 
+
+
                     holder.not_available.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -279,14 +289,16 @@ public class AllotmentAdapter extends RecyclerView.Adapter<AllotmentAdapter.MyVi
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
 
-                                    databaseHelperUser.moveEntryToNotAvailable(allotmentList.getConsumerNo());
-                                    notifyDataSetChanged();
+                                    //databaseHelperUser.moveEntryToNotAvailable(allotmentList.getConsumerNo());
+
                                     setDenied(allotmentList.getAllotmentId().toString(), 1);
-
-                                    //        InspectionDisplayActivity inspectionDisplayActivity=new InspectionDisplayActivity();
-                                    // inspectionDisplayActivity.refreshAdapter();
-
-                                    ((InspectionDisplayActivity) context).overridePendingTransition(R.anim.slide_out_down, R.anim.slide_out_down);
+                                    notifyDataSetChanged();
+                                    Intent i = new Intent(context, MainActivity.class);
+                                    // set the new task and clear flags
+                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    context.startActivity(i);
+                                    /*InspectionDisplayActivity inspectionDisplayActivity=new InspectionDisplayActivity();
+                                    inspectionDisplayActivity.refreshAdapter();*/
 
                                 }
                             });
@@ -304,10 +316,11 @@ public class AllotmentAdapter extends RecyclerView.Adapter<AllotmentAdapter.MyVi
                     });
 
 
+
+
                     holder.inspect.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            new MyGlobals(context).getJSON();
                             Intent intent = new Intent(context, SurveyActivity.class);
                             intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
 
@@ -419,10 +432,10 @@ public class AllotmentAdapter extends RecyclerView.Adapter<AllotmentAdapter.MyVi
                 return allotmentListFiltered.size();
             }
 
-            public interface AllotmentListAdapterListener
+           /* public interface AllotmentListAdapterListener
             {
                 void onContactSelected(AllotmentList allotmentList);
-            }
+            }*/
         }
 
 

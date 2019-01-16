@@ -285,6 +285,7 @@ public class MainActivity extends FragmentActivity
         adapter.addFragment(new Fragment_today(), "Today's Inspection");
         adapter.addFragment(new Fragment_total(), "Total Inspection");
         viewPager.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
 
