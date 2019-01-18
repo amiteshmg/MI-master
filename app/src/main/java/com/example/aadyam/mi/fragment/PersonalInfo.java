@@ -1,7 +1,9 @@
 package com.example.aadyam.mi.fragment;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,6 +25,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.aadyam.mi.Global.MyGlobals;
+import com.example.aadyam.mi.Utils.Constants;
 import com.example.aadyam.mi.activity.SurveyActivity;
 import com.example.aadyam.mi.database.DatabaseHelperUser;
 import com.example.aadyam.mi.R;
@@ -65,13 +68,11 @@ public class PersonalInfo extends Fragment {
 
 
 
-
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
+    {
         super.onViewCreated(view, savedInstanceState);
-
         context = getContext();
-
         databaseHelperUser = new DatabaseHelperUser(getContext());
 
         rationAffidavit_tv=view.findViewById(R.id.rationAffidavit_tv);
@@ -107,10 +108,8 @@ public class PersonalInfo extends Fragment {
         save = view.findViewById(R.id.button_save);
         next = view.findViewById(R.id.button_next);
 
-
         MyGlobals myGlobals = new MyGlobals(context);
         myGlobals.popUpDatePicker(context, dateOfBirth_editText);
-
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, getContext().getResources().getStringArray(R.array.genderList));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -127,11 +126,11 @@ public class PersonalInfo extends Fragment {
 
         rationCardAffidavit_spinner.setAdapter(adapter2);
 
-
         rationCardAffidavit_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @SuppressLint("SetTextI18n")
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
 
                 if (rationCardAffidavit_spinner.getSelectedItemId() == 2)
                 {
@@ -140,12 +139,13 @@ public class PersonalInfo extends Fragment {
                     rationAffidavit_EditText.setInputType(InputType.TYPE_CLASS_DATETIME);
                     new MyGlobals(context).popUpDatePicker(context,rationAffidavit_EditText);
                 }
-                else {
+
+                else
+                    {
                     rationAffidavit_tv.setText("Ration card no.");
                     rationAffidavit_EditText.setHint("Ration card no.");
                     rationAffidavit_EditText.setInputType(InputType.TYPE_CLASS_TEXT);
-
-                }
+                    }
             }
 
             @Override
@@ -161,19 +161,15 @@ public class PersonalInfo extends Fragment {
 
         houseAccomodation_spinner.setAdapter(adapter3);
 
-
         ArrayAdapter<String> adapter4 = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, getContext().getResources().getStringArray(R.array.refillBookingModeList));
         adapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
 
         refillBookingMode_spinner.setAdapter(adapter4);
 
-
         ArrayAdapter<String> adapter5 = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, getContext().getResources().getStringArray(R.array.cylinder_gap_spinnerList));
         adapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
 
         cylinder_gap_spinner.setAdapter(adapter5);
-
-
 
 
         save.setOnClickListener(new View.OnClickListener()
@@ -182,20 +178,18 @@ public class PersonalInfo extends Fragment {
             public void onClick(View v)
             {
 
-
-                  dateOfBirth=  dateOfBirth_editText.getText().toString();
-                  emailId = emailId_editText.getText().toString();
-
-                if(!dateOfBirth.isEmpty() )
-                {
-
-                dateOfBirth = dateOfBirth_editText.getText().toString();
-                mobileNo = mobileNo_editText.getText().toString();
+                dateOfBirth=  dateOfBirth_editText.getText().toString();
+                emailId = emailId_editText.getText().toString();
 
 
+                  if(!dateOfBirth.isEmpty())
+                    {
+                        dateOfBirth = dateOfBirth_editText.getText().toString();
+                        mobileNo = mobileNo_editText.getText().toString();
 
-                motherNameResult = motherName_editText.getText().toString();
-                fatherSpouseName=fatherSpouseName_editText.getText().toString();
+                        motherNameResult = motherName_editText.getText().toString();
+                        fatherSpouseName=fatherSpouseName_editText.getText().toString();
+
 
                 if(rationCardAffidavit_spinner.getSelectedItemId()==1)
                 {
@@ -273,57 +267,48 @@ public class PersonalInfo extends Fragment {
                     rationCardAffidavitResult=null;
                 }
 
-
-
                 if(usedPipeGas_checkbox.isChecked())
                 {
                     usedPipeGasResult=usedPipeGas_checkbox.getText().toString();
                 }
 
-
                 familyMembers=familyMembers_editText.getText().toString();
-
                 twoWheelers=twoWheelers_editText.getText().toString();
-
                 fourWheelers=fourWheelers_editText.getText().toString();
-
                 panCard=panCard_editText.getText().toString();
-
                 passport=passport_editText.getText().toString();
-
                 voterId=voterId_editText.getText().toString();
-
                 drivingLicense=drivingLicense_editText.getText().toString();
 
+                if(emailId.isEmpty() || emailId!=null && isValidEmail(emailId) )
+                {
 
-                if(isValidEmail(emailId)) {
                     boolean isSuccess = databaseHelperUser.putInformationEntryInDatabase(dateOfBirth, vipResult, genderResult, usingCreditCardResult, motherNameResult, highConsumptionConsumerResult, fatherSpouseResult, refillBookingModeResult, fatherSpouseName, refillBookingModeResult, familyMembers, houseAccommodationResult, rationCardAffidavitResult, twoWheelers, affidavitNo, fourWheelers, rationCardNo, usedPipeGasResult, panCard, passport, voterId, drivingLicense, mobileNo, emailId, consumerNo);
 
+                    SharedPreferences sharedPreferences=context.getSharedPreferences(Constants.PREFS_NAME,Context.MODE_PRIVATE);
+                    sharedPreferences.getString(Constants.UNIQUE_CONSUMER_NO,null);
+
+                    databaseHelperUser.setFragmentStatusSaved(sharedPreferences.getString(Constants.UNIQUE_CONSUMER_NO,null),6);
                     if (isSuccess)
                     {
                         ((SurveyActivity) context).setCurrentItem(6, true);
                     }
+                }
 
+                    else
+                    {
+                        Toast.makeText(context, "Enter valid e-mail address", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
 
                 else
                     {
-                        Toast.makeText(context, "Enter valid e-mail address", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Date of birth is must", Toast.LENGTH_SHORT).show();
                     }
-
-                }
-
-                else {
-                    Toast.makeText(context, "Date of birth is must", Toast.LENGTH_SHORT).show();
-                }
-
-
-
             }
 
         });
-
 
 
 
@@ -337,10 +322,10 @@ public class PersonalInfo extends Fragment {
         });
     }
 
+
     public static boolean isValidEmail(CharSequence target)
     {
         return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
     }
-
 
 }

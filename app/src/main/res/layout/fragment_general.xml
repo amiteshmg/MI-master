@@ -9,14 +9,7 @@
     android:layout_height="wrap_content"
     android:id="@+id/general_linear_layout"
     android:orientation="vertical"
-    android:padding="10dp">
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/general_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </android.support.v7.widget.RecyclerView>
-
-</LinearLayout>
+    android:padding="10dp"/>
 
 
 

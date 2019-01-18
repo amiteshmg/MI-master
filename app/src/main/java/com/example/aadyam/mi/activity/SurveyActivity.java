@@ -141,7 +141,6 @@ public class SurveyActivity extends FragmentActivity
         }*/
 
 
-
         @Override
         public CharSequence getPageTitle(int position)
         {

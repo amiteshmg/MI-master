@@ -16,6 +16,7 @@ import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.aadyam.mi.Global.MyGlobals;
 import com.example.aadyam.mi.R;
 import com.example.aadyam.mi.Utils.Constants;
 import com.example.aadyam.mi.model.Allotment;
@@ -730,31 +731,54 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
 
 
-    public ArrayList<Integer> getAllotmentEntriesCount()
+    public ArrayList<Integer> getAllotmentEntriesCount(int FRAG_TYPE)
     {
         //DatabaseHelperUser databaseHelperUser=new DatabaseHelperUser(context);
+
         ArrayList<Integer> countData=new ArrayList<>();
 
-        countData.add(getAllotmentEntries(Constants.TOTAL_ALLOTTED_PENDING).size());
-        countData.add(getAllotmentEntries(Constants.TOTAL_UNSAFE).size());
-        countData.add(getAllotmentEntries(Constants.TOTAL_DENIED).size());
-        countData.add(getAllotmentEntries(Constants.TOTAL_NOT_AVAILABLE).size());
-        countData.add(getAllotmentEntries(Constants.TOTAL_REALLOTTED_UNSAFE).size());
-        countData.add(getAllotmentEntries(Constants.TOTAL_REALLOTTED_DENIED).size());
-        countData.add(getAllotmentEntries(Constants.TOTAL_REALLOTTED_NOT_AVAILABLE).size());
-        countData.add(getAllotmentEntries(Constants.TOTAL_TOTAL).size());
-        countData.add(getAllotmentEntries(Constants.TOTAL_AGAINST_UNSAFE).size());
-        countData.add(getAllotmentEntries(Constants.TOTAL_AGAINST_DENIED).size());
-        countData.add(getAllotmentEntries(Constants.TOTAL_AGAINST_NOT_AVAILABLE).size());
 
-        return  countData;
+        switch (FRAG_TYPE)
+        {
+            case 1:
+                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_ALLOTTED_PENDING).size());
+                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_UNSAFE).size());
+                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_DENIED).size());
+                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_NOT_AVAILABLE).size());
+                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_REALLOTTED_UNSAFE).size());
+                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_REALLOTTED_DENIED).size());
+                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_REALLOTTED_NOT_AVAILABLE).size());
+                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_TOTAL).size());
+                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_AGAINST_UNSAFE).size());
+                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_AGAINST_DENIED).size());
+                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_AGAINST_NOT_AVAILABLE).size());
+                return countData;
+
+                case 2:
+                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_ALLOTTED_PENDING).size());
+                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_UNSAFE).size());
+                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_DENIED).size());
+                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_NOT_AVAILABLE).size());
+                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_REALLOTTED_UNSAFE).size());
+                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_REALLOTTED_DENIED).size());
+                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_REALLOTTED_NOT_AVAILABLE).size());
+                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_TOTAL).size());
+                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_AGAINST_UNSAFE).size());
+                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_AGAINST_DENIED).size());
+                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_AGAINST_NOT_AVAILABLE).size());
+                return  countData;
+
+                default: return null;
+        }
     }
 
 
     //fetching allotment entries from the mobile SQLiteDatabase
-    public List<AllotmentList> getAllotmentEntries(int CLICK_CODE)
+    public List<AllotmentList> getAllotmentEntries(int FRAG_TYPE,int CLICK_CODE)
     {
         SQLiteDatabase db = this.getReadableDatabase();
+        String currentDate="'"+new MyGlobals(context).getCurrentDate()+"'";
+        Log.d(Constants.TAG, "getAllotmentEntries: DATE "+currentDate);
 
         List<AllotmentList> allotmentLists = new ArrayList<AllotmentList>();
 
@@ -765,77 +789,174 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
             //TODO Apply logic here
 
             case Constants.TOTAL_ALLOTTED_PENDING:
+                if(FRAG_TYPE==2)
+                {
                 String selectQuery = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_9+"=0 AND "+COL3_12+"=0 and "+COL3_13+"=0 and "+COL3_10+"=0";
                 cursor = db.rawQuery(selectQuery, null);
+                }
+
+                else {
+                    String selectQuery = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_9+"=0 AND "+COL3_12+"=0 and "+COL3_13+"=0 and "+COL3_10+"=0"+" AND "+COL3_4+"="+currentDate;
+                    cursor = db.rawQuery(selectQuery, null);
+                }
                 break;
 
             case Constants.TOTAL_UNSAFE:
-                String selectQuery1 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_10+"=1 AND "+COL3_33+"='false';";
-                cursor = db.rawQuery(selectQuery1, null);
+                if(FRAG_TYPE==2)
+                {
+                    String selectQuery1 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_10+"=1 AND "+COL3_33+"='false';";
+                    cursor = db.rawQuery(selectQuery1, null);
+                }
+
+                else {
+                    String selectQuery1 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_10+"=1 AND "+COL3_33+"='false';"+" AND "+COL3_4+"="+currentDate;
+                    cursor = db.rawQuery(selectQuery1, null);
+                }
+
                 break;
 
             case Constants.TOTAL_DENIED:
-                String selectQuery2= "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_12+"=1";
-                cursor = db.rawQuery(selectQuery2, null);
+
+                if (FRAG_TYPE==2)
+                {
+                    String selectQuery2= "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_12+"=1";
+                    cursor = db.rawQuery(selectQuery2, null);
+                }
+
+                else {
+                    String selectQuery2= "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_12+"=1"+" AND "+COL3_4+"="+currentDate;
+                    cursor = db.rawQuery(selectQuery2, null);
+                }
                 break;
 
 
             case Constants.TOTAL_NOT_AVAILABLE:
-                String selectQuery3 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_13+"=1";
-                cursor = db.rawQuery(selectQuery3, null);
+                if(FRAG_TYPE==2)
+                {
+                    String selectQuery3 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_13+"=1";
+                    cursor = db.rawQuery(selectQuery3, null);
+                }
+
+                else
+                    {
+                        String selectQuery3 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_13+"=1"+" AND "+COL3_4+"="+currentDate;
+                        cursor = db.rawQuery(selectQuery3, null);
+                }
+
                 break;
 
 
             case Constants.TOTAL_REALLOTTED_UNSAFE:
-                String selectQuery4 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_11+"=1;";
-                cursor = db.rawQuery(selectQuery4, null);
+                if(FRAG_TYPE==2)
+                {
+                    String selectQuery4 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_11+"=1;";
+                    cursor = db.rawQuery(selectQuery4, null);
+                }
+                else {
+                    String selectQuery4 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_11+"=1 "+" AND "+COL3_4+"="+currentDate;
+                    cursor = db.rawQuery(selectQuery4, null);
+                }
+
                 break;
 
 
             case Constants.TOTAL_REALLOTTED_DENIED:
-                String selectQuery5 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_12+"=0 AND "+COL3_14+"=1 ;";
-                cursor = db.rawQuery(selectQuery5, null);
+                if (FRAG_TYPE==2)
+                {
+                    String selectQuery5 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_12+"=0 AND "+COL3_14+"=1 ;";
+                    cursor = db.rawQuery(selectQuery5, null);
+                }
+
+                else {
+                    String selectQuery5 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_12+"=0 AND "+COL3_14+"=1 "+" AND "+COL3_4+"="+currentDate;
+                    cursor = db.rawQuery(selectQuery5, null);
+                }
                 break;
 
 
             case Constants.TOTAL_REALLOTTED_NOT_AVAILABLE:
-                String selectQuery6 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_15+"=1";
-                cursor = db.rawQuery(selectQuery6, null);
+                if(FRAG_TYPE==2)
+                {
+                    String selectQuery6 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_15+"=1";
+                    cursor = db.rawQuery(selectQuery6, null);
+                }
+
+                else {
+                    String selectQuery6 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_15+"=1 "+" AND "+COL3_4+"="+currentDate;
+                    cursor = db.rawQuery(selectQuery6, null);
+                }
+
                 break;
 
 
             case Constants.TOTAL_TOTAL:
-                String selectQuery7 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_9+"=1;";
-                cursor = db.rawQuery(selectQuery7, null);
+                if(FRAG_TYPE==2)
+                {
+                    String selectQuery7 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_9+"=1;";
+                    cursor = db.rawQuery(selectQuery7, null);
+
+                }
+                else
+                    {
+                    String selectQuery7 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_9+"=1 "+" AND "+COL3_25+"="+currentDate;
+                    Log.d(Constants.TAG, "getAllotmentEntries: TOTAL "+selectQuery7);
+                    cursor = db.rawQuery(selectQuery7, null);
+                }
                 break;
 
             case Constants.TOTAL_AGAINST_UNSAFE:
-                String selectQuery8 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_10+"=1;";
-                cursor = db.rawQuery(selectQuery8, null);
+                if(FRAG_TYPE==2)
+                {
+                    String selectQuery8 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_10+"=1;";
+                    cursor = db.rawQuery(selectQuery8, null);
+                }
+                else {
+                    String selectQuery8 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_10+"=1 "+" AND "+COL3_4+"="+currentDate;
+
+                    cursor = db.rawQuery(selectQuery8, null);
+                }
                 break;
 
 
             case Constants.TOTAL_AGAINST_DENIED:
 
-                String selectQuery9 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_14+"=1;";
-                cursor = db.rawQuery(selectQuery9, null);
+                if(FRAG_TYPE==2)
+                {
+                    String selectQuery9 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_14+"=1;";
+                    cursor = db.rawQuery(selectQuery9, null);
+                }
+
+                else {
+                    String selectQuery9 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_14+"=1 "+" AND "+COL3_4+"="+currentDate;
+                    cursor = db.rawQuery(selectQuery9, null);
+                }
+
 
                 break;
 
 
 
             case Constants.TOTAL_AGAINST_NOT_AVAILABLE:
+                if(FRAG_TYPE==2)
+                {
 
-                String selectQuery10 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_15+"=1;";
-                cursor = db.rawQuery(selectQuery10, null);
+                    String selectQuery10 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_15+"=1;";
+                    cursor = db.rawQuery(selectQuery10, null);
+
+                }
+                else
+                {
+                    String selectQuery10 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_15+"=1 "+" AND "+COL3_4+"="+currentDate;
+                    cursor = db.rawQuery(selectQuery10, null);
+
+                }
                 break;
 
 
             default:
+
                 String selectQuery0 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT;
                 cursor = db.rawQuery(selectQuery0, null);
-
-
         }
 
 
@@ -1321,6 +1442,9 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
                 cv.put(COL3_30,1);
                 db.update(TABLE_NAME_ALLOTMENT,cv,""+COL3_19+"="+uniqueConsumerId,null);
                 break;
+            case 6:
+                cv.put(COL3_31,1);
+                db.update(TABLE_NAME_ALLOTMENT,cv,""+COL3_19+"="+uniqueConsumerId,null);
         }
 
     }
@@ -1328,7 +1452,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
     public int getFragmentSaveEntries(String uniqueNo)
     {
         db=this.getWritableDatabase();
-        String condition=COL3_26+"=1 AND "+COL3_27+"=1 AND "+COL3_28+"=1 AND "+COL3_29+"=1 AND "+COL3_30+"=1";
+        String condition=COL3_26+"=1 AND "+COL3_27+"=1 AND "+COL3_28+"=1 AND "+COL3_29+"=1 AND "+COL3_30+"=1 AND "+COL3_30+"=1";
         String[] columns={COL3_26,COL3_27,COL3_28,COL3_29,COL3_30};
 
         @SuppressLint("Recycle")

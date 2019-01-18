@@ -39,6 +39,7 @@ public class Constants
     public static final String RUBBER_HOSE_SAVE = "rubberHoseSave";
     public static final String STOVE_SAVE  = "stoveSave";
     public static final String GENERAL_SAVE = "generalSave";
+    public static final String IMAGE_ARRAY = "imageArray";
 
 
     public static  String SERVER_URL="http://hpgasprodweb1t.hpcl.co.in/hp.svc/QuestionnaireList";

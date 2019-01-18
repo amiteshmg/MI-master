@@ -30,6 +30,9 @@
       <console name="Connection" type="STANDARD" schema="main" session="Main" />
     </connection>
   </component>
+  <component name="DBNavigator.Project.DatabaseFileManager">
+    <open-files />
+  </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="ea10e0aa-abe3-40aa-9699-00477f4583e3" />
   </component>

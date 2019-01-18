@@ -20,7 +20,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/card_height"
+            android:layout_height="wrap_content"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:padding="@dimen/icon_padding"
             android:layout_margin="10dp"
@@ -62,7 +62,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/card_height"
+            android:layout_height="wrap_content"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:padding="@dimen/icon_padding"
             android:layout_margin="10dp"
@@ -102,7 +102,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/card_height"
+            android:layout_height="wrap_content"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:padding="@dimen/icon_padding"
             android:layout_margin="10dp"
@@ -145,7 +145,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/card_height"
+            android:layout_height="wrap_content"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:padding="@dimen/icon_padding"
             android:layout_margin="10dp"
@@ -160,22 +160,22 @@
 
                 <CheckBox
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:text="VIP"
                     android:id="@+id/vip_checkBox"
                     />
                 <CheckBox
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:text="Using Credit Card"
                     android:id="@+id/credit_card_checkBox"
                     />
+
                 <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="High Consumption consumer"
                     android:id="@+id/high_consumption_checkbox"
-                    />
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="High Consumption consumer" />
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
@@ -188,7 +188,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/card_height"
+            android:layout_height="wrap_content"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:padding="@dimen/icon_padding"
             android:layout_margin="10dp"
@@ -233,7 +233,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/card_height"
+            android:layout_height="wrap_content"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:padding="@dimen/icon_padding"
             android:layout_margin="10dp"
@@ -276,7 +276,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/card_height"
+            android:layout_height="wrap_content"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:padding="@dimen/icon_padding"
             android:layout_margin="10dp"
@@ -318,7 +318,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/card_height"
+            android:layout_height="wrap_content"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:padding="@dimen/icon_padding"
             android:layout_margin="10dp"
@@ -358,7 +358,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/card_height"
+            android:layout_height="wrap_content"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:padding="@dimen/icon_padding"
             android:layout_margin="10dp"
@@ -399,7 +399,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/card_height"
+            android:layout_height="wrap_content"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:padding="@dimen/icon_padding"
             android:layout_margin="10dp"
@@ -438,7 +438,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/card_height"
+            android:layout_height="wrap_content"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:padding="@dimen/icon_padding"
             android:layout_margin="10dp"
@@ -480,7 +480,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/card_height"
+            android:layout_height="wrap_content"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:padding="@dimen/icon_padding"
             android:layout_margin="10dp"
@@ -521,7 +521,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/card_height"
+            android:layout_height="wrap_content"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:padding="@dimen/icon_padding"
             android:layout_margin="10dp"
@@ -560,7 +560,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/card_height"
+            android:layout_height="wrap_content"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:padding="@dimen/icon_padding"
             android:layout_margin="10dp"
@@ -602,7 +602,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/card_height"
+            android:layout_height="wrap_content"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:padding="@dimen/icon_padding"
             android:layout_margin="10dp"
@@ -629,7 +629,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/card_height"
+            android:layout_height="wrap_content"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:padding="@dimen/icon_padding"
             android:layout_margin="10dp"
@@ -673,7 +673,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/card_height"
+            android:layout_height="wrap_content"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:padding="@dimen/icon_padding"
             android:layout_margin="10dp"
@@ -715,7 +715,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/card_height"
+            android:layout_height="wrap_content"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:padding="@dimen/icon_padding"
             android:layout_margin="10dp"
@@ -762,7 +762,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/card_height"
+            android:layout_height="wrap_content"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:padding="@dimen/icon_padding"
             android:layout_margin="10dp"
@@ -804,7 +804,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/card_height"
+            android:layout_height="wrap_content"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:padding="@dimen/icon_padding"
             android:layout_margin="10dp"
@@ -845,7 +845,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/card_height"
+            android:layout_height="wrap_content"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:padding="@dimen/icon_padding"
             android:layout_margin="10dp"

@@ -83,24 +83,15 @@ public class SplashScreenActivity extends AppCompatActivity
             }
 
         // boolean firstRun=sharedPreferences.getBoolean(Constants.FIRST_RUN,true);
-
         //proceed();
-
 
       /*  final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setProgress(0);*/
-
-
         /*AsyncTaskBar task = new AsyncTaskBar();
         task.setProgressBar(progressBar);
         task.execute();
 */
-
         //Stores PERMISSIONS in a String array
-
-
-
-
     }
 
 
@@ -111,18 +102,19 @@ public class SplashScreenActivity extends AppCompatActivity
     }
 
 
+    @SuppressLint("ApplySharedPref")
     @Override
     protected void onResume()
     {
         super.onResume();
 
 
-        if (prefs.getBoolean("firstrun", true))
+        if (prefs.getBoolean(Constants.FIRST_RUN, true))
         {
             // Do first run stuff here then set 'firstrun' as false
             // using the following line to edit/commit prefs
             databaseHelperUser.getAllotment();
-            prefs.edit().putBoolean("firstrun", false).commit();
+            prefs.edit().putBoolean(Constants.FIRST_RUN, false).commit();
         }
     }
 

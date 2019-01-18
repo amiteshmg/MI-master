@@ -67,7 +67,6 @@ import com.aquery.*;
 
 public class MainActivity extends FragmentActivity
 {
-
     private DrawerLayout mDrawerLayout;
     private List<DataUpdateListener> mListeners;
 
@@ -97,7 +96,7 @@ public class MainActivity extends FragmentActivity
 
     // Session Manager Class
     SessionManager session;
-    SwipeRefreshLayout swipeRefreshLayout;
+  //  SwipeRefreshLayout swipeRefreshLayout;
     TabLayout tabLayout;
     ViewPager viewPager;
     Date c;
@@ -129,10 +128,10 @@ public class MainActivity extends FragmentActivity
         }
     }
 
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @SuppressLint("CommitPrefEdits")
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -141,7 +140,7 @@ public class MainActivity extends FragmentActivity
         setContentView(R.layout.activity_main);
 
         tabLayout = findViewById(R.id.tabs);
-        swipeRefreshLayout=findViewById(R.id.swipeRefreshLayout);
+        //swipeRefreshLayout=findViewById(R.id.swipeRefreshLayout);
         progressDialog=new ProgressDialog(getApplicationContext());
         progressDialog.setMessage("Please wait..");
         session = new SessionManager(getApplicationContext());
@@ -149,18 +148,16 @@ public class MainActivity extends FragmentActivity
         mDrawerLayout=findViewById(R.id.drawer_layout);
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
-
         navigationView = findViewById(R.id.navigation_view);
         c=Calendar.getInstance().getTime();
-
         databaseHelperUser.getQuestion();
+
 
         Log.i("DATE", String.valueOf(c));
 
         setActionBar(toolbar);
 
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener()
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener()
                 {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem)
@@ -174,10 +171,8 @@ public class MainActivity extends FragmentActivity
                         switch (id)
                         {
                             case R.id.logout:
-
                                 SharedPreferences sharedPreferences=getSharedPreferences(Constants.PREFS_NAME,Context.MODE_PRIVATE);
                                 session.logoutUser();
-
                                 break;
 
                             case R.id.nav_settings:
@@ -185,11 +180,9 @@ public class MainActivity extends FragmentActivity
                                 startActivity(i);
 
                             case R.id.sync_entries:
-
                                 syncFragments();
 
                         }
-
                         // Add code here to update the UI based on the item selected
                         // For example, swap UI fragments here
                         return true;
@@ -202,9 +195,12 @@ public class MainActivity extends FragmentActivity
 
         viewPager = findViewById(R.id.viewpager);
 
-        tabLayout.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
+        tabLayout.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener()
+        {
+
             @Override
-            public void onTabSelected(TabLayout.Tab tab) {
+            public void onTabSelected(TabLayout.Tab tab)
+            {
                 int position = tab.getPosition();
             }
 
@@ -223,7 +219,7 @@ public class MainActivity extends FragmentActivity
 
 
 
-       swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+     /*  swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
        {
            @Override
            public void onRefresh()
@@ -232,7 +228,7 @@ public class MainActivity extends FragmentActivity
                 swipeRefreshLayout.setRefreshing(false);
            }
        });
-
+*/
        setupViewPager(viewPager);
 
        tabLayout.setupWithViewPager(viewPager);
@@ -242,10 +238,20 @@ public class MainActivity extends FragmentActivity
 
     private void syncFragments()
     {
+        if(new MyGlobals(getApplicationContext()).isNetworkConnected())
+        {
+            dataUpdated();
+            databaseHelperUser.getAllotment();
 
-        databaseHelperUser.getAllotment();
-        dataUpdated();
-//        viewPager.getAdapter().notifyDataSetChanged();
+        }
+
+        else
+            {
+                Toast.makeText(this, "No Internet Connection! ", Toast.LENGTH_SHORT).show();
+            }
+        //viewPager.getAdapter().notifyDataSetChanged();
+        //viewPager.getAdapter().notifyDataSetChanged();
+
 
         //viewPager.getAdapter().notifyDataSetChanged();
 
@@ -261,7 +267,7 @@ public class MainActivity extends FragmentActivity
 
         */
 
-       // viewPager.getAdapter().notifyDataSetChanged();
+        // viewPager.getAdapter().notifyDataSetChanged();
 
         /*Fragment fragment=getFragment();
 
@@ -275,13 +281,11 @@ public class MainActivity extends FragmentActivity
 
     }
 
-
-
     //to add fragments to ViewPager
+
     private void setupViewPager(ViewPager viewPager)
     {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        //adapter.notifyDataSetChanged();
         adapter.addFragment(new Fragment_today(), "Today's Inspection");
         adapter.addFragment(new Fragment_total(), "Total Inspection");
         viewPager.setAdapter(adapter);
@@ -289,17 +293,13 @@ public class MainActivity extends FragmentActivity
     }
 
 
-    private Fragment getFragment()
+ /*   private Fragment getFragment()
     {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-
         adapter.getItem(adapter.getItemPosition(adapter));
-        /*Fragment[] fragment=new Fragment[2];
-        fragment[0]=adapter.getItem(1);
-        fragment[1]=adapter.getItem(2);
-*/
+
         return adapter.getItem(adapter.getItemPosition(adapter));
-    }
+    }*/
 
 
     //adapt the viewpager to the tabLayout
@@ -309,19 +309,6 @@ public class MainActivity extends FragmentActivity
         @Override
         public Object instantiateItem(@NonNull ViewGroup container, int position)
         {
-
-            switch (position)
-            {
-               /* case 0 :
-                    Fragment_today fragment_today=new Fragment_today();
-                    fragment_today.onDataUpdate();
-                    break;
-                case 1 :
-                    Fragment_total fragment_total=new Fragment_total();
-                    fragment_total.onDataUpdate();
-                    break;*/
-            }
-
             return super.instantiateItem(container, position);
         }
 
@@ -329,7 +316,6 @@ public class MainActivity extends FragmentActivity
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
         private ArrayList<Integer> countData;
-
 
         ViewPagerAdapter(FragmentManager manager)
         {
@@ -362,10 +348,13 @@ public class MainActivity extends FragmentActivity
             {
                 ((Fragment_today) object).onDataUpdate();
             }
+
             //don't return POSITION_NONE, avoid fragment recreation.
             return super.getItemPosition(object);
-           //return POSITION_NONE;
+            //return POSITION_NONE;
         }
+
+
 
         @Override
         public int getCount()
@@ -376,7 +365,6 @@ public class MainActivity extends FragmentActivity
 
         void addFragment(Fragment fragment, String title)
         {
-
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             mFragmentList.add(fragment);
@@ -384,12 +372,14 @@ public class MainActivity extends FragmentActivity
             mFragmentTitleList.add(title);
         }
 
+
         @Override
         public CharSequence getPageTitle(int position)
         {
             return mFragmentTitleList.get(position);
         }
     }
+
 
 
     @Override
@@ -414,8 +404,8 @@ public class MainActivity extends FragmentActivity
     }
 
 
-    @SuppressLint("StaticFieldLeak")
-    public class MyTask extends AsyncTask
+   /* @SuppressLint("StaticFieldLeak")*/
+  /*  public class MyTask extends AsyncTask
     {
         @Override
         protected Object doInBackground(Object[] objects)
@@ -437,6 +427,7 @@ public class MainActivity extends FragmentActivity
 
         call.enqueue(new Callback<Distributor>()
         {
+
             @Override
             public void onResponse(@NonNull Call<Distributor> call, @NonNull Response<Distributor> response)
             {
@@ -447,14 +438,13 @@ public class MainActivity extends FragmentActivity
                 Toast.makeText(MainActivity.this, ""+response.body().toString(), Toast.LENGTH_SHORT).show();
             }
 
+
             @Override
             public void onFailure(@NonNull Call<Distributor> call, @NonNull Throwable t)
             {
                 Log.d("ERROR",t.getMessage());
                 Toast.makeText(MainActivity.this, "NO "+t.getMessage() , Toast.LENGTH_SHORT).show();
             }
-
         });
-
-    }
+    }*/
 }

@@ -77,6 +77,7 @@ public class UploadPhoto extends Fragment
 {
 
     private static final int SIGNATURE = 5;
+    private static final String ALLOTED_ID = "allottedId";
     private static String imageStoragePath;
     private static final int BITMAP_SAMPLE_SIZE = 8;
     private static final int REGULATOR_CODE = 1;
@@ -85,6 +86,7 @@ public class UploadPhoto extends Fragment
     private static final int INSTALLATION_CODE = 4;
     private static final String KEY_IMAGE_STORAGE_PATH = "image_path";
     private ImageView stove_iv, regulator_iv, hose_iv, installation_iv, signature_iv;
+
     public static final String GALLERY_DIRECTORY_NAME = "MI_Images";
     private SignaturePad userInput;
     String encoded4;
@@ -114,6 +116,12 @@ public class UploadPhoto extends Fragment
         return inflater.inflate(R.layout.fragment_upload_photo, container, false);
     }
 
+  /*  @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if(savedInstanceState==null)
+        this.savedInstanceState=savedInstanceState;
+    }*/
 
     @Override
     public void onPause()
@@ -142,23 +150,42 @@ public class UploadPhoto extends Fragment
 
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable final Bundle savedInstanceState)
+    public void onViewCreated(@NonNull View view, final Bundle savedInstanceState)
     {
+      this.savedInstanceState=savedInstanceState;
         context=getContext();
         progressDialog=new ProgressDialog(context);
         progressDialog.setMessage("Please wait..");
         progressDialog.setCancelable(false);
-
-
         sharedPreferences=context.getSharedPreferences(Constants.PREFS_NAME,Context.MODE_PRIVATE);
-        final String uniqueNo=sharedPreferences.getString(Constants.UNIQUE_CONSUMER_NO,null);
+
         String allottedId=sharedPreferences.getString(Constants.ALLOTED_ID,null);
-        this.savedInstanceState=savedInstanceState;
+
+        if(imageArray!=null)
+        {
+
+            if(setPhotoView(Constants.REGULATOR_CODE,allottedId))
+                setPhotoView(Constants.REGULATOR_CODE,allottedId);
+
+            if(setPhotoView(Constants.STOVE_CODE,allottedId))
+                setPhotoView(Constants.STOVE_CODE,allottedId);
+
+            if(setPhotoView(Constants.HOSE_CODE,allottedId))
+                setPhotoView(Constants.HOSE_CODE,allottedId);
+
+            if(setPhotoView(Constants.INSTALLATION_CODE,allottedId))
+                setPhotoView(Constants.INSTALLATION_CODE,allottedId);
+
+            if(setPhotoView(Constants.SIGNATURE,allottedId))
+                setPhotoView(Constants.SIGNATURE,allottedId);
+        }
+
+
+
+        final String uniqueNo=sharedPreferences.getString(Constants.UNIQUE_CONSUMER_NO,null);
 
         initializeComponents(view,savedInstanceState);
-
         //setSavedPhotos(allottedId);
-
         LinearLayout layout = view.findViewById(R.id.signature_layout);
         stove_iv.setOnClickListener(new View.OnClickListener()
         {
@@ -223,17 +250,22 @@ public class UploadPhoto extends Fragment
         });
 
 
-        hose_iv.setOnClickListener(new View.OnClickListener() {
+        hose_iv.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
 
-                if (CameraUtils.checkPermissions(getContext())) {
+                if (CameraUtils.checkPermissions(getContext()))
+                {
                     captureImage(HOSE_CODE);
                     restoreFromBundle(savedInstanceState, HOSE_CODE);
-                } else {
-                    requestCameraPermission(MEDIA_TYPE_IMAGE, HOSE_CODE);
                 }
 
+                else
+                    {
+                    requestCameraPermission(MEDIA_TYPE_IMAGE, HOSE_CODE);
+                    }
             }
         });
 
@@ -321,14 +353,9 @@ public class UploadPhoto extends Fragment
                 if(hoseBitmap!=null && regulatorBitmap!=null && installationBitmap!=null && signatureBitmap!=null && stoveBitmap!=null)
                 {
                     saveCapturedImage();
-                    @SuppressLint("SimpleDateFormat")
 
-                    DateFormat dateFormat =  new SimpleDateFormat("dd/MM/yyyy");
-                    Date date = new Date();
-                    String dateString = dateFormat.format(date);
-
-                    System.out.println(dateFormat.format(date)); //2016/11/16 12:08:43
-
+                    String dateString = new MyGlobals(getContext()).getCurrentDate();
+                    //System.out.println(dateFormat.format(date)); //2016/11/16 12:08:43
                     GPSTracker gps = new GPSTracker(context);
                     DatabaseHelperUser databaseHelperUser=new DatabaseHelperUser(context);
                     double latitude,longitude;
@@ -415,8 +442,8 @@ public class UploadPhoto extends Fragment
                 }
             }
         });
-
     }
+
 
 
     private void initializeComponents(View view,Bundle savedInstanceState)
@@ -440,6 +467,10 @@ public class UploadPhoto extends Fragment
     }
 
     private void setSavedPhotos(String allottedId) {
+
+        allottedId = savedInstanceState.getString(this.ALLOTED_ID);
+
+
         if(setPhotoView(Constants.REGULATOR_CODE,allottedId))
             setPhotoView(Constants.REGULATOR_CODE,allottedId);
 
@@ -525,23 +556,52 @@ public class UploadPhoto extends Fragment
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Permissions required!")
                 .setMessage("Camera needs few permissions to work properly. Grant them in settings.")
-                .setPositiveButton("GOTO SETTINGS", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
+                .setPositiveButton("GOTO SETTINGS", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
                         CameraUtils.openSettings(getContext());
                     }
                 })
-                .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
+                .setNegativeButton("CANCEL", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
 
                     }
                 }).show();
     }
 
 
+
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
+    {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+
+
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState)
+    {
+        super.onViewStateRestored(savedInstanceState);
+
+        SharedPreferences sharedPreferences=getContext().getSharedPreferences(Constants.PREFS_NAME,Context.MODE_PRIVATE);
+        String allottedId=sharedPreferences.getString(Constants.ALLOTED_ID,null);
+
+        if(savedInstanceState!=null)
+        {
+            // Retrieve the user email value from bundle.
+            setSavedPhotos(allottedId);
+            // Do not need below code, because android os will automatically save and restore view objects value that has id attribute.
+            // EditText userEmailInputBox = getActivity().findViewById(R.id.fragment_instance_state_user_email_edit_box);
+            //userEmailInputBox.setText(userEmail);
+            // Log the retrieved user email value.
+            //this.logDebugInfo("Fragment onViewStateRestored method is called.Retrieved user input email is " + userEmail);
+        }
+    }
+
 
 
     @Override
@@ -550,16 +610,32 @@ public class UploadPhoto extends Fragment
         super.onSaveInstanceState(outState);
         // save file url in bundle as it will be null on screen orientation
         // changes
-        outState.putString(KEY_IMAGE_STORAGE_PATH, imageStoragePath);
-        int mCurCheckPosition = 0;
-        outState.putInt("curChoice", mCurCheckPosition);
+        if(outState!=null)
+        {
+            // Retrieve the user email value from bundle.
+            //  setPhotoView() = savedInstanceState.getString(this.USER_EMAIL_KEY);
+            imageArray=outState.getStringArrayList(Constants.IMAGE_ARRAY);
+            // Do not need below code, because android os will automatically save and restore view objects value that has id attribute.
+            // EditText userEmailInputBox = getActivity().findViewById(R.id.fragment_instance_state_user_email_edit_box);
+            //userEmailInputBox.setText(userEmail);
+            // Log the retrieved user email value.
+            //this.logDebugInfo("Fragment onViewStateRestored method is called.Retrieved user input email is " + userEmail)
+        }
+
+        else
+            {
+            outState.putStringArrayList(Constants.IMAGE_ARRAY, imageArray);
+            outState.putString(KEY_IMAGE_STORAGE_PATH, imageStoragePath);
+            int mCurCheckPosition = 0;
+            outState.putInt("curChoice", mCurCheckPosition);
+            }
 
     }
 
 
 
                public boolean setPhotoView(int ImageViewCode,String allottedId)
-            {
+                {
                 String imageString= new DatabaseHelperUser(context).getPhotoEntry(ImageViewCode,allottedId);
                 Toast.makeText(getContext(), ""+imageString, Toast.LENGTH_SHORT).show();
 
@@ -568,28 +644,29 @@ public class UploadPhoto extends Fragment
                     byte[] decodedString = Base64.decode(imageString, Base64.DEFAULT);
                     Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
-            switch(ImageViewCode)
-            {
-                case REGULATOR_CODE:
-                    regulator_iv.setImageBitmap(decodedByte);
-                    break;
-                case HOSE_CODE:
-                    hose_iv.setImageBitmap(decodedByte);
-                    break;
-                case INSTALLATION_CODE:
-                    installation_iv.setImageBitmap(decodedByte);
-                    break;
-                case STOVE_CODE:
-                    stove_iv.setImageBitmap(decodedByte);
-                    break;
-            }
 
+                switch(ImageViewCode)
+                {
+                    case REGULATOR_CODE:
+                        regulator_iv.setImageBitmap(decodedByte);
+                        break;
+                    case HOSE_CODE:
+                        hose_iv.setImageBitmap(decodedByte);
+                        break;
+                    case INSTALLATION_CODE:
+                        installation_iv.setImageBitmap(decodedByte);
+                        break;
+                    case STOVE_CODE:
+                        stove_iv.setImageBitmap(decodedByte);
+                        break;
+            }
             return true;
         }
 
-        else {
-            return false;
-                }
+        else
+            {
+                return false;
+            }
     }
 
 
@@ -644,8 +721,6 @@ public class UploadPhoto extends Fragment
         fileNameArray.add(filename);
         imageArray.add(encodedImage);
 
-
-
         ByteArrayOutputStream baos1 = new ByteArrayOutputStream();
         stoveBitmap.compress(Bitmap.CompressFormat.JPEG, 60, baos1); //bm is the bitmap object
         imageByte.add(baos1.toByteArray());
@@ -689,10 +764,8 @@ public class UploadPhoto extends Fragment
         fileNameArray.add(filename4);
         imageArray.add(encodedImage4);
 
-            String[] CODE = {"1", "2", "3", "4", "5"};
-            databaseHelperUser.setPhotos(fileNameArray, imageArray, CODE);
-
-
+        String[] CODE = {"1", "2", "3", "4", "5"};
+        databaseHelperUser.setPhotos(fileNameArray, imageArray, CODE);
     }
 
 
@@ -825,9 +898,7 @@ public class UploadPhoto extends Fragment
                 }
 
                 Uri fileUri4 = CameraUtils.getOutputMediaFileUri(getContext(), file4);
-
                 //intent1.putExtra(MediaStore.EXTRA_OUTPUT, fileUri4);
-
                 break;
         }
 

@@ -158,10 +158,11 @@ public class StaticAdapter extends RecyclerView.Adapter<StaticAdapter.MyViewHold
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
         //used for loading data into each entry
         if(allotmentListFiltered.size()!=0) {
+
             final DatabaseHelperUser databaseHelperUser = new DatabaseHelperUser(context);
             //used for loading data into each entry
 
@@ -182,13 +183,15 @@ public class StaticAdapter extends RecyclerView.Adapter<StaticAdapter.MyViewHold
 
             holder.inspectionDate.setText(allotmentList.getLastInspDate());
 
-            holder.call_layout.setOnClickListener(new View.OnClickListener() {
+            holder.call_layout.setOnClickListener(new View.OnClickListener()
+            {
+                MyViewHolder holder1=holder;
                 @Override
-                public void onClick(View v) {
+                public void onClick(View v)
+                {
+                    holder1.alertDialog.setMessage("Are you sure you want to CALL " + allotmentList.getConsumerName() + " on Number - " +  allotmentList.getMobileNo() + "?");
 
-                    holder.alertDialog.setMessage("Are you sure you want to CALL " + allotmentList.getConsumerName() + " on Number - " +  allotmentList.getMobileNo() + "?");
-
-                    holder.alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    holder1.alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Intent intent = new Intent(Intent.ACTION_DIAL);
@@ -196,26 +199,21 @@ public class StaticAdapter extends RecyclerView.Adapter<StaticAdapter.MyViewHold
                             intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
                             context.startActivity(intent);
                         }
-
                     });
 
-                    holder.alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    holder1.alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener()
+                    {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
 
                         }
-
                     });
-
-                    holder.alertDialog.show();
+                    holder1.alertDialog.show();
                 }
             });
-
         }
-
     }
-
-
 
 
     @Override
@@ -223,7 +221,5 @@ public class StaticAdapter extends RecyclerView.Adapter<StaticAdapter.MyViewHold
     {
         return allotmentListFiltered.size();
     }
-
-
 }
 

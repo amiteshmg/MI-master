@@ -30,6 +30,8 @@ public class CameraUtils
      * Refreshes gallery on adding new image/video. Gallery won't be refreshed
      * on older devices until device is rebooted
      */
+
+
     public static void refreshGallery(Context context, String filePath)
     {
         // ScanFile so it will be appeared on Gallery
@@ -53,6 +55,8 @@ public class CameraUtils
      */
 
 
+
+
     public static Bitmap optimizeBitmap(int sampleSize, String filePath)
     {
         // bitmap factory
@@ -71,8 +75,7 @@ public class CameraUtils
      */
     public static boolean isDeviceSupportCamera(Context context)
     {
-        if (context.getPackageManager().hasSystemFeature(
-                PackageManager.FEATURE_CAMERA))
+        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA))
         {
             // this device has a camera
             return true;
@@ -85,12 +88,8 @@ public class CameraUtils
         }
     }
 
-
-
     /**
-
      Open device app settings to allow user to enable permissions
-
      **/
 
     public static void openSettings(Context context)
@@ -103,7 +102,8 @@ public class CameraUtils
     }
 
 
-    public static Uri getOutputMediaFileUri(Context context, File file) {
+    public static Uri getOutputMediaFileUri(Context context, File file)
+    {
         return FileProvider.getUriForFile(context, context.getPackageName() + ".provider", file);
     }
 
@@ -111,34 +111,27 @@ public class CameraUtils
     /**
      * Creates and returns the image or video file before opening the camera
      */
+
     public static File getOutputMediaFile(/*int type*/)
     {
-
         // External sdcard location
-        File mediaStorageDir = new File(
-                Environment
-                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                MainActivity.GALLERY_DIRECTORY_NAME);
-
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), MainActivity.GALLERY_DIRECTORY_NAME);
         // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                Log.e(MainActivity.GALLERY_DIRECTORY_NAME, "Oops! Failed create "
-                        + MainActivity.GALLERY_DIRECTORY_NAME + " directory");
+
+        if (!mediaStorageDir.exists())
+        {
+            if (!mediaStorageDir.mkdirs())
+            {
+                Log.e(MainActivity.GALLERY_DIRECTORY_NAME, "Oops! Failed create " + MainActivity.GALLERY_DIRECTORY_NAME + " directory");
                 return null;
             }
         }
-
         // Preparing media file naming convention
         // adds timestamp
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         File mediaFile;
-
-
         mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + "." + MainActivity.IMAGE_EXTENSION);
-
         return mediaFile;
-
     }
 
 }

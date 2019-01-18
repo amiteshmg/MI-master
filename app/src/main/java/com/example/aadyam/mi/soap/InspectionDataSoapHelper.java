@@ -155,6 +155,7 @@ public class InspectionDataSoapHelper
 
                 SoapPrimitive resultString = (SoapPrimitive) soapEnvelope.getResponse();
 
+                Log.d(Constants.TAG, "InspectionData_Response: "+resultString);
                 System.out.println("InspectionData_Response" + resultString);
 
                 String response = resultString.toString();

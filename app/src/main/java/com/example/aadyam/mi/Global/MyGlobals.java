@@ -6,9 +6,11 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
@@ -29,6 +31,7 @@ import android.widget.Toast;
 
 import com.example.aadyam.mi.R;
 import com.example.aadyam.mi.Utils.Constants;
+import com.example.aadyam.mi.activity.InspectionDisplayActivity;
 import com.example.aadyam.mi.activity.SurveyActivity;
 import com.example.aadyam.mi.database.DatabaseHelperUser;
 import com.example.aadyam.mi.model.QuestionList;
@@ -37,10 +40,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -49,7 +54,7 @@ public class MyGlobals
 {
     private Context mContext;
     private String[] answer,questionDescription,categoryID,questionID,informationAnswer;
-
+    LinearLayout.LayoutParams params;
     private int size;
     private SharedPreferences sharedPreferences;
 
@@ -134,7 +139,7 @@ public class MyGlobals
 */
 
 
-public ArrayList<Integer> getAllotmentEntriesCount()
+/*public ArrayList<Integer> getAllotmentEntriesCount()
 {
     DatabaseHelperUser databaseHelperUser=new DatabaseHelperUser(mContext);
     ArrayList<Integer> countData=new ArrayList<>();
@@ -152,7 +157,7 @@ public ArrayList<Integer> getAllotmentEntriesCount()
     countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_AGAINST_NOT_AVAILABLE).size());
 
     return  countData;
-}
+}*/
 
     //method to abstract allotmentList from the retrofit body and pass to addQuestion method one by one
   /*  public int getAllotmentCount()
@@ -653,8 +658,8 @@ public ArrayList<Integer> getAllotmentEntriesCount()
          questionDescription=new String[questionList.size()];
          size= questionList.size();
         
-         final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-         params.gravity=Gravity.CENTER_HORIZONTAL;
+        params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        params.gravity=Gravity.CENTER_HORIZONTAL;
 
          final SharedPreferences sharedPreferences=mContext.getSharedPreferences(Constants.PREFS_NAME,Context.MODE_PRIVATE);
 
@@ -698,9 +703,11 @@ public ArrayList<Integer> getAllotmentEntriesCount()
                 final int finalJ = j;
 
                     // no radio buttons are checked
-                    rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+                    {
                         @Override
-                        public void onCheckedChanged(RadioGroup group, int checkedId) {
+                        public void onCheckedChanged(RadioGroup group, int checkedId)
+                        {
                             int radioButtonID = rg.getCheckedRadioButtonId();
                             View radioButton = rg.findViewById(radioButtonID);
                             int idx = rg.indexOfChild(radioButton);
@@ -728,7 +735,7 @@ public ArrayList<Integer> getAllotmentEntriesCount()
                 {
                     popUpDatePicker(context,editText);
                 }
-                //editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+
                 questionHolderLinearLayout.addView(editText);
 
                 final int finalJ1 = j;
@@ -755,7 +762,6 @@ public ArrayList<Integer> getAllotmentEntriesCount()
                         //Toast.makeText(context, "" + answer[finalJ1], Toast.LENGTH_SHORT).show();
                     }
                 });
-
 
                 View.OnFocusChangeListener ofcListener = new MyFocusChangeListener();
                 editText.setOnFocusChangeListener(ofcListener);
@@ -810,6 +816,8 @@ public ArrayList<Integer> getAllotmentEntriesCount()
                                             public void onClick(DialogInterface dialog, int which)
                                             {
                                                 input.getText().toString();
+
+
                                                 Toast.makeText(context, ""+input.getText().toString(), Toast.LENGTH_SHORT).show();
                                             }
                                         }).show();
@@ -822,9 +830,10 @@ public ArrayList<Integer> getAllotmentEntriesCount()
                                     {
                                         alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                                             @Override
-                                            public void onDismiss(DialogInterface dialog) {
+                                            public void onDismiss(DialogInterface dialog)
+                                            {
+                                                spinner.setBackgroundColor(context.getResources().getColor(R.color.red));
                                                 dialog.dismiss();
-
                                             }
                                         });
                                     }
@@ -862,6 +871,8 @@ public ArrayList<Integer> getAllotmentEntriesCount()
                         }
 
 
+
+
                         else {
 
                             if(position==0)
@@ -880,11 +891,7 @@ public ArrayList<Integer> getAllotmentEntriesCount()
                                 questionDescription[finalJ2] = questionList.get(finalJ2).getDescription();
                                 //Toast.makeText(context, "" + answer[finalJ2], Toast.LENGTH_SHORT).show();
                             }
-
-
                         }
-
-
                     }
 
 
@@ -949,7 +956,6 @@ public ArrayList<Integer> getAllotmentEntriesCount()
                 DatabaseHelperUser databaseHelperUser = new DatabaseHelperUser(context);
 
                 SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.PREFS_NAME, Context.MODE_PRIVATE);
-
                 String areaName = sharedPreferences.getString(Constants.AREA_NAME, "0");
                 String consumerName = sharedPreferences.getString(Constants.CONSUMER_NAME, "0");
                 String consumerNo = sharedPreferences.getString(Constants.CONSUMER_NO, "0");
@@ -978,8 +984,6 @@ public ArrayList<Integer> getAllotmentEntriesCount()
                     for(int j=0;j<questionList.size();j++)
                     {
                         databaseHelperUser.putAnswerEntryInDatabase(answer[j], questionID[j], questionDescription[j], categoryID[j], allotmentDate, areaName, consumerName, consumerNo, isCompleted, uniqueConsumerId, allottedId);
-
-
                     }
 
                     databaseHelperUser.setFragmentStatusSaved(uniqueConsumerId,Integer.parseInt(questionList.get(0).getCategoryId()));
@@ -999,7 +1003,6 @@ public ArrayList<Integer> getAllotmentEntriesCount()
 
 
 
-
         next.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -1010,21 +1013,20 @@ public ArrayList<Integer> getAllotmentEntriesCount()
         });
 
 
-      LinearLayout buttonLayout=new LinearLayout(context);
-      //  final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-      buttonLayout.setPadding(pad,pad,pad,pad);
-      buttonLayout.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-      buttonLayout.setLayoutParams(params);
+        LinearLayout buttonLayout=new LinearLayout(context);
+        params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        params.gravity=Gravity.CENTER;
 
-      buttonLayout.addView(prev);
-      buttonLayout.addView(save);
-      buttonLayout.addView(next);
+        buttonLayout.setPadding(pad,pad,pad,pad);
+        buttonLayout.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        buttonLayout.setLayoutParams(params);
 
-      fragmentLinearLayout.addView(buttonLayout);
+        buttonLayout.addView(prev);
+        buttonLayout.addView(save);
+        buttonLayout.addView(next);
 
+        fragmentLinearLayout.addView(buttonLayout);
     }
-
-
 
 
 
@@ -1046,16 +1048,12 @@ public ArrayList<Integer> getAllotmentEntriesCount()
                 String myFormat = "dd/MM/yyyy"; //In which you need put here
                 SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
                 editText.setText(sdf.format(myCalendar.getTime()));
-
             }
-
         };
-
 
 
         editText.setOnClickListener(new View.OnClickListener()
         {
-
             @Override
             public void onClick(View v)
             {
@@ -1067,6 +1065,33 @@ public ArrayList<Integer> getAllotmentEntriesCount()
         });
     }
 
+
+    public String getCurrentDate()
+    {
+        @SuppressLint("SimpleDateFormat")
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = new Date();
+       return dateFormat.format(date);
+
+    }
+
+    public void changeIntent(FragmentActivity activity,TextView textView, int LAYOUT_TYPE_BLOCK, int FRAG_CODE)
+    {
+
+        if(!textView.getText().toString().equals("0"))
+        {
+            Intent intent=new Intent(activity, InspectionDisplayActivity.class);
+            intent.putExtra(Constants.CLICK_CODE, LAYOUT_TYPE_BLOCK);
+            intent.putExtra(Constants.FRAG_TYPE,FRAG_CODE);
+            activity.startActivity(intent);
+        }
+
+        else
+            {
+                Toast.makeText(activity, "No entries!", Toast.LENGTH_SHORT).show();
+            }
+
+    }
 
 
     private class MyFocusChangeListener implements View.OnFocusChangeListener

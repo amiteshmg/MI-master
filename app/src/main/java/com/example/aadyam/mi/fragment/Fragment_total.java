@@ -1,5 +1,6 @@
 package com.example.aadyam.mi.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.aadyam.mi.Global.MyGlobals;
 import com.example.aadyam.mi.R;
@@ -26,6 +26,7 @@ import com.example.aadyam.mi.interfaces.DataUpdateListener;
 import java.util.ArrayList;
 
 
+@SuppressWarnings({"ConstantConditions", "MoveFieldAssignmentToInitializer"})
 public class Fragment_total extends Fragment implements DataUpdateListener
 {
     TextView allotted_count_tv,unsafe_count_tv,denied_count_tv,not_available_count_tv,reallotted_unsafe_count_tv,reallotted_denied_count_tv,reallotted_not_available_count_tv,total_count_tv,against_unsafe_count_tv,against_denied_count_tv,against_not_available_count_tv;
@@ -35,10 +36,8 @@ public class Fragment_total extends Fragment implements DataUpdateListener
     ProgressDialog progressDialog;
     MyGlobals myGlobals;
     DatabaseHelperUser databaseHelperUser;
+    Intent intent;
 
-
-    //boolean allowRefresh;
-   // private ArrayList<Integer> countData;
 
     public Fragment_total()
     {
@@ -59,38 +58,16 @@ public class Fragment_total extends Fragment implements DataUpdateListener
     {
         super.onResume();
         Log.d(Constants.TAG, "onResume : ");
-        /*   View view=getView();
-        countData=myGlobals.getAllotmentEntriesCount();
-        setCountTextViews(view);*/
-
-        /*  if (allowRefresh)
-        {
-            allowRefresh = false;
-            DatabaseHelperUser databaseHelperUser=new DatabaseHelperUser(getContext());
-            databaseHelperUser.getAllotment();
-            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
-        }*/
     }
 
     @Override
-    public void onStart() {
+    public void onStart()
+    {
         super.onStart();
         Log.d(Constants.TAG, "onStart: ");
-        /*if(countData!=null)
-        countData=myGlobals.getAllotmentEntriesCount();*/
-        //setCountTextViews();
-
-
     }
 
 
-//    public void setAllowRefresh()
-//    {
-//        DatabaseHelperUser databaseHelperUser=new DatabaseHelperUser(getContext());
-//        databaseHelperUser.getAllotment();
-//        assert getFragmentManager() != null;
-//        getFragmentManager().beginTransaction().detach(this).attach(this).commit();
-//    }
 
 
     @Override
@@ -139,9 +116,6 @@ public class Fragment_total extends Fragment implements DataUpdateListener
         Log.d(Constants.TAG, "onAttach: ");
         ((MainActivity) getActivity()).registerDataUpdateListener(this);
 
-        /*countData=new ArrayList<>();
-        countData=new MyGlobals(getContext()).getAllotmentEntriesCount();*/
-        //setCountTextViews();
     }
 
 
@@ -150,6 +124,7 @@ public class Fragment_total extends Fragment implements DataUpdateListener
 
 
 
+    @SuppressLint("CutPasteId")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
@@ -158,192 +133,11 @@ public class Fragment_total extends Fragment implements DataUpdateListener
         Log.d(Constants.TAG, "onViewCreated : ");
 
         myGlobals=new MyGlobals(getContext());
-        //allowRefresh=true;
         progressDialog=new ProgressDialog(getContext());
         progressDialog.setMessage("Please Wait.....");
-
-      /*  countData=new ArrayList<>();
-        countData=myGlobals.getAllotmentEntriesCount();*/
-
-        setCountTextViews(view);
-
-       /* allotted_count_tv.setText(""+countData.get(0));
-
-        //countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_UNSAFE).size());
-        unsafe_count_tv.setText(""+countData.get(1));
-
-//        countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_DENIED).size());
-        denied_count_tv.setText(""+countData.get(2));
-
-//        countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_NOT_AVAILABLE).size());
-        not_available_count_tv.setText(""+countData.get(3));
-
-//        countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_REALLOTTED_UNSAFE).size());
-        reallotted_unsafe_count_tv.setText(""+countData.get(4));
-
-//        countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_REALLOTTED_DENIED).size());
-        reallotted_denied_count_tv.setText(""+countData.get(5));
-
-//        countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_REALLOTTED_NOT_AVAILABLE).size());
-        reallotted_not_available_count_tv.setText(""+countData.get(6));
-
-//        countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_TOTAL).size());
-        total_count_tv.setText(""+countData.get(7));
-
-//        countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_AGAINST_UNSAFE).size());
-        against_unsafe_count_tv.setText(""+countData.get(8));
-
-//        countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_AGAINST_DENIED).size());
-        against_denied_count_tv.setText(""+countData.get(9));
-
-//        countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_AGAINST_NOT_AVAILABLE).size());
-        against_not_available_count_tv.setText(""+countData.get(10));
-*/
-
-        allotted_pending_layout.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
-                intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_ALLOTTED_PENDING);
-                intent.putExtra(Constants.FRAG_TYPE,2);
-                startActivity(intent);
-            }
-        });
-
-
-        unsafe_layout.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
-                intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_UNSAFE);
-                startActivity(intent);
-            }
-        });
-
-
-        Denied_layout.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
-                intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_DENIED);
-                startActivity(intent);
-            }
-        });
-
-
-        Not_available_layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
-                intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_NOT_AVAILABLE);
-                startActivity(intent);
-
-            }
-        });
-
-
-        reallotted_unsafe_layout.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
-                intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_REALLOTTED_UNSAFE);
-                startActivity(intent);
-
-            }
-        });
-
-
-        reallotted_denied_layout.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
-                intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_REALLOTTED_DENIED);
-                startActivity(intent);
-            }
-        });
-
-
-
-
-        reallotted_not_available_layout.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
-                intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_REALLOTTED_NOT_AVAILABLE);
-                startActivity(intent);
-            }
-        });
-
-
-
-        total_layout.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
-                intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_TOTAL);
-                startActivity(intent);
-            }
-        });
-
-
-        against_unsafe_layout.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
-                intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_AGAINST_UNSAFE);
-                startActivity(intent);
-            }
-        });
-
-
-
-        against_denied_layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
-                intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_AGAINST_DENIED);
-                startActivity(intent);
-
-            }
-        });
-
-
-        against_not_available_layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
-                intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_AGAINST_NOT_AVAILABLE);
-                startActivity(intent);
-            }
-        });
-
-    }
-
-
-    private void setCountTextViews(View view)
-    {
+        databaseHelperUser=new DatabaseHelperUser(getContext());
 
         databaseHelperUser=new DatabaseHelperUser(getContext());
-        //countData=new ArrayList<>();
-        ArrayList<Integer> countData = databaseHelperUser.getAllotmentEntriesCount();
         allotted_pending_layout=view.findViewById(R.id.allotted_layout);
         unsafe_layout=view.findViewById(R.id.unsafe_layout);
         Denied_layout=view.findViewById(R.id.denied_layout);
@@ -355,7 +149,6 @@ public class Fragment_total extends Fragment implements DataUpdateListener
         against_unsafe_layout=view.findViewById(R.id.against_unsafe_layout);
         against_denied_layout=view.findViewById(R.id.against_denied_layout);
         against_not_available_layout=view.findViewById(R.id.against_not_available_layout);
-        //initializeLayouts(view);
         allotted_count_tv = view.findViewById(R.id.allotted_count_text);
         unsafe_count_tv = view.findViewById(R.id.unsafe_count_text);
         denied_count_tv = view.findViewById(R.id.denied_count_text);
@@ -367,63 +160,194 @@ public class Fragment_total extends Fragment implements DataUpdateListener
         against_unsafe_count_tv = view.findViewById(R.id.against_unsafe_count_text);
         against_denied_count_tv = view.findViewById(R.id.against_denied_count_text);
         against_not_available_count_tv = view.findViewById(R.id.against_not_available_count_text);
-        //countData=new ArrayList<>();
-       // countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_ALLOTTED_PENDING).size());
+
+        setCountTextViews(databaseHelperUser.getAllotmentEntriesCount(2));
+
+
+        intent=new Intent(getActivity(),InspectionDisplayActivity.class);
+
+        allotted_pending_layout.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                new MyGlobals(getContext()).changeIntent(getActivity(),allotted_count_tv,Constants.TOTAL_ALLOTTED_PENDING,2);
+
+                /*intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_ALLOTTED_PENDING);
+                intent.putExtra(Constants.FRAG_TYPE,2);
+                startActivity(intent);*/
+            }
+        });
+
+
+
+        unsafe_layout.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                //Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
+                new MyGlobals(getContext()).changeIntent(getActivity(),unsafe_count_tv,Constants.TOTAL_UNSAFE,2);
+               /* intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_UNSAFE);
+                intent.putExtra(Constants.FRAG_TYPE,2);
+                startActivity(intent);*/
+            }
+        });
+
+
+        Denied_layout.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                //Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
+                new MyGlobals(getContext()).changeIntent(getActivity(),denied_count_tv,Constants.TOTAL_DENIED,2);
+              /*  intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_DENIED);
+                intent.putExtra(Constants.FRAG_TYPE,2);
+                startActivity(intent);*/
+
+            }
+        });
+
+
+        Not_available_layout.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                new MyGlobals(getContext()).changeIntent(getActivity(),not_available_count_tv,Constants.TOTAL_NOT_AVAILABLE,2);
+               // Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
+              /*  intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_NOT_AVAILABLE);
+                intent.putExtra(Constants.FRAG_TYPE,2);
+                startActivity(intent);*/
+            }
+        });
+
+
+        reallotted_unsafe_layout.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                new MyGlobals(getContext()).changeIntent(getActivity(),reallotted_unsafe_count_tv,Constants.TOTAL_REALLOTTED_UNSAFE,2);
+               // Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
+             /*   intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_REALLOTTED_UNSAFE);
+                intent.putExtra(Constants.FRAG_TYPE,2);
+                startActivity(intent);*/
+            }
+        });
+
+
+        reallotted_denied_layout.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                new MyGlobals(getContext()).changeIntent(getActivity(),reallotted_denied_count_tv,Constants.TOTAL_REALLOTTED_DENIED,2);
+                //Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
+//                intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_REALLOTTED_DENIED);
+//                intent.putExtra(Constants.FRAG_TYPE,2);
+//                startActivity(intent);
+            }
+        });
+
+
+
+
+        reallotted_not_available_layout.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                new MyGlobals(getContext()).changeIntent(getActivity(),reallotted_not_available_count_tv,Constants.TOTAL_REALLOTTED_NOT_AVAILABLE,2);
+                //Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
+              /*  intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_REALLOTTED_NOT_AVAILABLE);
+                intent.putExtra(Constants.FRAG_TYPE,2);
+                startActivity(intent);*/
+            }
+        });
+
+
+
+        total_layout.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                new MyGlobals(getContext()).changeIntent(getActivity(),total_count_tv,Constants.TOTAL_TOTAL,2);
+                //Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
+              /*  intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_TOTAL);
+                intent.putExtra(Constants.FRAG_TYPE,2);
+                startActivity(intent);*/
+            }
+        });
+
+
+        against_unsafe_layout.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                new MyGlobals(getContext()).changeIntent(getActivity(),against_unsafe_count_tv,Constants.TOTAL_AGAINST_UNSAFE,2);
+                //Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
+                /*intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_AGAINST_UNSAFE);
+                intent.putExtra(Constants.FRAG_TYPE,2);
+                startActivity(intent);*/
+            }
+        });
+
+
+
+        against_denied_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new MyGlobals(getContext()).changeIntent(getActivity(),against_denied_count_tv,Constants.TOTAL_AGAINST_DENIED,2);
+//                Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
+               /* intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_AGAINST_DENIED);
+                intent.putExtra(Constants.FRAG_TYPE,2);
+                startActivity(intent);*/
+
+            }
+        });
+
+
+        against_not_available_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                new MyGlobals(getContext()).changeIntent(getActivity(),against_not_available_count_tv,Constants.TOTAL_AGAINST_NOT_AVAILABLE,2);
+                //Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
+               /* intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_AGAINST_NOT_AVAILABLE);
+                intent.putExtra(Constants.FRAG_TYPE,2);
+                startActivity(intent);*/
+            }
+        });
+
+    }
+
+
+    @SuppressLint({"CutPasteId", "SetTextI18n"})
+    private void setCountTextViews(ArrayList<Integer> countData)
+    {
         allotted_count_tv.setText(""+ countData.get(0));
-
-        //countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_UNSAFE).size());
         unsafe_count_tv.setText(""+ countData.get(1));
-
-        //countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_DENIED).size());
         denied_count_tv.setText(""+ countData.get(2));
-
-        //countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_NOT_AVAILABLE).size());
         not_available_count_tv.setText(""+ countData.get(3));
-
-        //countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_REALLOTTED_UNSAFE).size());
         reallotted_unsafe_count_tv.setText(""+ countData.get(4));
-
-        //countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_REALLOTTED_DENIED).size());
         reallotted_denied_count_tv.setText(""+ countData.get(5));
-
-        //countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_REALLOTTED_NOT_AVAILABLE).size());
         reallotted_not_available_count_tv.setText(""+ countData.get(6));
-
-        //countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_TOTAL).size());
         total_count_tv.setText(""+ countData.get(7));
-
-        //countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_AGAINST_UNSAFE).size());
         against_unsafe_count_tv.setText(""+ countData.get(8));
-
-        //countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_AGAINST_DENIED).size());
         against_denied_count_tv.setText(""+ countData.get(9));
-
-        //countData.add(databaseHelperUser.getAllotmentEntries(Constants.TOTAL_AGAINST_NOT_AVAILABLE).size());
         against_not_available_count_tv.setText(""+ countData.get(10));
-
 }
 
-   /* @Override
-    public void update(ArrayList<Integer> countData)
-    {
-        this.countData=countData;
-        //setCountTextViews();
-    }*/
 
 
     @Override
     public void onDataUpdate()
     {
-       // countData=new ArrayList<>();
-        //MyGlobals myGlobals=new MyGlobals(getContext());
-        //countData=myGlobals.getAllotmentEntriesCount();
-        setCountTextViews(getView());
-/*
-        databaseHelperUser=new DatabaseHelperUser(getContext());
-        databaseHelperUser.getAllotment();
-*/
-//        ((MainActivity) getActivity()).dataUpdated();
-        //Toast.makeText(getContext(), "Fragment Total updated!"+countData.get(3), Toast.LENGTH_SHORT).show();
+        DatabaseHelperUser databaseHelperUser=new DatabaseHelperUser(getContext());
+        ArrayList<Integer>countData=databaseHelperUser.getAllotmentEntriesCount(2);
+        setCountTextViews(countData);
     }
 }
 

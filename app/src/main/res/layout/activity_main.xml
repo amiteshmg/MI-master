@@ -7,11 +7,12 @@
     android:layout_height="match_parent"
     android:elevation="5dp"
     android:orientation="vertical"
+    android:fitsSystemWindows="true"
     android:theme="@style/Theme.AppCompat.Light"
     android:visibility="visible"
     tools:context=".activity.MainActivity"
     tools:openDrawer="start"
-    tools:targetApi="lollipop">
+    >
 
 
     <LinearLayout
@@ -52,12 +53,6 @@
             </android.support.design.widget.TabLayout>
 
 
-            <android.support.v4.widget.SwipeRefreshLayout
-                android:id="@+id/swipeRefreshLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-
                 <android.support.v4.view.ViewPager
                     android:id="@+id/viewpager"
                     android:layout_width="match_parent"
@@ -69,7 +64,6 @@
                     app:layout_constraintTop_toTopOf="parent"
                     />
 
-            </android.support.v4.widget.SwipeRefreshLayout>
 
         </android.support.design.widget.AppBarLayout>
 
@@ -82,9 +76,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:fitsSystemWindows="true"
         android:theme="@style/Theme.AppCompat.Light"
         app:headerLayout="@layout/nav_header"
+        android:fitsSystemWindows="false"
         app:itemIconTint="@color/colorPrimary"
         app:menu="@menu/drawer_view"
         />
