@@ -7,7 +7,7 @@ android {
     defaultConfig
             {
         applicationId "com.example.aadyam.mi"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 28
 
                 //Open File
@@ -27,6 +27,10 @@ android {
                         }
 
             }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 
@@ -52,7 +56,7 @@ dependencies
             implementation 'com.karumi:dexter:4.2.0'
             implementation 'com.github.gcacace:signature-pad:1.2.1'
             implementation 'com.google.code.ksoap2-android:ksoap2-android:3.6.2'
-            implementation "android.arch.persistence.room:runtime:1.1.1"
+            implementation 'android.arch.persistence.room:runtime:1.1.1'
             annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
             implementation files('build/android-query-0.25.9.jar')
         }

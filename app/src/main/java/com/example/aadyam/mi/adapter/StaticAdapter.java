@@ -33,7 +33,7 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 public class StaticAdapter extends RecyclerView.Adapter<StaticAdapter.MyViewHolder> implements Filterable
 {
     private Context context;
-    DatabaseHelperUser databaseHelperUser;
+    private DatabaseHelperUser databaseHelperUser;
     private List<AllotmentList> allotmentListFiltered;
     private AllotmentListAdapterListener listener;
 
@@ -65,6 +65,7 @@ public class StaticAdapter extends RecyclerView.Adapter<StaticAdapter.MyViewHold
                 {
                     allotmentListFiltered = allotmentList;
                 }
+
 
                 else
                 {
@@ -134,6 +135,7 @@ public class StaticAdapter extends RecyclerView.Adapter<StaticAdapter.MyViewHold
             distributor_address = itemView.findViewById(R.id.static_distributor_tv);
             inspectionDate=itemView.findViewById(R.id.inspection_date_tv);
             call_layout = itemView.findViewById(R.id.static_call_layout);
+            alertDialog = new AlertDialog.Builder(itemView.getContext());
            // alertDialog = new AlertDialog.Builder(itemView.getContext());
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -155,7 +157,6 @@ public class StaticAdapter extends RecyclerView.Adapter<StaticAdapter.MyViewHold
         return new MyViewHolder(itemView);
     }
 
-
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
@@ -172,28 +173,25 @@ public class StaticAdapter extends RecyclerView.Adapter<StaticAdapter.MyViewHold
 
             pos = position + 1;
 
-
             holder.serial_no.setText("" + pos);
-
             holder.distributor_address.setText(allotmentList.getAreaName());
             holder.user_address.setText(allotmentList.getAddress());
             holder.consumer_no.setText(allotmentList.getConsumerNo().toString());
             holder.name.setText(allotmentList.getConsumerName());
             holder.contact_no.setText(allotmentList.getMobileNo().toString());
-
             holder.inspectionDate.setText(allotmentList.getLastInspDate());
 
             holder.call_layout.setOnClickListener(new View.OnClickListener()
             {
-                MyViewHolder holder1=holder;
                 @Override
                 public void onClick(View v)
                 {
-                    holder1.alertDialog.setMessage("Are you sure you want to CALL " + allotmentList.getConsumerName() + " on Number - " +  allotmentList.getMobileNo() + "?");
-
-                    holder1.alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    holder.alertDialog.setMessage("Are you sure you want to CALL " + allotmentList.getConsumerName() + " on Number - " +  allotmentList.getMobileNo() + "?");
+                    holder.alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                    {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
                             Intent intent = new Intent(Intent.ACTION_DIAL);
                             intent.setData(Uri.parse("tel:" +  allotmentList.getMobileNo().toString()));
                             intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
@@ -201,7 +199,7 @@ public class StaticAdapter extends RecyclerView.Adapter<StaticAdapter.MyViewHold
                         }
                     });
 
-                    holder1.alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener()
+                    holder.alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener()
                     {
                         @Override
                         public void onClick(DialogInterface dialog, int which)
@@ -209,7 +207,7 @@ public class StaticAdapter extends RecyclerView.Adapter<StaticAdapter.MyViewHold
 
                         }
                     });
-                    holder1.alertDialog.show();
+                    holder.alertDialog.show();
                 }
             });
         }

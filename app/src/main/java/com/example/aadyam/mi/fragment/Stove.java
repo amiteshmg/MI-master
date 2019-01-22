@@ -26,9 +26,9 @@ import java.util.List;
 public class Stove extends Fragment {
 
     RecyclerView recyclerView;
-    List<QuestionList> questionList;
-    DatabaseHelperUser databaseHelperUser;
-    LinearLayout stoveLayout;
+    private List<QuestionList> questionList;
+    private DatabaseHelperUser databaseHelperUser;
+    private LinearLayout stoveLayout;
 
 
     public Stove()

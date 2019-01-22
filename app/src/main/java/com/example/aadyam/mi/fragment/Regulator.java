@@ -24,10 +24,10 @@ import java.util.List;
 public class Regulator extends Fragment {
 
     RecyclerView recyclerView;
-    List<QuestionList> questionList;
-    DatabaseHelperUser databaseHelperUser;
+    private List<QuestionList> questionList;
+    private DatabaseHelperUser databaseHelperUser;
     Button save;
-    LinearLayout regulatorLayout;
+    private LinearLayout regulatorLayout;
 
     public Regulator() {
         // Required empty public constructor

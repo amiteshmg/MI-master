@@ -48,10 +48,11 @@ public class InspectionDataSoapHelper
         private SharedPreferences.Editor editor;
        /* ArrayList<LogAllModel> logArrayList = new ArrayList<LogAllModel>();
         ArrayList<LogAllModel> logArrayListException = new ArrayList<LogAllModel>();*/
-        String currentDateandTime;
+       private String currentDateandTime;
+        private String response;
 
 
-        private class AsyncCallWS extends AsyncTask<Void, Void, String> {
+    private class AsyncCallWS extends AsyncTask<Void, Void, String> {
 
             String NAMESPACE;
             String METHOD_NAME;
@@ -60,8 +61,8 @@ public class InspectionDataSoapHelper
             LinkedHashMap<Byte, Byte> parameters;
             Context mContext;
 
-            public AsyncCallWS(Context mContext, String NAMESPACE, String METHOD_NAME, String URL, String SOAP_ACTION, LinkedHashMap<Byte,
-                    Byte> parameters) {
+            AsyncCallWS(Context mContext, String NAMESPACE, String METHOD_NAME, String URL, String SOAP_ACTION, LinkedHashMap<Byte, Byte> parameters)
+            {
                 this.mContext = mContext;
                 this.NAMESPACE = NAMESPACE;
                 this.METHOD_NAME = METHOD_NAME;
@@ -70,13 +71,14 @@ public class InspectionDataSoapHelper
                 this.parameters = parameters;
             }
 
+
             @Override
             protected String doInBackground(Void... params) {
 
                 SimpleDateFormat sdf = new SimpleDateFormat("MMddHHmmssSS", Locale.ENGLISH);
                 currentDateandTime = sdf.format(new Date());
 
-                calculate(mContext, NAMESPACE, METHOD_NAME, URL, SOAP_ACTION, parameters);
+                response=calculate(mContext, NAMESPACE, METHOD_NAME, URL, SOAP_ACTION, parameters);
                 return null;
             }
 
@@ -95,7 +97,7 @@ public class InspectionDataSoapHelper
 
         }
 
-        public void calculate(Context context, String NAMESPACE, String METHOD_NAME, String URL, String SOAP_ACTION, LinkedHashMap<Byte, Byte> parameters) {
+        private String calculate(Context context, String NAMESPACE, String METHOD_NAME, String URL, String SOAP_ACTION, LinkedHashMap<Byte, Byte> parameters) {
 
 
             sharedPreferences = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
@@ -158,10 +160,10 @@ public class InspectionDataSoapHelper
                 Log.d(Constants.TAG, "InspectionData_Response: "+resultString);
                 System.out.println("InspectionData_Response" + resultString);
 
-                String response = resultString.toString();
+                response = resultString.toString();
+                return response;
 
-
-                sharedPreferences.edit().remove("flagSubmit").commit();  // upload photo fragment
+                //sharedPreferences.edit().remove("flagSubmit").commit();  // upload photo fragment
 
 /*
                 if (!response.equalsIgnoreCase("Fail")) {
@@ -176,6 +178,7 @@ public class InspectionDataSoapHelper
 
                 /*if (logArrayListException.size() > 0) {
                     logArrayListException.clear();*/
+                return null;
                 }
 
              /*   try {
@@ -204,19 +207,25 @@ public class InspectionDataSoapHelper
 
         //
 
-        public String getSoapRequest(Context context, String NAMESPACE, String METHOD_NAME, String URL, String SOAP_ACTION, LinkedHashMap<Byte, Byte> parameters) {
-           // int event = 0;
-            String response = "";
+        public String getSoapRequest(Context context, String NAMESPACE, String METHOD_NAME, String URL, String SOAP_ACTION, LinkedHashMap<Byte, Byte> parameters)
+        {
+            // int event = 0;
+            String response1 = "";
+
             AsyncCallWS task = new AsyncCallWS(context, NAMESPACE, METHOD_NAME, URL, SOAP_ACTION, parameters);
-            try {
-                response = task.execute().get();
+
+            try
+            {
+                response1 = task.execute().get();
             }
+
 
             catch (InterruptedException e)
             {
                 Log.d(Constants.TAG, "getSoapRequest: "+e.toString());
                 e.printStackTrace();
             }
+
 
             catch (ExecutionException e)
             {

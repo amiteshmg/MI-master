@@ -9,16 +9,6 @@ public class AllotmentList
 
 {
 
-
-    public String getJsonData()
-    {
-        return JsonData;
-    }
-
-    private  String JsonData;
-
-
-
     @NonNull
     @Override
     public String toString()
@@ -147,7 +137,7 @@ public class AllotmentList
         private Long uniqueConsumerId;
         @SerializedName("UnsafeInspId")
         @Expose
-        private Object unsafeInspId;
+        private Integer unsafeInspId;
         @SerializedName("UnsafeSignatureFlag")
         @Expose
         private Integer unsafeSignatureFlag;
@@ -443,11 +433,11 @@ public class AllotmentList
             this.uniqueConsumerId = uniqueConsumerId;
         }
 
-        public Object getUnsafeInspId() {
+        public Integer getUnsafeInspId() {
             return unsafeInspId;
         }
 
-        public void setUnsafeInspId(Object unsafeInspId) {
+        public void setUnsafeInspId(Integer unsafeInspId) {
             this.unsafeInspId = unsafeInspId;
         }
 
@@ -490,7 +480,6 @@ public class AllotmentList
 
     public void setJsonData(String json)
     {
-        this.JsonData=json;
 
     }
 }

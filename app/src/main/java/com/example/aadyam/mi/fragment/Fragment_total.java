@@ -29,20 +29,42 @@ import java.util.ArrayList;
 @SuppressWarnings({"ConstantConditions", "MoveFieldAssignmentToInitializer"})
 public class Fragment_total extends Fragment implements DataUpdateListener
 {
-    TextView allotted_count_tv,unsafe_count_tv,denied_count_tv,not_available_count_tv,reallotted_unsafe_count_tv,reallotted_denied_count_tv,reallotted_not_available_count_tv,total_count_tv,against_unsafe_count_tv,against_denied_count_tv,against_not_available_count_tv;
+    private TextView allotted_count_tv;
+    private TextView unsafe_count_tv;
+    private TextView denied_count_tv;
+    private TextView not_available_count_tv;
+    private TextView reallotted_unsafe_count_tv;
+    private TextView reallotted_denied_count_tv;
+    private TextView reallotted_not_available_count_tv;
+    private TextView total_count_tv;
+    private TextView against_unsafe_count_tv;
+    private TextView against_denied_count_tv;
+    private TextView against_not_available_count_tv;
 
-    LinearLayout allotted_pending_layout,unsafe_layout,Denied_layout,Not_available_layout,reallotted_unsafe_layout,reallotted_denied_layout,reallotted_not_available_layout,total_layout,against_unsafe_layout,against_denied_layout,against_not_available_layout;
+    private LinearLayout allotted_pending_layout;
+    private LinearLayout unsafe_layout;
+    private LinearLayout Denied_layout;
+    private LinearLayout Not_available_layout;
+    private LinearLayout reallotted_unsafe_layout;
+    private LinearLayout reallotted_denied_layout;
+    private LinearLayout reallotted_not_available_layout;
+    private LinearLayout total_layout;
+    private LinearLayout against_unsafe_layout;
+    private LinearLayout against_denied_layout;
+    private LinearLayout against_not_available_layout;
 
-    ProgressDialog progressDialog;
-    MyGlobals myGlobals;
-    DatabaseHelperUser databaseHelperUser;
-    Intent intent;
+    private ProgressDialog progressDialog;
+    private MyGlobals myGlobals;
+    private DatabaseHelperUser databaseHelperUser;
+    private Intent intent;
 
 
     public Fragment_total()
     {
         // Required empty public constructor
     }
+
+
 
 
     @Override
@@ -163,7 +185,6 @@ public class Fragment_total extends Fragment implements DataUpdateListener
 
         setCountTextViews(databaseHelperUser.getAllotmentEntriesCount(2));
 
-
         intent=new Intent(getActivity(),InspectionDisplayActivity.class);
 
         allotted_pending_layout.setOnClickListener(new View.OnClickListener()
@@ -172,10 +193,6 @@ public class Fragment_total extends Fragment implements DataUpdateListener
             public void onClick(View v)
             {
                 new MyGlobals(getContext()).changeIntent(getActivity(),allotted_count_tv,Constants.TOTAL_ALLOTTED_PENDING,2);
-
-                /*intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_ALLOTTED_PENDING);
-                intent.putExtra(Constants.FRAG_TYPE,2);
-                startActivity(intent);*/
             }
         });
 
@@ -186,11 +203,7 @@ public class Fragment_total extends Fragment implements DataUpdateListener
             @Override
             public void onClick(View v)
             {
-                //Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
                 new MyGlobals(getContext()).changeIntent(getActivity(),unsafe_count_tv,Constants.TOTAL_UNSAFE,2);
-               /* intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_UNSAFE);
-                intent.putExtra(Constants.FRAG_TYPE,2);
-                startActivity(intent);*/
             }
         });
 
@@ -199,11 +212,7 @@ public class Fragment_total extends Fragment implements DataUpdateListener
         {
             @Override
             public void onClick(View v) {
-                //Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
                 new MyGlobals(getContext()).changeIntent(getActivity(),denied_count_tv,Constants.TOTAL_DENIED,2);
-              /*  intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_DENIED);
-                intent.putExtra(Constants.FRAG_TYPE,2);
-                startActivity(intent);*/
 
             }
         });
@@ -214,10 +223,6 @@ public class Fragment_total extends Fragment implements DataUpdateListener
             @Override
             public void onClick(View v) {
                 new MyGlobals(getContext()).changeIntent(getActivity(),not_available_count_tv,Constants.TOTAL_NOT_AVAILABLE,2);
-               // Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
-              /*  intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_NOT_AVAILABLE);
-                intent.putExtra(Constants.FRAG_TYPE,2);
-                startActivity(intent);*/
             }
         });
 
@@ -228,10 +233,6 @@ public class Fragment_total extends Fragment implements DataUpdateListener
             public void onClick(View v)
             {
                 new MyGlobals(getContext()).changeIntent(getActivity(),reallotted_unsafe_count_tv,Constants.TOTAL_REALLOTTED_UNSAFE,2);
-               // Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
-             /*   intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_REALLOTTED_UNSAFE);
-                intent.putExtra(Constants.FRAG_TYPE,2);
-                startActivity(intent);*/
             }
         });
 
@@ -242,10 +243,6 @@ public class Fragment_total extends Fragment implements DataUpdateListener
             public void onClick(View v)
             {
                 new MyGlobals(getContext()).changeIntent(getActivity(),reallotted_denied_count_tv,Constants.TOTAL_REALLOTTED_DENIED,2);
-                //Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
-//                intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_REALLOTTED_DENIED);
-//                intent.putExtra(Constants.FRAG_TYPE,2);
-//                startActivity(intent);
             }
         });
 
@@ -258,10 +255,6 @@ public class Fragment_total extends Fragment implements DataUpdateListener
             public void onClick(View v)
             {
                 new MyGlobals(getContext()).changeIntent(getActivity(),reallotted_not_available_count_tv,Constants.TOTAL_REALLOTTED_NOT_AVAILABLE,2);
-                //Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
-              /*  intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_REALLOTTED_NOT_AVAILABLE);
-                intent.putExtra(Constants.FRAG_TYPE,2);
-                startActivity(intent);*/
             }
         });
 
@@ -273,10 +266,6 @@ public class Fragment_total extends Fragment implements DataUpdateListener
             public void onClick(View v)
             {
                 new MyGlobals(getContext()).changeIntent(getActivity(),total_count_tv,Constants.TOTAL_TOTAL,2);
-                //Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
-              /*  intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_TOTAL);
-                intent.putExtra(Constants.FRAG_TYPE,2);
-                startActivity(intent);*/
             }
         });
 
@@ -287,10 +276,6 @@ public class Fragment_total extends Fragment implements DataUpdateListener
             public void onClick(View v)
             {
                 new MyGlobals(getContext()).changeIntent(getActivity(),against_unsafe_count_tv,Constants.TOTAL_AGAINST_UNSAFE,2);
-                //Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
-                /*intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_AGAINST_UNSAFE);
-                intent.putExtra(Constants.FRAG_TYPE,2);
-                startActivity(intent);*/
             }
         });
 
@@ -300,10 +285,6 @@ public class Fragment_total extends Fragment implements DataUpdateListener
             @Override
             public void onClick(View v) {
                 new MyGlobals(getContext()).changeIntent(getActivity(),against_denied_count_tv,Constants.TOTAL_AGAINST_DENIED,2);
-//                Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
-               /* intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_AGAINST_DENIED);
-                intent.putExtra(Constants.FRAG_TYPE,2);
-                startActivity(intent);*/
 
             }
         });
@@ -314,10 +295,7 @@ public class Fragment_total extends Fragment implements DataUpdateListener
             public void onClick(View v)
             {
                 new MyGlobals(getContext()).changeIntent(getActivity(),against_not_available_count_tv,Constants.TOTAL_AGAINST_NOT_AVAILABLE,2);
-                //Intent intent=new Intent(getActivity(),InspectionDisplayActivity.class);
-               /* intent.putExtra(Constants.CLICK_CODE,Constants.TOTAL_AGAINST_NOT_AVAILABLE);
-                intent.putExtra(Constants.FRAG_TYPE,2);
-                startActivity(intent);*/
+
             }
         });
 

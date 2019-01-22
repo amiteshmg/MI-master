@@ -74,9 +74,9 @@ public class MainActivity extends FragmentActivity
     SharedPreferences.Editor editor;
 
     //AQuery aQuery=new AQuery(this);
-    Toolbar toolbar;
-    ProgressDialog progressDialog;
-    DatabaseHelperUser databaseHelperUser;
+    private Toolbar toolbar;
+    private ProgressDialog progressDialog;
+    private DatabaseHelperUser databaseHelperUser;
 
     int UserId,ConsumerCount;
     long StaffRefNo;
@@ -95,12 +95,12 @@ public class MainActivity extends FragmentActivity
     AlertDialogManager alert = new AlertDialogManager();
 
     // Session Manager Class
-    SessionManager session;
+    private SessionManager session;
   //  SwipeRefreshLayout swipeRefreshLayout;
-    TabLayout tabLayout;
-    ViewPager viewPager;
-    Date c;
-    NavigationView navigationView;
+  private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private Date c;
+    private NavigationView navigationView;
     //QuestionAsync questionAsync;
 
 
@@ -120,7 +120,7 @@ public class MainActivity extends FragmentActivity
     }
 
 
-    public synchronized void dataUpdated()
+    private synchronized void dataUpdated()
     {
         for (DataUpdateListener listener : mListeners)
         {
@@ -378,6 +378,7 @@ public class MainActivity extends FragmentActivity
         {
             return mFragmentTitleList.get(position);
         }
+
     }
 
 

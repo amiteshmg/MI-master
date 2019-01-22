@@ -61,6 +61,7 @@
                         android:layout_gravity="center_horizontal"
                         android:gravity="center_horizontal|center_vertical"
                         android:text="0"
+                        android:fontFamily="@font/roboto_medium"
                         android:textStyle="bold" />
 
                     <TextView
@@ -70,6 +71,7 @@
                         android:layout_gravity="center_horizontal"
                         android:gravity="center_horizontal|center_vertical"
                         android:text="Allotted Pending"
+                        android:fontFamily="@font/roboto_medium"
                         android:textColor="@color/dark_blue" />
 
 
@@ -112,6 +114,7 @@
                         android:layout_gravity="center_horizontal"
                         android:gravity="center_horizontal|center_vertical"
                         android:text="0"
+                        android:fontFamily="@font/roboto_medium"
                         android:textStyle="bold" />
 
                     <TextView
@@ -121,6 +124,7 @@
                         android:layout_gravity="center_horizontal"
                         android:gravity="center_horizontal|center_vertical"
                         android:text="Unsafe"
+                        android:fontFamily="@font/roboto_medium"
                         android:textColor="@color/dark_blue" />
 
 
@@ -188,6 +192,7 @@
                             android:layout_gravity="center_horizontal"
                             android:gravity="center_horizontal|center_vertical"
                             android:text="0"
+                            android:fontFamily="@font/roboto_medium"
                             android:textStyle="bold" />
 
                         <TextView
@@ -197,6 +202,7 @@
                             android:layout_gravity="center_horizontal"
                             android:gravity="center_horizontal|center_vertical"
                             android:text="Denied"
+                            android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/dark_blue" />
 
 
@@ -236,6 +242,7 @@
                             android:layout_gravity="center_horizontal"
                             android:gravity="center_horizontal|center_vertical"
                             android:text="0"
+                            android:fontFamily="@font/roboto_medium"
                             android:textStyle="bold" />
 
                         <TextView
@@ -245,16 +252,13 @@
                             android:layout_gravity="center_horizontal"
                             android:gravity="center_horizontal|center_vertical"
                             android:text="Not Available"
+                            android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/dark_blue" />
 
 
                     </LinearLayout>
 
-
-
                 </LinearLayout>
-
-
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
@@ -289,6 +293,7 @@
                         android:layout_height="30dp"
                         android:gravity="center_horizontal|center_vertical"
                         android:text="Total Re-Allotted"
+                        android:fontFamily="@font/roboto_medium"
                         android:textColor="@color/dark_blue"
 
                         />
@@ -337,6 +342,7 @@
                             android:layout_gravity="center_horizontal"
                             android:gravity="center_horizontal|center_vertical"
                             android:text="0"
+                            android:fontFamily="@font/roboto_medium"
                             android:textStyle="bold" />
 
                         <TextView
@@ -346,6 +352,7 @@
                             android:layout_gravity="center_horizontal"
                             android:gravity="center_horizontal|center_vertical"
                             android:text="Unsafe"
+                            android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/dark_blue" />
 
 
@@ -365,7 +372,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-
+                        android:fontFamily="@font/roboto_medium"
                         android:background="@color/white"
                         android:orientation="vertical"
                         android:paddingLeft="2dp"
@@ -382,6 +389,7 @@
                             android:layout_gravity="center_horizontal"
                             android:gravity="center_horizontal|center_vertical"
                             android:text="0"
+                            android:fontFamily="@font/roboto_medium"
                             android:textStyle="bold" />
 
                         <TextView
@@ -389,10 +397,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
+                            android:fontFamily="@font/roboto_medium"
                             android:gravity="center_horizontal|center_vertical"
                             android:text="Denied"
-                            android:textColor="@color/dark_blue" />
 
+                            android:textColor="@color/dark_blue" />
 
                     </LinearLayout>
 
@@ -404,14 +413,11 @@
                         android:background="#f2f3f6" />
 
 
-
-
                     <LinearLayout
                         android:id="@+id/reallotted_not_available_layout"
                         android:layout_width="fill_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-
                         android:background="@color/white"
                         android:orientation="vertical"
                         android:paddingLeft="2dp"
@@ -420,7 +426,6 @@
                         android:paddingBottom="2dp"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
-
                         >
 
                         <TextView
@@ -430,6 +435,7 @@
                             android:layout_gravity="center_horizontal"
                             android:gravity="center_horizontal|center_vertical"
                             android:text="0"
+                            android:fontFamily="@font/roboto_medium"
                             android:textStyle="bold" />
 
                         <TextView
@@ -439,17 +445,10 @@
                             android:layout_gravity="center_horizontal"
                             android:gravity="center_horizontal|center_vertical"
                             android:text="Not Available"
+                            android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/dark_blue" />
-
-
                     </LinearLayout>
-
-
                 </LinearLayout>
-
-
-
-
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
@@ -479,6 +478,7 @@
                         android:elevation="@dimen/layout_elevation"
                         android:gravity="center_horizontal|center_vertical"
                         android:text="Total Completed"
+                        android:fontFamily="@font/roboto_medium"
                         android:textColor="@color/dark_blue"
 
 
@@ -509,7 +509,6 @@
                         android:layout_width="fill_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-
                         android:background="@color/white"
                         android:orientation="vertical"
                         android:paddingLeft="2dp"
@@ -525,6 +524,7 @@
                             android:layout_gravity="center_horizontal"
                             android:gravity="center_horizontal|center_vertical"
                             android:text="0"
+                            android:fontFamily="@font/roboto_medium"
                             android:textStyle="bold" />
 
                         <TextView
@@ -534,6 +534,7 @@
                             android:layout_gravity="center_horizontal"
                             android:gravity="center_horizontal|center_vertical"
                             android:text="Total"
+                            android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/dark_blue" />
 
 
@@ -553,7 +554,6 @@
                         android:layout_width="fill_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-
                         android:background="@color/white"
                         android:orientation="vertical"
                         android:paddingLeft="2dp"
@@ -571,6 +571,7 @@
                             android:layout_gravity="center_horizontal"
                             android:gravity="center_horizontal|center_vertical"
                             android:text="0"
+                            android:fontFamily="@font/roboto_medium"
                             android:textStyle="bold" />
 
                         <TextView
@@ -580,8 +581,8 @@
                             android:layout_gravity="center_horizontal"
                             android:gravity="center_horizontal|center_vertical"
                             android:text="Against Unsafe"
+                            android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/dark_blue" />
-
 
                     </LinearLayout>
 
@@ -616,7 +617,6 @@
                         android:layout_width="fill_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-
                         android:background="@color/white"
                         android:orientation="vertical"
                         android:paddingLeft="2dp"
@@ -632,6 +632,7 @@
                             android:layout_gravity="center_horizontal"
                             android:gravity="center_horizontal|center_vertical"
                             android:text="0"
+                            android:fontFamily="@font/roboto_medium"
                             android:textStyle="bold" />
 
                         <TextView
@@ -641,6 +642,7 @@
                             android:layout_gravity="center_horizontal"
                             android:gravity="center_horizontal|center_vertical"
                             android:text="Against Denied"
+                            android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/dark_blue" />
 
 
@@ -658,7 +660,6 @@
                         android:layout_width="fill_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-
                         android:background="@color/white"
                         android:orientation="vertical"
                         android:paddingRight="2dp"
@@ -669,6 +670,7 @@
                         <TextView
                             android:id="@+id/against_not_available_count_text"
                             android:layout_width="50dp"
+                            android:fontFamily="@font/roboto_medium"
                             android:layout_height="30dp"
                             android:layout_gravity="center_horizontal"
                             android:gravity="center_horizontal|center_vertical"
@@ -679,6 +681,7 @@
                             android:id="@+id/against_not_available_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_medium"
                             android:layout_gravity="center_horizontal"
                             android:gravity="center_horizontal|center_vertical"
                             android:text="Against Not Available"

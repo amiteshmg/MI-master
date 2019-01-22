@@ -2,12 +2,10 @@ package com.example.aadyam.mi.Fonts;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 
-public class MyTextView_Roboto_Medium extends TextView {
+public class MyTextView_Roboto_Medium extends android.support.v7.widget.AppCompatTextView {
 
     public MyTextView_Roboto_Medium(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);

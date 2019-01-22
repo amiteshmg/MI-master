@@ -3,7 +3,7 @@ package com.example.aadyam.mi.Utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public class SharedValues
+class SharedValues
 {
     private Context context;
 

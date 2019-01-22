@@ -21,10 +21,10 @@ import java.util.List;
 
 public class Cylinder extends Fragment
 {
-    List<QuestionList> questionList;
-    DatabaseHelperUser databaseHelperUser;
-    int size;
-    LinearLayout cylinderLayout;
+    private List<QuestionList> questionList;
+    private DatabaseHelperUser databaseHelperUser;
+    private int size;
+    private LinearLayout cylinderLayout;
 
     public Cylinder()
     {

@@ -35,20 +35,50 @@ import java.util.List;
 public class PersonalInfo extends Fragment {
 
 
-    DatabaseHelperUser databaseHelperUser;
+    private DatabaseHelperUser databaseHelperUser;
 
     private EditText mobileNo_editText,emailId_editText,dateOfBirth_editText,fatherSpouseName_editText,familyMembers_editText,twoWheelers_editText,fourWheelers_editText,panCard_editText,passport_editText,voterId_editText,drivingLicense_editText;
-    Spinner gender_spinner,fatherSpouse_spinner,cylinder_gap_spinner,refillBookingMode_spinner,houseAccomodation_spinner,rationCardAffidavit_spinner;
-    Button save,next;
-    CheckBox vip_checkbox,using_credit_card_checkbox,high_consumption_consumer_checkbox,usedPipeGas_checkbox;
-    String mobileNo,emailId,dateOfBirth,fatherSpouseName,familyMembers,twoWheelers,fourWheelers,panCard,rationCardNo,affidavitNo,consumerNo;
-    String passport,voterId,drivingLicense,genderResult,fatherSpouseResult,cylinderGapResults;
-    String refillBookingModeResult,houseAccommodationResult,rationCardAffidavitResult;
-    String vipResult,usingCreditCardResult,highConsumptionConsumerResult,usedPipeGasResult;
-    EditText motherName_editText,rationAffidavit_EditText;
-    TextView rationAffidavit_tv;
+    private Spinner gender_spinner;
+    private Spinner fatherSpouse_spinner;
+    private Spinner cylinder_gap_spinner;
+    private Spinner refillBookingMode_spinner;
+    private Spinner houseAccomodation_spinner;
+    private Spinner rationCardAffidavit_spinner;
+    private Button save;
+    private Button next;
+    private CheckBox vip_checkbox;
+    private CheckBox using_credit_card_checkbox;
+    private CheckBox high_consumption_consumer_checkbox;
+    private CheckBox usedPipeGas_checkbox;
+    private String mobileNo;
+    private String emailId;
+    private String dateOfBirth;
+    private String fatherSpouseName;
+    private String familyMembers;
+    private String twoWheelers;
+    private String fourWheelers;
+    private String panCard;
+    private String rationCardNo;
+    private String affidavitNo;
+    private String consumerNo;
+    private String passport;
+    private String voterId;
+    private String drivingLicense;
+    private String genderResult;
+    private String fatherSpouseResult;
+    private String cylinderGapResults;
+    private String refillBookingModeResult;
+    private String houseAccommodationResult;
+    private String rationCardAffidavitResult;
+    private String vipResult;
+    private String usingCreditCardResult;
+    private String highConsumptionConsumerResult;
+    private String usedPipeGasResult;
+    private EditText motherName_editText;
+    private EditText rationAffidavit_EditText;
+    private TextView rationAffidavit_tv;
 
-    Context context;
+    private Context context;
 
     private EditText date;
     private String motherNameResult;
@@ -286,9 +316,11 @@ public class PersonalInfo extends Fragment {
                     boolean isSuccess = databaseHelperUser.putInformationEntryInDatabase(dateOfBirth, vipResult, genderResult, usingCreditCardResult, motherNameResult, highConsumptionConsumerResult, fatherSpouseResult, refillBookingModeResult, fatherSpouseName, refillBookingModeResult, familyMembers, houseAccommodationResult, rationCardAffidavitResult, twoWheelers, affidavitNo, fourWheelers, rationCardNo, usedPipeGasResult, panCard, passport, voterId, drivingLicense, mobileNo, emailId, consumerNo);
 
                     SharedPreferences sharedPreferences=context.getSharedPreferences(Constants.PREFS_NAME,Context.MODE_PRIVATE);
-                    sharedPreferences.getString(Constants.UNIQUE_CONSUMER_NO,null);
+                    String allottedId=sharedPreferences.getString(Constants.ALLOTED_ID,null);
 
-                    databaseHelperUser.setFragmentStatusSaved(sharedPreferences.getString(Constants.UNIQUE_CONSUMER_NO,null),6);
+
+
+                    databaseHelperUser.setFragmentStatusSaved(allottedId,6);
                     if (isSuccess)
                     {
                         ((SurveyActivity) context).setCurrentItem(6, true);
@@ -323,7 +355,7 @@ public class PersonalInfo extends Fragment {
     }
 
 
-    public static boolean isValidEmail(CharSequence target)
+    private static boolean isValidEmail(CharSequence target)
     {
         return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
     }

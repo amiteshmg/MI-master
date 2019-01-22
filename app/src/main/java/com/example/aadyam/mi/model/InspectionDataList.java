@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 
 import java.io.ByteArrayInputStream;
 
-public class InspectionDataList
+class InspectionDataList
 {
     JsonObject ConsumerInfo;
     JsonObject PersonalInfo;

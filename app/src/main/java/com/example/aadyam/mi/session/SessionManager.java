@@ -13,16 +13,16 @@ import com.example.aadyam.mi.activity.LoginActivity;
 
 public class SessionManager {
     // Shared Preferences
-    SharedPreferences pref;
+    private SharedPreferences pref;
 
     // Editor for Shared preferences
-    Editor editor;
+    private Editor editor;
 
     // Context
-    Context _context;
+    private Context _context;
 
     // Shared pref mode
-    int PRIVATE_MODE = 0;
+    private int PRIVATE_MODE = 0;
 
     // Sharedpref file name
     private static final String PREF_NAME = "AndroidHivePref";
@@ -31,10 +31,10 @@ public class SessionManager {
     private static final String IS_LOGIN = "IsLoggedIn";
 
     // User name (make variable public to access from outside)
-    public static final String KEY_MOBILE_NO = "MobileNo";
+    private static final String KEY_MOBILE_NO = "MobileNo";
 
     // Email address (make variable public to access from outside)
-    public static final String KEY_EMAIL = "email";
+    private static final String KEY_EMAIL = "email";
 
     // Constructor
     public SessionManager(Context context){
@@ -123,7 +123,7 @@ public class SessionManager {
      * Quick check for login
      * **/
     // Get Login State
-    public boolean isLoggedIn(){
+    private boolean isLoggedIn(){
         return pref.getBoolean(IS_LOGIN, false);
     }
 }

@@ -1,28 +1,15 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorPrimary</item>
-        <item name="actionBarItemBackground">@style/MyCustomStyle</item>
-        <item name="android:colorBackground">@color/bg_color</item>
-        <item name="android:textColorPrimary">@color/navigationBarColor</item>
-
-
-    </style>
-
-    <style name="MyCustomStyle" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="actionBarItemBackground">@color/white</item>
-    </style>
 
     <style name="FullscreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="actionBarStyle">@style/FullscreenActionBarStyle</item>
         <item name="windowActionBarOverlay">true</item>
         <item name="android:windowBackground">@null</item>
+
         <item name="metaButtonBarStyle">?attr/buttonBarStyle</item>
         <item name="metaButtonBarButtonStyle">?attr/buttonBarButtonStyle</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
     </style>
 
     <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
@@ -31,6 +18,10 @@
 
     <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:fontFamily">@font/roboto_medium</item>
     </style>
 
 </resources>

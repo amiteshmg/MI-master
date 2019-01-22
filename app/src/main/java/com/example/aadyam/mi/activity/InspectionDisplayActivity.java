@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.content.Context;
 
 import android.os.Bundle;
+import android.support.constraint.solver.Cache;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,6 +26,7 @@ import com.example.aadyam.mi.adapter.AllotmentAdapter;
 import com.example.aadyam.mi.adapter.StaticAdapter;
 import com.example.aadyam.mi.database.DatabaseHelperUser;
 import com.example.aadyam.mi.interfaces.AllotmentListAdapterListener;
+import com.example.aadyam.mi.interfaces.DataUpdateListener;
 import com.example.aadyam.mi.model.Allotment;
 import com.example.aadyam.mi.model.AllotmentList;
 
@@ -33,7 +35,7 @@ import java.util.List;
 
 
 @SuppressWarnings("ALL")
-public class InspectionDisplayActivity extends AppCompatActivity implements AllotmentListAdapterListener
+public class InspectionDisplayActivity extends AppCompatActivity implements AllotmentListAdapterListener, DataUpdateListener
 {
     DatabaseHelperUser databaseHelperUser;
     RecyclerView recyclerView;
@@ -78,6 +80,7 @@ public class InspectionDisplayActivity extends AppCompatActivity implements Allo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inspection_display);
         toolbar= findViewById(R.id.toolbar);
+
         setSupportActionBar(toolbar);
         databaseHelperUser=new DatabaseHelperUser(this);
         allotment=new Allotment();
@@ -96,7 +99,6 @@ public class InspectionDisplayActivity extends AppCompatActivity implements Allo
         switch(clickCode)
         {
             case Constants.TOTAL_ALLOTTED_PENDING:
-
                     getSupportActionBar().setTitle("Total Allottment pending");
                     list= databaseHelperUser.getAllotmentEntries(typeFlag,Constants.TOTAL_ALLOTTED_PENDING);
                     allotmentAdapter=new AllotmentAdapter(list, getApplicationContext(),this);
@@ -107,7 +109,6 @@ public class InspectionDisplayActivity extends AppCompatActivity implements Allo
 
 
             case Constants.TOTAL_UNSAFE:
-//                    typeFlag=2;
                     getSupportActionBar().setTitle("Total Unsafe");
                     list=databaseHelperUser.getAllotmentEntries(typeFlag,Constants.TOTAL_UNSAFE);
                     staticAdapter=new StaticAdapter(list,getApplicationContext(),this);
@@ -115,8 +116,8 @@ public class InspectionDisplayActivity extends AppCompatActivity implements Allo
                     recyclerView.setAdapter(new StaticAdapter(list, getApplicationContext(),this));
                     break;
 
+
             case Constants.TOTAL_DENIED:
-//                    typeFlag=2;
                     getSupportActionBar().setTitle("Total Denied");
                     list=databaseHelperUser.getAllotmentEntries(typeFlag,Constants.TOTAL_DENIED);
                     staticAdapter=new StaticAdapter(list, getApplicationContext(),this);
@@ -124,8 +125,8 @@ public class InspectionDisplayActivity extends AppCompatActivity implements Allo
                     recyclerView.setAdapter(new StaticAdapter(list, getApplicationContext(),this));
                     break;
 
+
             case Constants.TOTAL_NOT_AVAILABLE:
-//                    typeFlag=2;
                     list=databaseHelperUser.getAllotmentEntries(typeFlag,Constants.TOTAL_NOT_AVAILABLE);
                     getSupportActionBar().setTitle("Total Available");
                     staticAdapter = new StaticAdapter(list, getApplicationContext(),this);
@@ -133,8 +134,8 @@ public class InspectionDisplayActivity extends AppCompatActivity implements Allo
                     recyclerView.setAdapter(new StaticAdapter(list, getApplicationContext(),this));
                     break;
 
+
             case Constants.TOTAL_REALLOTTED_UNSAFE:
-//                    typeFlag=1;
                     list=databaseHelperUser.getAllotmentEntries(typeFlag,Constants.TOTAL_REALLOTTED_UNSAFE);
                     getSupportActionBar().setTitle("Total Re-allotted Unsafe");
                     allotmentAdapter = new AllotmentAdapter(list, getApplicationContext(),this);
@@ -142,8 +143,8 @@ public class InspectionDisplayActivity extends AppCompatActivity implements Allo
                     recyclerView.setAdapter(new AllotmentAdapter(list, getApplicationContext(),this));
                     break;
 
+
             case Constants.TOTAL_REALLOTTED_DENIED:
-//                    typeFlag=1;
                     list=databaseHelperUser.getAllotmentEntries(typeFlag,Constants.TOTAL_REALLOTTED_DENIED);
                     getSupportActionBar().setTitle("Total Re-allotted Denied");
                     allotmentAdapter = new AllotmentAdapter(list, getApplicationContext(),this);
@@ -151,18 +152,17 @@ public class InspectionDisplayActivity extends AppCompatActivity implements Allo
                     recyclerView.setAdapter(new AllotmentAdapter(list, getApplicationContext(),this));
                     break;
 
+
             case Constants.TOTAL_REALLOTTED_NOT_AVAILABLE:
-//                    typeFlag=1;
                     getSupportActionBar().setTitle("Total Re-allotted Not Available");
                     list=databaseHelperUser.getAllotmentEntries(typeFlag,Constants.TOTAL_REALLOTTED_NOT_AVAILABLE);
                     allotmentAdapter=new AllotmentAdapter(list, getApplicationContext(),this);
                     recyclerView.setAdapter(allotmentAdapter);
                     recyclerView.setAdapter(new AllotmentAdapter(list, getApplicationContext(),this));
-                    allotmentAdapter.notifyDataSetChanged();
                     break;
 
+
             case Constants.TOTAL_TOTAL:
-//                    typeFlag=2;
                     getSupportActionBar().setTitle("Total");
                     list=databaseHelperUser.getAllotmentEntries(typeFlag,Constants.TOTAL_TOTAL);
                     staticAdapter=new StaticAdapter(list, getApplicationContext(),this);
@@ -170,8 +170,8 @@ public class InspectionDisplayActivity extends AppCompatActivity implements Allo
                     recyclerView.setAdapter(new StaticAdapter(list, getApplicationContext(),this));
                     break;
 
+
             case Constants.TOTAL_AGAINST_UNSAFE:
-//                    typeFlag=2;
                     getSupportActionBar().setTitle("Total Against Unsafe");
                     list=databaseHelperUser.getAllotmentEntries(typeFlag,Constants.TOTAL_AGAINST_UNSAFE);
                     staticAdapter=new StaticAdapter(list, getApplicationContext(),this);
@@ -181,8 +181,6 @@ public class InspectionDisplayActivity extends AppCompatActivity implements Allo
 
 
             case Constants.TOTAL_AGAINST_DENIED:
-
-//                typeFlag=2;
                 getSupportActionBar().setTitle("Total Against Denied");
                 list=databaseHelperUser.getAllotmentEntries(typeFlag,Constants.TOTAL_AGAINST_DENIED);
                 staticAdapter=new StaticAdapter(list, getApplicationContext(),this);
@@ -192,7 +190,6 @@ public class InspectionDisplayActivity extends AppCompatActivity implements Allo
 
 
             case Constants.TOTAL_AGAINST_NOT_AVAILABLE:
-//                typeFlag=2;
                 getSupportActionBar().setTitle("Total Against Not Available");
                 list=databaseHelperUser.getAllotmentEntries(typeFlag,Constants.TOTAL_AGAINST_NOT_AVAILABLE);
                 staticAdapter=new StaticAdapter(list, getApplicationContext(),this);
@@ -221,12 +218,7 @@ public class InspectionDisplayActivity extends AppCompatActivity implements Allo
                 recyclerView.setVisibility(View.INVISIBLE);
             else
                 {
-                    /*recyclerView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            allotmentAdapter.notifyDataSetChanged();
-                        }
-                    });*/
+
                 recyclerView.setVisibility(View.VISIBLE);
                 recyclerView.setAdapter(allotmentAdapter);
                 }
@@ -241,15 +233,8 @@ public class InspectionDisplayActivity extends AppCompatActivity implements Allo
 
             else
                 {
-                    /*recyclerView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            allotmentAdapter.notifyDataSetChanged();
-                        }
-                    });*/
-
-                recyclerView.setVisibility(View.VISIBLE);
-                recyclerView.setAdapter(staticAdapter);
+                 recyclerView.setVisibility(View.VISIBLE);
+                 recyclerView.setAdapter(staticAdapter);
                 }
         }
     }
@@ -260,7 +245,6 @@ public class InspectionDisplayActivity extends AppCompatActivity implements Allo
     public boolean onCreateOptionsMenu(Menu menu)
     {
         getMenuInflater().inflate(R.menu.menu_item, menu);
-        // Associate searchable configuration with the SearchView
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         searchView = (SearchView) menu.findItem(R.id.action_search_view).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
@@ -340,4 +324,9 @@ public class InspectionDisplayActivity extends AppCompatActivity implements Allo
         recyclerView.setAdapter(allotmentAdapter);
     }
 
+    @Override
+    public void onDataUpdate()
+    {
+
+    }
 }

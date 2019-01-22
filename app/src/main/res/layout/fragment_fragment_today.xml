@@ -61,6 +61,7 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="0"
+                android:fontFamily="@font/roboto_medium"
                 android:textStyle="bold" />
 
             <TextView
@@ -70,6 +71,7 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="Allotted"
+                android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/dark_blue" />
 
 
@@ -112,6 +114,7 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="0"
+                android:fontFamily="@font/roboto_medium"
                 android:textStyle="bold" />
 
             <TextView
@@ -121,6 +124,7 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="Unsafe"
+                android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/dark_blue" />
 
 
@@ -162,6 +166,7 @@
         android:paddingRight="2dp"
         android:paddingTop="2dp"
         android:paddingBottom="2dp"
+         android:fontFamily="@font/roboto_medium"
         >
 
         <LinearLayout
@@ -188,6 +193,7 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="0"
+                android:fontFamily="@font/roboto_medium"
                 android:textStyle="bold" />
 
             <TextView
@@ -197,6 +203,7 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="Denied"
+                android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/dark_blue" />
 
 
@@ -209,24 +216,22 @@
             android:layout_marginBottom="10dp"
             android:background="#f2f3f6" />
 
+
         <LinearLayout
             android:id="@+id/today_not_available_layout"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-
             android:orientation="vertical"
             android:paddingLeft="2dp"
             android:background="@color/white"
             android:paddingTop="2dp"
             android:paddingRight="2dp"
             android:paddingBottom="2dp"
-
             android:layout_marginLeft="@dimen/icon_padding"
             android:layout_marginRight="@dimen/icon_padding"
             android:layout_marginTop="@dimen/icon_padding"
             android:layout_marginEnd="@dimen/icon_padding"
-
             >
 
             <TextView
@@ -236,6 +241,7 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="0"
+                android:fontFamily="@font/roboto_medium"
                 android:textStyle="bold" />
 
             <TextView
@@ -245,6 +251,7 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="Not Available"
+                android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/dark_blue" />
 
 
@@ -290,7 +297,7 @@
                 android:gravity="center_horizontal|center_vertical"
                 android:text="Today's Re-Allotted"
                 android:textColor="@color/dark_blue"
-
+                android:fontFamily="@font/roboto_medium"
                 />
 
         </LinearLayout>
@@ -320,14 +327,12 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-
             android:background="@color/white"
             android:orientation="vertical"
             android:paddingLeft="2dp"
             android:paddingTop="2dp"
             android:paddingRight="2dp"
             android:layout_marginLeft="5dp"
-
             android:paddingBottom="2dp">
 
             <TextView
@@ -337,6 +342,7 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="0"
+                android:fontFamily="@font/roboto_medium"
                 android:textStyle="bold" />
 
             <TextView
@@ -346,6 +352,7 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="Unsafe"
+                android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/dark_blue" />
 
 
@@ -382,6 +389,7 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="0"
+                android:fontFamily="@font/roboto_medium"
                 android:textStyle="bold" />
 
             <TextView
@@ -389,6 +397,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:fontFamily="@font/roboto_medium"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="Denied"
                 android:textColor="@color/dark_blue" />
@@ -400,6 +409,7 @@
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_marginTop="10dp"
+            android:fontFamily="@font/roboto_medium"
             android:layout_marginBottom="10dp"
             android:background="#f2f3f6" />
 
@@ -430,6 +440,7 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="0"
+                android:fontFamily="@font/roboto_medium"
                 android:textStyle="bold" />
 
             <TextView
@@ -439,6 +450,7 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="Not Available"
+                android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/dark_blue" />
 
 
@@ -477,6 +489,7 @@
         android:layout_height="30dp"
         android:gravity="center_horizontal|center_vertical"
         android:text="Today's Completed"
+        android:fontFamily="@font/roboto_medium"
         android:textColor="@color/dark_blue"
         android:elevation="@dimen/layout_elevation"
 
@@ -521,6 +534,7 @@
                 android:id="@+id/today_total_count_text"
                 android:layout_width="50dp"
                 android:layout_height="30dp"
+                android:fontFamily="@font/roboto_medium"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="0"
@@ -570,6 +584,7 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="0"
+                android:fontFamily="@font/roboto_medium"
                 android:textStyle="bold" />
 
             <TextView
@@ -579,6 +594,7 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="Against Unsafe"
+                android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/dark_blue" />
 
 

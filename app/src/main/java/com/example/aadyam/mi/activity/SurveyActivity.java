@@ -30,12 +30,13 @@ import java.util.List;
 
 public class SurveyActivity extends FragmentActivity
 {
-    TabLayout tabLayout;
-    TextView displayName,displayId;
-    ViewPager viewPager1;
-    Toolbar toolbar1;
+    private TabLayout tabLayout;
+    private TextView displayName;
+    private TextView displayId;
+    private ViewPager viewPager1;
+    private Toolbar toolbar1;
 
-    DatabaseHelperUser databaseHelperUser;
+    private DatabaseHelperUser databaseHelperUser;
 
 
     @SuppressLint("NewApi")

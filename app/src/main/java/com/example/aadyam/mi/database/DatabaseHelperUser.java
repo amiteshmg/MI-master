@@ -124,7 +124,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
     public static final int API_ALLOTMENT=2;
 
 
-    public int count=0;
+    private int count=0;
 
     private static final String TABLE_NAME_ANSWERS ="Answers";
 
@@ -202,7 +202,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
     private static final String COL5_26 = "mobileno";
     private static final String COL5_27 = "emailid";
     private static final String COL5_28 = "json_data";
-    Activity activity;
+    private Activity activity;
 
     //create table queries
 
@@ -221,7 +221,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
     ProgressDialog mProgressDialog;
     //private Activity activityContext;
-    SQLiteDatabase db;
+    private SQLiteDatabase db;
 
     public DatabaseHelperUser(Context context)
     {
@@ -470,7 +470,6 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
 
     //method to abstract questions from the retrofit body and pass to addQuestion method one by one
-
     public void getQuestion()
     {
         //Retrofit hits here
@@ -479,17 +478,14 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
         Call<Question> call = apiService.getQuestionDetails();
 
         //enqueue - used to execute calls asynchronously
+
         call.enqueue(new Callback<Question>()
         {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onResponse(@NonNull Call<Question> call, @NonNull Response<Question> response)
             {
-
-
                 assert response.body() != null;
-
-
                 int size=response.body().getQuestionList().size();
 
                 for(int i=0;i<size;i++)
@@ -509,13 +505,10 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
                         s8 = response.body().getQuestionList().get(i).getIsRemark();
                         s9 = response.body().getQuestionList().get(i).getQuestionId();
                         addQuestion(s1, s2, s3, s4, s5, s6, s7, s8, s9);
-
                     }
-
                 }
 
                 Log.d(Constants.TAG, "Questions Loaded!");
-
             }
 
 
@@ -525,22 +518,13 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
                 Log.d(TAG, "ERROR FOUND :" + t.toString());
             }
         });
-
     }
-
-
-
-
 
     //method to insert question entry into SQLiteDatabase
     private void addQuestion(String Active, String CategoryID, String Description, String DescriptionHindi, String DescriptionMarathi, String FieldData, String FieldType, String Remark, String QuestionID)
     {
-
         SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues contentValues = new ContentValues();
-
-
 
         contentValues.put(COL1_1, Active);
         contentValues.put(COL1_2, CategoryID);
@@ -551,8 +535,6 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
         contentValues.put(COL1_7, FieldType);
         contentValues.put(COL1_8, Remark);
         contentValues.put(COL1_9, QuestionID);
-
-        //long result = db.insert(TABLE_NAME_QUESTION, null, contentValues);
 
         long result =  db.insertWithOnConflict(TABLE_NAME_QUESTION, null, contentValues, SQLiteDatabase.CONFLICT_IGNORE);
         if (result == -1)
@@ -576,12 +558,9 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
 
 
-
-
-
     //TODO ---------------------------------------------ALLOTMENT METHODS---------------------------------------------------------
 
-    public void putAllotmentBeta(List<AllotmentList> list)
+    private void putAllotmentBeta(List<AllotmentList> list)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("delete from "+ TABLE_NAME_ALLOTMENT);
@@ -621,12 +600,8 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
             contentValues.put(COL3_25,list.get(i).getLastInspDate());
             contentValues.put(COL3_33,list.get(i).getIsSatisfactory());
             contentValues.put(COL3_34,list.get(i).getIsMobCompleted());
-            //contentValues.put(COL3_35,list.get(i).getIsSatisfactory());
             contentValues.put(COL3_36,list.get(i).getIsSyncCompleted());
             contentValues.put(COL3_37,list.get(i).getIsInMobile());
-            //contentValues.put(COL3_38,list.get(i).getIsSatisfactory());
-
-
 
             long result=db.insert(TABLE_NAME_ALLOTMENT,  null,contentValues);
             Log.d(Constants.TAG,"ALLOTMENT RESULT "+result);
@@ -741,6 +716,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
         switch (FRAG_TYPE)
         {
             case 1:
+
                 countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_ALLOTTED_PENDING).size());
                 countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_UNSAFE).size());
                 countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_DENIED).size());
@@ -752,6 +728,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
                 countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_AGAINST_UNSAFE).size());
                 countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_AGAINST_DENIED).size());
                 countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_AGAINST_NOT_AVAILABLE).size());
+
                 return countData;
 
                 case 2:
@@ -780,7 +757,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
         String currentDate="'"+new MyGlobals(context).getCurrentDate()+"'";
         Log.d(Constants.TAG, "getAllotmentEntries: DATE "+currentDate);
 
-        List<AllotmentList> allotmentLists = new ArrayList<AllotmentList>();
+        List<AllotmentList> allotmentLists = new ArrayList<>();
 
         Cursor cursor;
 
@@ -898,9 +875,9 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
                 }
                 else
                     {
-                    String selectQuery7 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_9+"=1 "+" AND "+COL3_25+"="+currentDate;
-                    Log.d(Constants.TAG, "getAllotmentEntries: TOTAL "+selectQuery7);
-                    cursor = db.rawQuery(selectQuery7, null);
+                    String selectQuery7_1 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_9+"=1 "+" AND "+COL3_25+"="+currentDate;
+                    Log.d(Constants.TAG, "getAllotmentEntries: TOTAL "+selectQuery7_1);
+                    cursor = db.rawQuery(selectQuery7_1, null);
                 }
                 break;
 
@@ -988,16 +965,12 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
                 allotment.setUniqueConsumerId(cursor.getLong(18));
                 allotment.setAllotmentId(cursor.getInt(19));
                 allotment.setLastInspDate(cursor.getString(24));
-
                 allotmentLists.add(allotment);
-//                Toast.makeText(context, ""+json, Toast.LENGTH_SHORT).show();
 
             } while (cursor.moveToNext());
         }
-
         // return contact list
         return allotmentLists;
-
     }
 
 
@@ -1037,7 +1010,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
             {
                 long result=db.update(TABLE_NAME_PHOTOS,contentValues,""+COL6_9+"="+UniqueNo+" AND "+COL6_11+"="+CODE[i],null);
                 if(result!=-1)
-                    Toast.makeText(context, "Updated!", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, "Updated!", Toast.LENGTH_SHORT).show();
                 Log.d(Constants.TAG, "Updated!");
                 //long result1=db.replace(TABLE_NAME_PHOTOS,null,contentValues);
             }
@@ -1046,11 +1019,9 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
             {
                 long result = db.insert(TABLE_NAME_PHOTOS, null, contentValues);
                 if(result!=-1)
-                    Toast.makeText(context, "Inserted!", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, "Inserted!", Toast.LENGTH_SHORT).show();
                 Log.d(Constants.TAG, "Inserted!");
-
             }
-
         }
         //id INTEGER PRIMARY KEY AUTOINCREMENT,flag TEXT,filestream TEXT, distributor_id TEXT, filename TEXT,Inspectionformid TEXT,ref_Inspectionformid TEXT,unsafe_id TEXT,uniqueConsumerId TEXT,allotedId TEXT,imageType TEXT,json_data TEXT);";
     }
@@ -1058,25 +1029,25 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
 
     //retrieves base64string from database w.r.t imageviewCODE and allotedId
-    public String getPhotoEntry(int imageViewCode,String allottedId)
+    public ArrayList<String> getPhotoEntry(String allottedId)
     {
         SQLiteDatabase db=this.getWritableDatabase();
+        ArrayList<String> imageArray=new ArrayList<>();
 
-        String getQuery="SELECT * FROM "+ TABLE_NAME_PHOTOS +" WHERE "+COL6_11+"="+imageViewCode+" AND "+COL6_10+"="+allottedId;
+        String getQuery="SELECT * FROM "+ TABLE_NAME_PHOTOS +" WHERE "+COL6_10+"="+allottedId;
         Cursor cursor=db.rawQuery(getQuery,null);
-        String imageString;
+        if(cursor.moveToFirst())
+            do
+                {
+                imageArray.add(cursor.getString(2));
+                } while (cursor.moveToNext());
 
-        if(cursor.getCount()==1)
-            return cursor.getString(2);
 
-        else
-            return null;
-
+            return imageArray;
     }
 
 
-
-    //inserts induvidual answer entry into Database
+    //inserts individual answer entry into Database
     public void putAnswerEntryInDatabase(String answer,String questionId,String quesDescription,String categoryId,String allottedDate,String areaName,String consumerName, String consumerNo,String isCompleted,String uniqueConsumerId,String allottedId)
     {
         SQLiteDatabase db=this.getWritableDatabase();
@@ -1172,6 +1143,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
         JSONObject jsonObject=new JSONObject();
         try
         {
+            //jsonObject.put()
             jsonObject.put("VIP",vip);
             jsonObject.put("Gndr",gender);
             jsonObject.put("CCrd",usingcreditcardcheckbox);
@@ -1205,14 +1177,13 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
         String jsonData=jsonObject.toString();
 
         // cv.put(COL5_1,sharedPreferences.getString(Constants) );
-        cv.put(COL5_2,uniqueConsumerId );
-
-        cv.put(COL5_3, sharedPreferences.getInt(Constants.INSPECTION_ID,0));
-        cv.put(COL5_4, dateofbirth);
-        cv.put(COL5_5, vip);
-        cv.put(COL5_6, gender);
-        cv.put(COL5_7, usingcreditcardcheckbox);
-        cv.put(COL5_8, motherName);
+        cv.put(COL5_2,uniqueConsumerId);
+        cv.put(COL5_3,sharedPreferences.getInt(Constants.INSPECTION_ID,0));
+        cv.put(COL5_4,dateofbirth);
+        cv.put(COL5_5,vip);
+        cv.put(COL5_6,gender);
+        cv.put(COL5_7,usingcreditcardcheckbox);
+        cv.put(COL5_8,motherName);
         cv.put(COL5_9, highConsumerCheckBox);
         cv.put(COL5_10, fatherName);
         cv.put(COL5_11, refillGap);
@@ -1245,7 +1216,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
             {
                 Log.d(Constants.TAG,"Updated"+c);
                 ///isSuccess=true;
-                Toast.makeText(context, "Updated!", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(context, "Updated!", Toast.LENGTH_SHORT).show();
                 return true;
             }
             else
@@ -1261,7 +1232,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
             if(result!=-1)
             {
-                Toast.makeText(context, "Inserted!", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(context, "Inserted!", Toast.LENGTH_SHORT).show();
                 Log.d(Constants.TAG, "Inserted!"+c);
                 return true;
             }
@@ -1291,7 +1262,6 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
             //Toast.makeText(context, "Updated!", Toast.LENGTH_SHORT).show();
             Log.d(Constants.TAG,"Updated!");
         }
-
 
     }
 
@@ -1410,54 +1380,67 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
     }
 
-    public void setFragmentStatusSaved(String uniqueConsumerId,int categoryId)
+    public void setFragmentStatusSaved(String allotedId,int categoryId)
     {
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues cv=new ContentValues();
-
 
         switch (categoryId)
         {
             case 1:
                 cv.put(COL3_26,1);
-                db.update(TABLE_NAME_ALLOTMENT,cv,""+COL3_19+"="+uniqueConsumerId,null);
+                db.update(TABLE_NAME_ALLOTMENT,cv,""+COL3_20+"="+allotedId,null);
                 break;
 
             case 2:
                 cv.put(COL3_27,1);
-                db.update(TABLE_NAME_ALLOTMENT,cv,""+COL3_19+"="+uniqueConsumerId,null);
+                db.update(TABLE_NAME_ALLOTMENT,cv,""+COL3_20+"="+allotedId,null);
                 break;
 
             case 3:
                 cv.put(COL3_28,1);
-                db.update(TABLE_NAME_ALLOTMENT,cv,""+COL3_19+"="+uniqueConsumerId,null);
+                db.update(TABLE_NAME_ALLOTMENT,cv,""+COL3_20+"="+allotedId,null);
                 break;
 
             case 4:
                 cv.put(COL3_29,1);
-                db.update(TABLE_NAME_ALLOTMENT,cv,""+COL3_19+"="+uniqueConsumerId,null);
+                db.update(TABLE_NAME_ALLOTMENT,cv,""+COL3_20+"="+allotedId,null);
                 break;
 
             case 5:
                 cv.put(COL3_30,1);
-                db.update(TABLE_NAME_ALLOTMENT,cv,""+COL3_19+"="+uniqueConsumerId,null);
+                db.update(TABLE_NAME_ALLOTMENT,cv,""+COL3_20+"="+allotedId,null);
                 break;
             case 6:
                 cv.put(COL3_31,1);
-                db.update(TABLE_NAME_ALLOTMENT,cv,""+COL3_19+"="+uniqueConsumerId,null);
+                db.update(TABLE_NAME_ALLOTMENT,cv,""+COL3_20+"="+allotedId,null);
         }
 
     }
 
-    public int getFragmentSaveEntries(String uniqueNo)
+    public int getFragmentSaveEntries(String allotedId)
     {
         db=this.getWritableDatabase();
         String condition=COL3_26+"=1 AND "+COL3_27+"=1 AND "+COL3_28+"=1 AND "+COL3_29+"=1 AND "+COL3_30+"=1 AND "+COL3_30+"=1";
-        String[] columns={COL3_26,COL3_27,COL3_28,COL3_29,COL3_30};
-
+        String[] columns={COL3_26,COL3_27,COL3_28,COL3_29,COL3_30,COL3_31};
         @SuppressLint("Recycle")
-        Cursor cursor=db.query(TABLE_NAME_ALLOTMENT,columns,""+COL3_19+"=?"+" AND "+condition,new String[]{uniqueNo},null,null,uniqueNo);
-
+        Cursor cursor=db.query(TABLE_NAME_ALLOTMENT,columns,""+COL3_20+"="+allotedId+" AND "+condition,null,null,null,null);
         return cursor.getCount();
+    }
+
+    public boolean isPhotoEntryPresent(String allottedId)
+    {
+        SQLiteDatabase db=this.getReadableDatabase();
+        Cursor c=db.rawQuery("select * from "+TABLE_NAME_PHOTOS+" where "+COL6_10+"="+allottedId,null);
+
+        if(c.getCount()==5)
+        {
+            return true;
+        }
+
+        else
+            {
+            return  false;
+            }
     }
 }

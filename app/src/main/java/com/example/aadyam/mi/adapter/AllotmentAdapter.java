@@ -188,16 +188,12 @@ public class AllotmentAdapter extends RecyclerView.Adapter<AllotmentAdapter.MyVi
             {
 
                 if(allotmentListFiltered.size()!=0) {
-                    final DatabaseHelperUser databaseHelperUser = new DatabaseHelperUser(context);
+
                     //used for loading data into each entry
-
-
                     final AllotmentList allotmentList = allotmentListFiltered.get(position);
                     final int pos;
                     pos = position + 1;
-
                     holder.serial_no.setText("" + pos);
-
                     holder.distributor_address.setText(allotmentList.getAreaName());
                     holder.user_address.setText(allotmentList.getAddress());
                     holder.consumer_no.setText(allotmentList.getConsumerNo().toString());
@@ -249,7 +245,10 @@ public class AllotmentAdapter extends RecyclerView.Adapter<AllotmentAdapter.MyVi
                                     // setAllotmentList(allotmentList);
                                     //new AllotmentAdapter(getAllotmentList(),context);
                                     setDenied(allotmentList.getAllotmentId().toString(), 0);
+
                                     notifyDataSetChanged();
+                                    notifyItemChanged(position);
+                                    notifyItemRemoved(position);
                                     Intent i = new Intent(context, MainActivity.class);
                                     // set the new task and clear flags
                                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

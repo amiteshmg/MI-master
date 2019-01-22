@@ -32,13 +32,13 @@ public class SplashScreenActivity extends AppCompatActivity
     private static int SPLASH_TIME_OUT = 5000;
     private static final int REQUEST = 112;
     TextView txtVersionCode;
-    Dialog dialog;
+    private Dialog dialog;
     //SharedPreferences sharedPreferences;
     //SharedPreferences.Editor editor;
-    Context context;
-    DatabaseHelperUser databaseHelperUser;
+    private Context context;
+    private DatabaseHelperUser databaseHelperUser;
     private String questionVersion;
-    SharedPreferences prefs = null;
+    private SharedPreferences prefs = null;
 
 
 
@@ -107,8 +107,6 @@ public class SplashScreenActivity extends AppCompatActivity
     protected void onResume()
     {
         super.onResume();
-
-
         if (prefs.getBoolean(Constants.FIRST_RUN, true))
         {
             // Do first run stuff here then set 'firstrun' as false
@@ -123,17 +121,24 @@ public class SplashScreenActivity extends AppCompatActivity
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case REQUEST: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
                     Log.d("TAG", "Grant Permissions ");
                     proceed();
-                } else {
+                }
+
+
+                else
+                    {
                     Log.d("TAG", "PERMISSIONS Denied");
                     final AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle("You must Allow all the requested Permissions. Application will exit now");
 
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                    {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
                             finish();
                         }
                     });
@@ -163,7 +168,7 @@ public class SplashScreenActivity extends AppCompatActivity
 
 
 
-    public void proceed()
+    private void proceed()
     {
         new Handler().postDelayed(new Runnable()
         {

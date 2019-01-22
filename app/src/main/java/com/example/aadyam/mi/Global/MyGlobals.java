@@ -8,9 +8,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.AppCompatRadioButton;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
@@ -54,9 +56,10 @@ public class MyGlobals
 {
     private Context mContext;
     private String[] answer,questionDescription,categoryID,questionID,informationAnswer;
-    LinearLayout.LayoutParams params;
+    private LinearLayout.LayoutParams params;
     private int size;
     private SharedPreferences sharedPreferences;
+    private String hoseExpiryDate;
 
 
     // constructor
@@ -279,7 +282,7 @@ public class MyGlobals
 
 
     //Convert density independent pixels to pixels
-    public int dpToPx(int dp,Context context)
+    private int dpToPx(int dp, Context context)
     {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
@@ -684,22 +687,40 @@ public class MyGlobals
             questionHolderLinearLayout.addView(question);
 
             //radioGroup condition
-            if (questionList.get(j).getFieldType().equals("C"))
-            {
-                final RadioButton[] rb = new RadioButton[2];
+            if (questionList.get(j).getFieldType().equals("C")) {
+                final AppCompatRadioButton[] rb = new AppCompatRadioButton[2];
+
                 final RadioGroup rg = new RadioGroup(context); //create the RadioGroup
                 rg.setOrientation(RadioGroup.HORIZONTAL);//or RadioGroup.VERTICAL
                 String[] options = context.getResources().getStringArray(R.array.radio_options_yes_no);
 
                 for (int i = 0; i < options.length; i++)
                 {
-                    rb[i] = new RadioButton(context);
+                    rb[i] = new AppCompatRadioButton(context);
                     rb[i].setText(options[i]);
                     rb[i].setId(i + 100);
+                    rb[i].setHighlightColor(context.getResources().getColor(R.color.colorPrimary));
                     rg.addView(rb[i]);
                 }
 
+                if (questionList.get(j).getQuestionId().matches("3|16|24"))
+                {
+                    rb[1].setHighlightColor(context.getResources().getColor(R.color.red));
+                    rb[1].setTextColor(context.getResources().getColor(R.color.red));
+                }
+
+
+                //for yes as unsafe option
+                else if (questionList.get(j).getQuestionId().matches("21|23|30|32"))
+                {
+                    rb[0].setHighlightColor(context.getResources().getColor(R.color.red));
+                    rb[0].setTextColor(context.getResources().getColor(R.color.red));
+                }
+
                 questionHolderLinearLayout.addView(rg);
+
+                //unsafe questions category
+                //for No as unsafe option
                 final int finalJ = j;
 
                     // no radio buttons are checked
@@ -711,19 +732,48 @@ public class MyGlobals
                             int radioButtonID = rg.getCheckedRadioButtonId();
                             View radioButton = rg.findViewById(radioButtonID);
                             int idx = rg.indexOfChild(radioButton);
-
                             RadioButton r = (RadioButton) rg.getChildAt(idx);
+
+                                if(questionList.get(finalJ).getQuestionId().matches("3|16|24"))
+                                {
+                                    if(r.getText().toString().equalsIgnoreCase("no"))
+                                    {
+                                        question.setTextColor(context.getResources().getColor(R.color.red));
+                                        r.setHighlightColor(context.getResources().getColor(R.color.red));
+                                        sharedPreferences.edit().putInt(Constants.ANSWER+questionList.get(finalJ).getQuestionId(),1).commit();
+                                    }
+
+                                        else
+                                        {
+                                            question.setTextColor(Color.BLACK);
+                                            sharedPreferences.edit().putInt(Constants.ANSWER+questionList.get(finalJ).getQuestionId(),0).commit();
+                                            //r.setHighlightColor(context.getResources().getColor(R.color.dark_blue));
+
+                                        }
+                                }
+
+
+                            else if(questionList.get(finalJ).getQuestionId().matches("21|23|30|32"))
+                            {
+                                if(r.getText().toString().equalsIgnoreCase("yes"))
+                                {
+                                    question.setTextColor(context.getResources().getColor(R.color.red));
+                                    r.setHighlightColor(context.getResources().getColor(R.color.red));
+                                    sharedPreferences.edit().putInt(Constants.ANSWER+questionList.get(finalJ).getQuestionId(),1).commit();
+                                }
+
+                                else {
+                                    question.setTextColor(Color.BLACK);
+                                    sharedPreferences.edit().putInt(Constants.ANSWER+questionList.get(finalJ).getQuestionId(),0).commit();
+                                    }
+                            }
 
                             answer[finalJ] = r.getText().toString();
                             questionID[finalJ] = questionList.get(finalJ).getQuestionId();
                             categoryID[finalJ] = questionList.get(finalJ).getCategoryId();
                             questionDescription[finalJ] = questionList.get(finalJ).getDescription();
-                            // Toast.makeText(context, "" + answer[finalJ], Toast.LENGTH_SHORT).show();
                         }
-
                     });
-
-
             }
 
 
@@ -731,18 +781,32 @@ public class MyGlobals
             else if (questionList.get(j).getFieldType().equals("T"))
             {
                 final EditText editText=new EditText(context);
-                if(questionList.get(j).getQuestionId().equals("35")||questionList.get(j).getQuestionId().equals("17"))
+                if(questionList.get(j).getQuestionId().equals("35"))
                 {
                     popUpDatePicker(context,editText);
                 }
 
-                questionHolderLinearLayout.addView(editText);
+                if(questionList.get(j).getQuestionId().equals("17"))
+                {
+                    if(hoseExpiryDate!=null)
+                    {
+                        editText.setText(hoseExpiryDate);
+                        editText.setFocusable(false);
+                    }
 
+                    else {
+                        popUpDatePicker(context,editText);
+                        }
+                }
+
+                questionHolderLinearLayout.addView(editText);
                 final int finalJ1 = j;
 
-                editText.addTextChangedListener(new TextWatcher() {
+                editText.addTextChangedListener(new TextWatcher()
+                {
                     @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after)
+                    {
 
                     }
 
@@ -772,7 +836,6 @@ public class MyGlobals
             {
 
                 final Spinner spinner=new Spinner(context);
-
                 String str = context.getResources().getString(R.string.spinner_default_item)+questionList.get(j).getFieldData();
                 final List<String> spinnerList = Arrays.asList(str.split(","));
 
@@ -791,72 +854,94 @@ public class MyGlobals
                     {
 
 
-                        if(questionList.get(finalJ2).getQuestionId().equals("13") && spinner.getSelectedItem().toString().equalsIgnoreCase("rubber"))
+                        if(questionList.get(finalJ2).getQuestionId().equals("13"))
                         {
-
-                                spinner.setBackgroundColor(context.getResources().getColor(R.color.red));
+                            if(spinner.getSelectedItem().toString().equalsIgnoreCase("rubber"))
+                            {
                                 final AlertDialog.Builder alertDialog=new AlertDialog.Builder(context);
-
                                 alertDialog.setMessage("Do you want to change the Rubber Hose?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which)
                                     {
                                         AlertDialog.Builder alertDialog1=new AlertDialog.Builder(context);
                                         final EditText input = new EditText(context);
-                                        input.setBackground(context.getResources().getDrawable(R.drawable.rectangle));
                                         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                                                 LinearLayout.LayoutParams.MATCH_PARENT,
                                                 LinearLayout.LayoutParams.MATCH_PARENT);
                                         input.setLayoutParams(lp);
-
                                         new MyGlobals(context).popUpDatePicker(context,input);
                                         alertDialog1.setView(input).setTitle("Suraksha Hose Expiry date").setMessage("New Suraksha hose expiry date").setPositiveButton("Ok", new DialogInterface.OnClickListener()
                                         {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which)
                                             {
-                                                input.getText().toString();
-
-
+                                                hoseExpiryDate=input.getText().toString();
+                                                spinner.setBackgroundColor(context.getResources().getColor(R.color.white));
+                                                answer[finalJ2] = spinner.getSelectedItem().toString();
+                                                questionID[finalJ2] = questionList.get(finalJ2).getQuestionId();
+                                                categoryID[finalJ2] = questionList.get(finalJ2).getCategoryId();
+                                                questionDescription[finalJ2] = questionList.get(finalJ2).getDescription();
+                                                sharedPreferences.edit().putInt(Constants.ANSWER+questionList.get(finalJ2).getQuestionId(),0).commit();
                                                 Toast.makeText(context, ""+input.getText().toString(), Toast.LENGTH_SHORT).show();
                                             }
                                         }).show();
 
                                     }
+
                                 }).setNegativeButton("No", new DialogInterface.OnClickListener()
-                                    {
+                                {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which)
                                     {
-                                        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                                            @Override
-                                            public void onDismiss(DialogInterface dialog)
-                                            {
-                                                spinner.setBackgroundColor(context.getResources().getColor(R.color.red));
-                                                dialog.dismiss();
-                                            }
-                                        });
+                                        spinner.setBackgroundColor(context.getResources().getColor(R.color.red));
+                                        //spinner.setBackgroundColor(context.getResources().getColor(R.color.white));
+                                        answer[finalJ2] = spinner.getSelectedItem().toString();
+                                        questionID[finalJ2] = questionList.get(finalJ2).getQuestionId();
+                                        categoryID[finalJ2] = questionList.get(finalJ2).getCategoryId();
+                                        questionDescription[finalJ2] = questionList.get(finalJ2).getDescription();
+                                        sharedPreferences.edit().putInt(Constants.ANSWER+questionList.get(finalJ2).getQuestionId(),1).commit();
+                                        dialog.dismiss();
                                     }
                                 }).show();
-                        }
+                            }
 
-
-                        if(questionList.get(finalJ2).getQuestionId().equals("10"))
-                        {
-                            if(position==0)
+                            else if(spinner.getSelectedItem().toString().equalsIgnoreCase("Select one"))
                             {
                                 spinner.setBackgroundColor(context.getResources().getColor(R.color.white));
                                 answer[finalJ2]=null;
                             }
 
 
-                            else  if(position==1)
+                            else if(spinner.getSelectedItem().toString().equalsIgnoreCase("Suraksha Hose"))
+                                {
+                                    spinner.setBackgroundColor(context.getResources().getColor(R.color.white));
+                                    answer[finalJ2] = spinner.getSelectedItem().toString();
+                                    questionID[finalJ2] = questionList.get(finalJ2).getQuestionId();
+                                    categoryID[finalJ2] = questionList.get(finalJ2).getCategoryId();
+                                    questionDescription[finalJ2] = questionList.get(finalJ2).getDescription();
+                                    sharedPreferences.edit().putInt(Constants.ANSWER+questionList.get(finalJ2).getQuestionId(),0).commit();
+                                }
+
+
+                        }
+
+
+                        else if(questionList.get(finalJ2).getQuestionId().equals("10"))
+                        {
+                            if(/*position==0*/spinner.getSelectedItem().toString().matches("select one|Select one|Select One|SELECT ONE"))
+                            {
+                                spinner.setBackgroundColor(context.getResources().getColor(R.color.white));
+                                answer[finalJ2]=null;
+                            }
+//
+                            else  if(spinner.getSelectedItem().toString().matches("hpcl|Hpcl|HPCL"))
                             {
                                 spinner.setBackgroundColor(context.getResources().getColor(R.color.white));
                                 answer[finalJ2] = spinner.getSelectedItem().toString();
                                 questionID[finalJ2] = questionList.get(finalJ2).getQuestionId();
                                 categoryID[finalJ2] = questionList.get(finalJ2).getCategoryId();
                                 questionDescription[finalJ2] = questionList.get(finalJ2).getDescription();
+                                sharedPreferences.edit().putInt(Constants.ANSWER+questionList.get(finalJ2).getQuestionId(),0).commit();
                                 //Toast.makeText(context, "" + answer[finalJ2], Toast.LENGTH_SHORT).show();
                             }
 
@@ -867,13 +952,13 @@ public class MyGlobals
                                 questionID[finalJ2] = questionList.get(finalJ2).getQuestionId();
                                 categoryID[finalJ2] = questionList.get(finalJ2).getCategoryId();
                                 questionDescription[finalJ2] = questionList.get(finalJ2).getDescription();
+                                sharedPreferences.edit().putInt(Constants.ANSWER+questionList.get(finalJ2).getQuestionId(),1).commit();
                             }
                         }
 
 
-
-
-                        else {
+                        else
+                            {
 
                             if(position==0)
                             {
@@ -952,7 +1037,6 @@ public class MyGlobals
             @Override
             public void onClick(View v)
             {
-
                 DatabaseHelperUser databaseHelperUser = new DatabaseHelperUser(context);
 
                 SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.PREFS_NAME, Context.MODE_PRIVATE);
@@ -968,13 +1052,12 @@ public class MyGlobals
 
                 for(int i=0;i<questionList.size();i++)
                 {
-
                     if(answer[i]!=null)
                     {
                         count++;
                     }
-
                 }
+
                 sharedPreferences.edit().putInt(Constants.CYLINDER_SAVE,0).commit();
 
                 if(count==questionList.size())
@@ -986,7 +1069,7 @@ public class MyGlobals
                         databaseHelperUser.putAnswerEntryInDatabase(answer[j], questionID[j], questionDescription[j], categoryID[j], allotmentDate, areaName, consumerName, consumerNo, isCompleted, uniqueConsumerId, allottedId);
                     }
 
-                    databaseHelperUser.setFragmentStatusSaved(uniqueConsumerId,Integer.parseInt(questionList.get(0).getCategoryId()));
+                    databaseHelperUser.setFragmentStatusSaved(allottedId,Integer.parseInt(questionList.get(0).getCategoryId()));
 
                     Toast.makeText(context, "Saved SuccessFully", Toast.LENGTH_SHORT).show();
                     ((SurveyActivity)context).setCurrentItem(Integer.parseInt(questionList.get(0).getCategoryId()), true);
@@ -1087,10 +1170,9 @@ public class MyGlobals
         }
 
         else
-            {
-                Toast.makeText(activity, "No entries!", Toast.LENGTH_SHORT).show();
-            }
-
+        {
+            Toast.makeText(activity, "No entries!", Toast.LENGTH_SHORT).show();
+        }
     }
 
 

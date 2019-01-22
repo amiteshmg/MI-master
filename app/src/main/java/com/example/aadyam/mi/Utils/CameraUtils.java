@@ -35,9 +35,12 @@ public class CameraUtils
     public static void refreshGallery(Context context, String filePath)
     {
         // ScanFile so it will be appeared on Gallery
+
         MediaScannerConnection.scanFile(context, new String[]{filePath}, null,
                 new MediaScannerConnection.OnScanCompletedListener() {
                     public void onScanCompleted(String path, Uri uri) {
+
+
                     }
                 });
     }

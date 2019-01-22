@@ -26,9 +26,9 @@ import java.util.List;
 public class Rubberhose extends Fragment {
 
     RecyclerView recyclerView;
-    List<QuestionList> questionList;
-    DatabaseHelperUser databaseHelperUser;
-    LinearLayout rubberHoseLayout;
+    private List<QuestionList> questionList;
+    private DatabaseHelperUser databaseHelperUser;
+    private LinearLayout rubberHoseLayout;
 
     public Rubberhose()
     {

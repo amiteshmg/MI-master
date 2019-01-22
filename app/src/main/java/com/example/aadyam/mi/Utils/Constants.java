@@ -72,7 +72,7 @@ public class Constants
 */
 
  // UAT server
-    public static final String ServerUrl = "http://hpgasprodweb1t.hpcl.co.in/hp.svc/";
+    private static final String ServerUrl = "http://hpgasprodweb1t.hpcl.co.in/hp.svc/";
     public static final String ServerUrl_Soap = "http://hpgasprodweb1t.hpcl.co.in/uploadfilesservice.asmx";
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -87,7 +87,6 @@ public class Constants
     public static final String InspectionDenied = ServerUrl + "InspectionDenied?";
 
     public static final String InspCompletedFlagInMobile = ServerUrl + "InspCompletedFlagInMobile?";
-
     public static final String GET_UNSAFE_QUESTIONNAIRE = ServerUrl + "UnsafeQueListForAllInspId?";
 
     public static final String IS_IN_MOBILE_METHOD_PostFile = "SetIsInMobileFlag";

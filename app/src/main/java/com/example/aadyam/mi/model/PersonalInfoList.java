@@ -3,7 +3,7 @@ package com.example.aadyam.mi.model;
 
 
 
-public class PersonalInfoList
+class PersonalInfoList
 {
 
     /**

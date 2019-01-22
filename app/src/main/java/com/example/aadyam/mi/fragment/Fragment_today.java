@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,15 +26,37 @@ import com.example.aadyam.mi.interfaces.DataUpdateListener;
 import java.util.ArrayList;
 
 
+@SuppressWarnings("ALL")
 public class Fragment_today extends Fragment implements DataUpdateListener
 {
-    TextView allotted_count_tv, unsafe_count_tv, denied_count_tv, not_available_count_tv, reallotted_unsafe_count_tv, reallotted_denied_count_tv, reallotted_not_available_count_tv, total_count_tv, against_unsafe_count_tv, against_denied_count_tv, against_not_available_count_tv;
-    LinearLayout allotted_pending_layout, unsafe_layout, Denied_layout, Not_available_layout, reallotted_unsafe_layout, reallotted_denied_layout, reallotted_not_available_layout, total_layout, against_unsafe_layout, against_denied_layout, against_not_available_layout;
-    ProgressDialog progressDialog;
+    private TextView allotted_count_tv;
+    private TextView unsafe_count_tv;
+    private TextView denied_count_tv;
+    private TextView not_available_count_tv;
+    private TextView reallotted_unsafe_count_tv;
+    private TextView reallotted_denied_count_tv;
+    private TextView reallotted_not_available_count_tv;
+    private TextView total_count_tv;
+    private TextView against_unsafe_count_tv;
+    private TextView against_denied_count_tv;
+    private TextView against_not_available_count_tv;
+    private LinearLayout allotted_pending_layout;
+    private LinearLayout unsafe_layout;
+    private LinearLayout denied_layout;
+    private LinearLayout not_available_layout;
+    private LinearLayout reallotted_unsafe_layout;
+    private LinearLayout reallotted_denied_layout;
+    private LinearLayout reallotted_not_available_layout;
+    private LinearLayout total_layout;
+    private LinearLayout against_unsafe_layout;
+    private LinearLayout against_denied_layout;
+    private LinearLayout against_not_available_layout;
+    private ProgressDialog progressDialog;
     View view1;
     //public ArrayList<Integer> countData;
-    DatabaseHelperUser databaseHelperUser;
-    Intent intent;
+    private DatabaseHelperUser databaseHelperUser;
+    private Intent intent;
+
 
     public Fragment_today()
     {
@@ -44,10 +65,9 @@ public class Fragment_today extends Fragment implements DataUpdateListener
 
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         // Inflate the layout for this fragment
-
         return inflater.inflate(R.layout.fragment_fragment_today, container, false);
     }
 
@@ -72,28 +92,21 @@ public class Fragment_today extends Fragment implements DataUpdateListener
     {
         super.onViewCreated(view, savedInstanceState);
         databaseHelperUser=new DatabaseHelperUser(getContext());
-
-        //allowRefresh=true;
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage("Please Wait.....");
         final ArrayList<Integer> countData;
         countData=databaseHelperUser.getAllotmentEntriesCount(1);
         allotted_pending_layout = view.findViewById(R.id.today_allotted_layout);
         unsafe_layout = view.findViewById(R.id.today_unsafe_layout);
-
-        Denied_layout = view.findViewById(R.id.today_denied_layout);
-        Not_available_layout = view.findViewById(R.id.today_not_available_layout);
-
+        denied_layout = view.findViewById(R.id.today_denied_layout);
+        not_available_layout = view.findViewById(R.id.today_not_available_layout);
         reallotted_unsafe_layout = view.findViewById(R.id.today_reallotted_not_available_layout);
         reallotted_denied_layout = view.findViewById(R.id.today_reallotted_denied_layout);
-
         reallotted_not_available_layout = view.findViewById(R.id.today_reallotted_not_available_layout);
         total_layout = view.findViewById(R.id.today_total_layout);
-
         against_unsafe_layout = view.findViewById(R.id.today_against_unsafe_layout);
         against_denied_layout = view.findViewById(R.id.today_against_denied_layout);
         against_not_available_layout = view.findViewById(R.id.today_against_not_available_layout);
-
         allotted_count_tv = view.findViewById(R.id.today_allotted_count_text);
         unsafe_count_tv = view.findViewById(R.id.today_unsafe_count_text);
         denied_count_tv = view.findViewById(R.id.today_denied_count_text);
@@ -117,7 +130,6 @@ public class Fragment_today extends Fragment implements DataUpdateListener
             {
                 if(!allotted_count_tv.getText().toString().equals("0"))
                 {
-//                    Intent intent = new Intent(getActivity(), InspectionDisplayActivity.class);
                     intent.putExtra(Constants.FRAG_TYPE,1);
                     intent.putExtra(Constants.CLICK_CODE, Constants.TOTAL_ALLOTTED_PENDING);
                     startActivity(intent);
@@ -137,7 +149,6 @@ public class Fragment_today extends Fragment implements DataUpdateListener
             {
                 if(!unsafe_count_tv.getText().toString().equals("0"))
                 {
-//                    Intent intent = new Intent(getActivity(), InspectionDisplayActivity.class);
                     intent.putExtra(Constants.CLICK_CODE, Constants.TOTAL_UNSAFE);
                     intent.putExtra(Constants.FRAG_TYPE,1);
                     startActivity(intent);
@@ -150,12 +161,11 @@ public class Fragment_today extends Fragment implements DataUpdateListener
         });
 
 
-        Denied_layout.setOnClickListener(new View.OnClickListener() {
+        denied_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!denied_count_tv.getText().toString().equals("0"))
                 {
-//                    Intent intent = new Intent(getActivity(), InspectionDisplayActivity.class);
                     intent.putExtra(Constants.CLICK_CODE, Constants.TOTAL_DENIED);
                     intent.putExtra(Constants.FRAG_TYPE,1);
                     startActivity(intent);
@@ -168,7 +178,8 @@ public class Fragment_today extends Fragment implements DataUpdateListener
         });
 
 
-        Not_available_layout.setOnClickListener(new View.OnClickListener() {
+        not_available_layout.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v)
             {
@@ -272,12 +283,15 @@ public class Fragment_today extends Fragment implements DataUpdateListener
 
     }
 
+
     @SuppressWarnings("ConstantConditions")
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(Context context)
+    {
         super.onAttach(context);
         ((MainActivity) getActivity()).registerDataUpdateListener(this);
     }
+
 
     @Override
     public void onDataUpdate()
@@ -286,4 +300,5 @@ public class Fragment_today extends Fragment implements DataUpdateListener
         ArrayList<Integer>countData=databaseHelperUser.getAllotmentEntriesCount(1);
         setCountTextViews(countData);
     }
+
 }

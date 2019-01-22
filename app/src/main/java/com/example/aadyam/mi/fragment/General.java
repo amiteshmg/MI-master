@@ -25,9 +25,9 @@ import java.util.List;
 public class General extends Fragment
 {
 
-    List<QuestionList> questionList;
-    DatabaseHelperUser databaseHelperUser;
-    LinearLayout generalLayout;
+    private List<QuestionList> questionList;
+    private DatabaseHelperUser databaseHelperUser;
+    private LinearLayout generalLayout;
 
     public General()
     {

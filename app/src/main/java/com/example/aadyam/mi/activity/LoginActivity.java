@@ -33,11 +33,11 @@ public class LoginActivity extends AppCompatActivity
 {
     private static final String TAG = "LoginActivity";
 
-    EditText editText;
-    Button button;
-    String number;
-    AlertDialogManager alert;
-    SessionManager sessionManager;
+    private EditText editText;
+    private Button button;
+    private String number;
+    private AlertDialogManager alert;
+    private SessionManager sessionManager;
 
 
 

@@ -3,7 +3,7 @@ package com.example.aadyam.mi.rest;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ApiClientLive
+class ApiClientLive
 {
     private static Retrofit retrofit=null;
     //public  static Gson gson;
