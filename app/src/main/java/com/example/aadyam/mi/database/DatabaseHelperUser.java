@@ -1175,7 +1175,6 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
         //vip, gender, using credit_card,mother_name,high_consumption,father_spouse_name,refill_gap,booking_mode,family_member_count,accomodation,ration_affidavit,two_wheeler,four_wheeler,ration_card_no,using_piped_gas,pan_card_no,passport,voter_id,license,mobileNo,email
 
         String jsonData=jsonObject.toString();
-
         // cv.put(COL5_1,sharedPreferences.getString(Constants) );
         cv.put(COL5_2,uniqueConsumerId);
         cv.put(COL5_3,sharedPreferences.getInt(Constants.INSPECTION_ID,0));
@@ -1232,7 +1231,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
             if(result!=-1)
             {
-              //  Toast.makeText(context, "Inserted!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "Inserted!", Toast.LENGTH_SHORT).show();
                 Log.d(Constants.TAG, "Inserted!"+c);
                 return true;
             }
@@ -1301,10 +1300,11 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
         Cursor cursor=db.rawQuery("Select * from "+TABLE_NAME_PERSONAL_INFO+" where "+COL5_2+" = "+uniqueNo,null);
 
         if (cursor.moveToFirst()){
-            do{
-                return cursor.getString(28);
+            do
+                {
+                    return cursor.getString(28);
                 // do what ever you want here
-            }while(cursor.moveToNext());
+                }while(cursor.moveToNext());
         }
         cursor.close();
 
@@ -1353,6 +1353,10 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
         return jsonArrayQuestions.toString();
     }
 
+
+
+
+    //delete all table entries after entry submitted to server
     public void deleteAllTableEntries(String allotted_id, String uniqueNo)
     {
         SQLiteDatabase db=this.getWritableDatabase();
@@ -1380,6 +1384,9 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
     }
 
+
+
+    //sets fragment status when entries for that fragment
     public void setFragmentStatusSaved(String allotedId,int categoryId)
     {
         SQLiteDatabase db=this.getWritableDatabase();
@@ -1415,9 +1422,9 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
                 cv.put(COL3_31,1);
                 db.update(TABLE_NAME_ALLOTMENT,cv,""+COL3_20+"="+allotedId,null);
         }
-
     }
 
+    //return 1 if entry is found with all question Answers and information entries saved in database
     public int getFragmentSaveEntries(String allotedId)
     {
         db=this.getWritableDatabase();
@@ -1440,7 +1447,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
         else
             {
-            return  false;
+                return false;
             }
     }
 }

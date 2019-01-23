@@ -77,7 +77,6 @@ public class InspectionDataSoapHelper
 
                 SimpleDateFormat sdf = new SimpleDateFormat("MMddHHmmssSS", Locale.ENGLISH);
                 currentDateandTime = sdf.format(new Date());
-
                 response=calculate(mContext, NAMESPACE, METHOD_NAME, URL, SOAP_ACTION, parameters);
                 return null;
             }
@@ -109,9 +108,12 @@ public class InspectionDataSoapHelper
              /*   if (logArrayList.size() > 0) {
                     logArrayList.clear();
                 }*/
-
                 SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
+                Log.d(Constants.TAG, "calculate REQUEST : "+Request.toString()+Request);
+                for(int i=0;i<parameters.size();i++)
+                Log.d(Constants.TAG, "calculate: "+ parameters.get(i).byteValue());
                 addParameters(parameters, Request);
+
 
              /*
                 try {
@@ -129,7 +131,6 @@ public class InspectionDataSoapHelper
                     logArrayList.add(logDetailModel);
                     System.out.println("logArrayList@@" + logArrayList);
                     new Logger(context).saveLog(logArrayList);
-
                 }
 
                 catch (Exception e)
@@ -139,8 +140,6 @@ public class InspectionDataSoapHelper
 
 
                 */
-
-
                 SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 soapEnvelope.dotNet = true;
 
@@ -150,6 +149,8 @@ public class InspectionDataSoapHelper
                 soapEnvelope.setOutputSoapObject(Request);
                 soapEnvelope.implicitTypes = true;
                 HttpTransportSE transport = new HttpTransportSE(URL);
+                Log.d(Constants.TAG, "calculate HttpTransport : "+ URL+transport.toString() +transport);
+
                 transport.debug = true;
                 transport.setXmlVersionTag("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
 
@@ -157,15 +158,18 @@ public class InspectionDataSoapHelper
 
                 SoapPrimitive resultString = (SoapPrimitive) soapEnvelope.getResponse();
 
-                Log.d(Constants.TAG, "InspectionData_Response: "+resultString);
+
+
+                Log.d(Constants.TAG, "InspectionData_Response: "+resultString+soapEnvelope.toString());
                 System.out.println("InspectionData_Response" + resultString);
 
                 response = resultString.toString();
+                Log.d(Constants.TAG, "calculate: RESPONSE :"+response);
                 return response;
 
                 //sharedPreferences.edit().remove("flagSubmit").commit();  // upload photo fragment
 
-/*
+                /*
                 if (!response.equalsIgnoreCase("Fail")) {
                     //Success
                     QuestionAnswerDB.getInstance(context).deleteRecord(response);
@@ -212,6 +216,7 @@ public class InspectionDataSoapHelper
             // int event = 0;
             String response1 = "";
 
+
             AsyncCallWS task = new AsyncCallWS(context, NAMESPACE, METHOD_NAME, URL, SOAP_ACTION, parameters);
 
             try
@@ -234,18 +239,16 @@ public class InspectionDataSoapHelper
             }
 
             return response;
-
         }
-
-
-
 
 
         private void addParameters(LinkedHashMap<Byte, Byte> parameters, SoapObject request)
         {
             Iterator<Entry<Byte, Byte>> iterator = parameters.entrySet().iterator();
-            while (iterator.hasNext()) {
+            while (iterator.hasNext())
+            {
                 Entry<Byte, Byte> entry = iterator.next();
+                Log.d(Constants.TAG, "addParameters: "+entry.getKey());
                 request.addProperty(String.valueOf(entry.getKey()), entry.getValue());
             }
         }

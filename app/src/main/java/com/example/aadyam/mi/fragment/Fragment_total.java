@@ -58,13 +58,10 @@ public class Fragment_total extends Fragment implements DataUpdateListener
     private DatabaseHelperUser databaseHelperUser;
     private Intent intent;
 
-
     public Fragment_total()
     {
         // Required empty public constructor
     }
-
-
 
 
     @Override
@@ -90,21 +87,22 @@ public class Fragment_total extends Fragment implements DataUpdateListener
     }
 
 
-
-
     @Override
-    public void onDetach() {
+    public void onDetach()
+    {
         super.onDetach();
         Log.d(Constants.TAG, "onDetach: ");
     }
 
 
     @Override
-    public void onDestroy() {
+    public void onDestroy()
+    {
         super.onDestroy();
         Log.d(Constants.TAG, "onDestroy: ");
         ((MainActivity) getActivity()).unregisterDataUpdateListener(this);
     }
+
 
     @Override
     public void onDestroyView()
@@ -113,36 +111,37 @@ public class Fragment_total extends Fragment implements DataUpdateListener
         Log.d(Constants.TAG, "onDestroyView: ");
     }
 
+
     @Override
-    public void onStop() {
+    public void onStop()
+    {
         super.onStop();
         Log.d(Constants.TAG, "onStop: ");
     }
 
+
     @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState)
+    {
         super.onSaveInstanceState(outState);
         Log.d(Constants.TAG, "onSaveInstanceState: ");
     }
 
+
     @Override
-    public void setInitialSavedState(@Nullable SavedState state) {
+    public void setInitialSavedState(@Nullable SavedState state)
+    {
         super.setInitialSavedState(state);
         Log.d(Constants.TAG, "setInitialSavedState : ");
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(Context context)
+    {
         super.onAttach(context);
-
         Log.d(Constants.TAG, "onAttach: ");
         ((MainActivity) getActivity()).registerDataUpdateListener(this);
-
     }
-
-
-
-
 
 
 
@@ -158,7 +157,6 @@ public class Fragment_total extends Fragment implements DataUpdateListener
         progressDialog=new ProgressDialog(getContext());
         progressDialog.setMessage("Please Wait.....");
         databaseHelperUser=new DatabaseHelperUser(getContext());
-
         databaseHelperUser=new DatabaseHelperUser(getContext());
         allotted_pending_layout=view.findViewById(R.id.allotted_layout);
         unsafe_layout=view.findViewById(R.id.unsafe_layout);
@@ -184,7 +182,6 @@ public class Fragment_total extends Fragment implements DataUpdateListener
         against_not_available_count_tv = view.findViewById(R.id.against_not_available_count_text);
 
         setCountTextViews(databaseHelperUser.getAllotmentEntriesCount(2));
-
         intent=new Intent(getActivity(),InspectionDisplayActivity.class);
 
         allotted_pending_layout.setOnClickListener(new View.OnClickListener()
@@ -195,7 +192,6 @@ public class Fragment_total extends Fragment implements DataUpdateListener
                 new MyGlobals(getContext()).changeIntent(getActivity(),allotted_count_tv,Constants.TOTAL_ALLOTTED_PENDING,2);
             }
         });
-
 
 
         unsafe_layout.setOnClickListener(new View.OnClickListener()
@@ -316,8 +312,7 @@ public class Fragment_total extends Fragment implements DataUpdateListener
         against_unsafe_count_tv.setText(""+ countData.get(8));
         against_denied_count_tv.setText(""+ countData.get(9));
         against_not_available_count_tv.setText(""+ countData.get(10));
-}
-
+    }
 
 
     @Override

@@ -732,7 +732,7 @@ public class MyGlobals
                             int radioButtonID = rg.getCheckedRadioButtonId();
                             View radioButton = rg.findViewById(radioButtonID);
                             int idx = rg.indexOfChild(radioButton);
-                            RadioButton r = (RadioButton) rg.getChildAt(idx);
+                            AppCompatRadioButton r = (AppCompatRadioButton) rg.getChildAt(idx);
 
                                 if(questionList.get(finalJ).getQuestionId().matches("3|16|24"))
                                 {
@@ -759,6 +759,7 @@ public class MyGlobals
                                 {
                                     question.setTextColor(context.getResources().getColor(R.color.red));
                                     r.setHighlightColor(context.getResources().getColor(R.color.red));
+                                    //r;
                                     sharedPreferences.edit().putInt(Constants.ANSWER+questionList.get(finalJ).getQuestionId(),1).commit();
                                 }
 
@@ -832,7 +833,7 @@ public class MyGlobals
             }
             
             //listViews
-            else if (questionList.get(j).getFieldType().equals("D"))
+            else if(questionList.get(j).getFieldType().equals("D"))
             {
 
                 final Spinner spinner=new Spinner(context);
@@ -1094,7 +1095,6 @@ public class MyGlobals
                 ((SurveyActivity)context).setCurrentItem(Integer.parseInt(questionList.get(0).getCategoryId()), true);
             }
         });
-
 
         LinearLayout buttonLayout=new LinearLayout(context);
         params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
