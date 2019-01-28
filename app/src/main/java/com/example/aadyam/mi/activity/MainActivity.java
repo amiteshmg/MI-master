@@ -88,7 +88,7 @@ public class MainActivity extends FragmentActivity
      public static final String GALLERY_DIRECTORY_NAME="MI Images";
 
     // Image and Video file extensions
-    public static final String IMAGE_EXTENSION = "jpg";
+    public static final String IMAGE_EXTENSION = "png";
     public static final String VIDEO_EXTENSION = "mp4";
 
     // Alert Dialog Manager
@@ -156,7 +156,6 @@ public class MainActivity extends FragmentActivity
         Log.i("DATE", String.valueOf(c));
 
         setActionBar(toolbar);
-
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener()
                 {
                     @Override
@@ -181,7 +180,6 @@ public class MainActivity extends FragmentActivity
 
                             case R.id.sync_entries:
                                 syncFragments();
-
                         }
                         // Add code here to update the UI based on the item selected
                         // For example, swap UI fragments here

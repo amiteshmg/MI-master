@@ -49,7 +49,7 @@ public class InspectionDataSoapHelper
        /* ArrayList<LogAllModel> logArrayList = new ArrayList<LogAllModel>();
         ArrayList<LogAllModel> logArrayListException = new ArrayList<LogAllModel>();*/
        private String currentDateandTime;
-        private String response;
+        private String response=null;
 
 
     private class AsyncCallWS extends AsyncTask<Void, Void, String> {
@@ -77,6 +77,7 @@ public class InspectionDataSoapHelper
 
                 SimpleDateFormat sdf = new SimpleDateFormat("MMddHHmmssSS", Locale.ENGLISH);
                 currentDateandTime = sdf.format(new Date());
+
                 response=calculate(mContext, NAMESPACE, METHOD_NAME, URL, SOAP_ACTION, parameters);
                 return null;
             }
@@ -99,8 +100,8 @@ public class InspectionDataSoapHelper
         private String calculate(Context context, String NAMESPACE, String METHOD_NAME, String URL, String SOAP_ACTION, LinkedHashMap<Byte, Byte> parameters) {
 
 
-            sharedPreferences = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
-            editor = sharedPreferences.edit();
+           /* sharedPreferences = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
+            editor = sharedPreferences.edit();*/
 
             try
             {
@@ -108,12 +109,10 @@ public class InspectionDataSoapHelper
              /*   if (logArrayList.size() > 0) {
                     logArrayList.clear();
                 }*/
-                SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
-                Log.d(Constants.TAG, "calculate REQUEST : "+Request.toString()+Request);
-                for(int i=0;i<parameters.size();i++)
-                Log.d(Constants.TAG, "calculate: "+ parameters.get(i).byteValue());
-                addParameters(parameters, Request);
 
+                SoapObject Request = new SoapObject(NAMESPACE, METHOD_NAME);
+                Log.d(Constants.TAG, "calculate REQUEST : "+Request.toString());
+                addParameters(parameters, Request);
 
              /*
                 try {
@@ -131,6 +130,7 @@ public class InspectionDataSoapHelper
                     logArrayList.add(logDetailModel);
                     System.out.println("logArrayList@@" + logArrayList);
                     new Logger(context).saveLog(logArrayList);
+
                 }
 
                 catch (Exception e)
@@ -140,6 +140,8 @@ public class InspectionDataSoapHelper
 
 
                 */
+
+
                 SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 soapEnvelope.dotNet = true;
 
@@ -160,16 +162,16 @@ public class InspectionDataSoapHelper
 
 
 
-                Log.d(Constants.TAG, "InspectionData_Response: "+resultString+soapEnvelope.toString());
+                Log.d(Constants.TAG, "InspectionData_Response: "+resultString);
                 System.out.println("InspectionData_Response" + resultString);
 
                 response = resultString.toString();
-                Log.d(Constants.TAG, "calculate: RESPONSE :"+response);
+
                 return response;
 
                 //sharedPreferences.edit().remove("flagSubmit").commit();  // upload photo fragment
 
-                /*
+/*
                 if (!response.equalsIgnoreCase("Fail")) {
                     //Success
                     QuestionAnswerDB.getInstance(context).deleteRecord(response);
@@ -178,8 +180,8 @@ public class InspectionDataSoapHelper
 
                 }*/
 
-            } catch (Exception ex) {
-
+            } catch (Exception ex)
+            {
                 /*if (logArrayListException.size() > 0) {
                     logArrayListException.clear();*/
                 return null;
@@ -216,7 +218,6 @@ public class InspectionDataSoapHelper
             // int event = 0;
             String response1 = "";
 
-
             AsyncCallWS task = new AsyncCallWS(context, NAMESPACE, METHOD_NAME, URL, SOAP_ACTION, parameters);
 
             try
@@ -239,17 +240,17 @@ public class InspectionDataSoapHelper
             }
 
             return response;
+
         }
 
 
         private void addParameters(LinkedHashMap<Byte, Byte> parameters, SoapObject request)
         {
             Iterator<Entry<Byte, Byte>> iterator = parameters.entrySet().iterator();
-            while (iterator.hasNext())
-            {
+            while (iterator.hasNext()) {
                 Entry<Byte, Byte> entry = iterator.next();
-                Log.d(Constants.TAG, "addParameters: "+entry.getKey());
                 request.addProperty(String.valueOf(entry.getKey()), entry.getValue());
+
             }
         }
 

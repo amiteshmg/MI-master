@@ -115,7 +115,7 @@ public class CameraUtils
      * Creates and returns the image or video file before opening the camera
      */
 
-    public static File getOutputMediaFile(/*int type*/)
+    public static File getOutputMediaFile(int type)
     {
         // External sdcard location
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), MainActivity.GALLERY_DIRECTORY_NAME);
@@ -133,7 +133,7 @@ public class CameraUtils
         // adds timestamp
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         File mediaFile;
-        mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + "." + MainActivity.IMAGE_EXTENSION);
+        mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp +"_"+type+ "." + MainActivity.IMAGE_EXTENSION);
         return mediaFile;
     }
 

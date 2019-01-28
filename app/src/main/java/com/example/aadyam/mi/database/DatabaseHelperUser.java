@@ -32,6 +32,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -490,7 +492,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
                 for(int i=0;i<size;i++)
                 {
-                    Log.d(Constants.TAG,""+response.body().getQuestionList().get(i).getDescription());
+                    //Log.d(Constants.TAG,""+response.body().getQuestionList().get(i).getDescription());
                     String s1,s2,s3,s4,s5,s6,s7,s8,s9;
 
                     if(response.body().getQuestionList().get(i).getActive().equalsIgnoreCase("true"))
@@ -508,7 +510,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
                     }
                 }
 
-                Log.d(Constants.TAG, "Questions Loaded!");
+             //   Log.d(Constants.TAG, "Questions Loaded!");
             }
 
 
@@ -543,7 +545,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
         }
 
 
-        Log.d(Constants.TAG,"QuestionInserted : " + result);
+     //  Log.d(Constants.TAG,"QuestionInserted : " + result);
 
 
 
@@ -604,12 +606,12 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
             contentValues.put(COL3_37,list.get(i).getIsInMobile());
 
             long result=db.insert(TABLE_NAME_ALLOTMENT,  null,contentValues);
-            Log.d(Constants.TAG,"ALLOTMENT RESULT "+result);
+           // Log.d(Constants.TAG,"ALLOTMENT RESULT "+result);
 
-            if(result!=-1)
-            {
-                Log.d(Constants.TAG, "Inserted!");
-            }
+//            if(result!=-1)
+//            {
+//               // Log.d(Constants.TAG, "Inserted!");
+//            }
           /*  if (c == 1)
             {
                 //long result = db.update(TABLE_NAME_ALLOTMENT, contentValues, COL3_20 + " = " + list.get(i).getAllotmentId(), null);
@@ -673,7 +675,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
                 Toast.makeText(context, "Connected. Fetched Allotment updates successfully! ", Toast.LENGTH_SHORT).show();
 
                 assert response.body() != null;
-                Log.d(Constants.TAG," getAllotment Entered : DEMO DATA RESPONSE : "+response.body().getAllotmentListResult().get(1).getAddress());
+              //  Log.d(Constants.TAG," getAllotment Entered : DEMO DATA RESPONSE : "+response.body().getAllotmentListResult().get(1).getAddress());
 
                 assert response.body() != null;
                 Random rand = new Random();
@@ -685,9 +687,6 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
                 putAllotmentBeta(list);
                 token[0] =true;
                 //progressDialog.dismiss();
-
-
-
             }
 
             @Override
@@ -709,6 +708,8 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
     public ArrayList<Integer> getAllotmentEntriesCount(int FRAG_TYPE)
     {
         //DatabaseHelperUser databaseHelperUser=new DatabaseHelperUser(context);
+
+
 
         ArrayList<Integer> countData=new ArrayList<>();
 
@@ -732,18 +733,21 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
                 return countData;
 
                 case 2:
-                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_ALLOTTED_PENDING).size());
-                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_UNSAFE).size());
-                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_DENIED).size());
-                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_NOT_AVAILABLE).size());
-                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_REALLOTTED_UNSAFE).size());
-                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_REALLOTTED_DENIED).size());
-                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_REALLOTTED_NOT_AVAILABLE).size());
-                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_TOTAL).size());
-                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_AGAINST_UNSAFE).size());
-                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_AGAINST_DENIED).size());
-                countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_AGAINST_NOT_AVAILABLE).size());
-                return  countData;
+
+                    countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_ALLOTTED_PENDING).size());
+                    countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_UNSAFE).size());
+                    countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_DENIED).size());
+                    countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_NOT_AVAILABLE).size());
+                    countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_REALLOTTED_UNSAFE).size());
+                    countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_REALLOTTED_DENIED).size());
+                    countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_REALLOTTED_NOT_AVAILABLE).size());
+                    countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_TOTAL).size());
+                    countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_AGAINST_UNSAFE).size());
+                    countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_AGAINST_DENIED).size());
+                    countData.add(this.getAllotmentEntries(FRAG_TYPE,Constants.TOTAL_AGAINST_NOT_AVAILABLE).size());
+
+                    return  countData;
+
 
                 default: return null;
         }
@@ -903,10 +907,11 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
                     cursor = db.rawQuery(selectQuery9, null);
                 }
 
-                else {
-                    String selectQuery9 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_14+"=1 "+" AND "+COL3_4+"="+currentDate;
-                    cursor = db.rawQuery(selectQuery9, null);
-                }
+                else
+                    {
+                        String selectQuery9 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_14+"=1 "+" AND "+COL3_4+"="+currentDate;
+                        cursor = db.rawQuery(selectQuery9, null);
+                    }
 
 
                 break;
@@ -983,7 +988,10 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
     //TODO----------------------------------------PHOTOS TABLE-----------------------------------------------------
 
-    public void setPhotos(ArrayList<String> filename,ArrayList<String> encodedImage,String[] CODE)
+
+    //TODO Changed on 25 JAn retrive if not working
+
+    public void setPhotos(String filename,String encodedImage,String CODE)
     {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -992,23 +1000,30 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
         String  AllottedId=sharedPreferences.getString(Constants.ALLOTED_ID,null);
 
 
-        for(int i=0;i<filename.size();i++)
+       /* for(int i=0;i<encodedImage.size();i++)
         {
-
+            int j=i+1;*/
             ContentValues contentValues = new ContentValues();
-            contentValues.put(COL6_3,encodedImage.get(i));
-            contentValues.put(COL6_5,filename.get(i));
+            contentValues.put(COL6_3,encodedImage);
+            contentValues.put(COL6_5,filename);
+            contentValues.put(COL6_10,AllottedId);
+            contentValues.put(COL6_11,CODE);
             contentValues.put(COL6_9,UniqueNo);
-            contentValues.put(COL6_10,AllottedId);
-            contentValues.put(COL6_10,AllottedId);
-            contentValues.put(COL6_11,CODE[i]);
 
-            Cursor cursor=db.rawQuery("SELECT * FROM "+TABLE_NAME_PHOTOS+" WHERE "+COL6_9+"="+UniqueNo+" AND "+COL6_11+"="+CODE[i],null);
+
+
+
+
+
+            @SuppressLint("Recycle")
+            Cursor cursor=db.rawQuery("SELECT * FROM "+TABLE_NAME_PHOTOS+" WHERE "+COL6_9+"="+UniqueNo+" AND "+COL6_11+"="+CODE,null);
+
             int count=cursor.getCount();
 
             if(count==1)
             {
-                long result=db.update(TABLE_NAME_PHOTOS,contentValues,""+COL6_9+"="+UniqueNo+" AND "+COL6_11+"="+CODE[i],null);
+                long result=db.update(TABLE_NAME_PHOTOS,contentValues,""+COL6_9+"="+UniqueNo+" AND "+COL6_11+"="+CODE,null);
+                //long result=db.replace(TABLE_NAME_PHOTOS,null,contentValues);
                 if(result!=-1)
                     //Toast.makeText(context, "Updated!", Toast.LENGTH_SHORT).show();
                 Log.d(Constants.TAG, "Updated!");
@@ -1022,7 +1037,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
                     //Toast.makeText(context, "Inserted!", Toast.LENGTH_SHORT).show();
                 Log.d(Constants.TAG, "Inserted!");
             }
-        }
+
         //id INTEGER PRIMARY KEY AUTOINCREMENT,flag TEXT,filestream TEXT, distributor_id TEXT, filename TEXT,Inspectionformid TEXT,ref_Inspectionformid TEXT,unsafe_id TEXT,uniqueConsumerId TEXT,allotedId TEXT,imageType TEXT,json_data TEXT);";
     }
 
@@ -1144,28 +1159,125 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
         try
         {
             //jsonObject.put()
+            jsonObject.put("DOB", dateofbirth);
+            if(vip==null)
+                jsonObject.put("VIP",null);
+            else
             jsonObject.put("VIP",vip);
+
+            if(gender==null)
+                jsonObject.put("Gndr",null);
+            else
             jsonObject.put("Gndr",gender);
-            jsonObject.put("CCrd",usingcreditcardcheckbox);
+
+            if(usingcreditcardcheckbox==null)
+            jsonObject.put("CCrd",null);
+            else
+                jsonObject.put("CCrd",usingcreditcardcheckbox);
+
+            if(motherName==null)
+                jsonObject.put("MMNme",null);
+            else
             jsonObject.put("MMNme",motherName);
-            jsonObject.put("HCC",highConsumerCheckBox);
+
+            if(highConsumerCheckBox==null)
+            jsonObject.put("HCC",null);
+            else
+                jsonObject.put("HCC",highConsumerCheckBox);
+
+            if (fatherName==null)
+            jsonObject.put("FSp",null);
+            else
             jsonObject.put("FSp",fatherSpouseName);
+
+            if(refillGap==null)
+            jsonObject.put("Gp2Refil",null);
+            else
             jsonObject.put("Gp2Refil",refillGap);
+
+            if(bookRefill==null)
+            jsonObject.put("Hwfil",null);
+
+            else
             jsonObject.put("Hwfil",bookRefill);
+
+
+            if(familyMember==null)
+            jsonObject.put("NoOfFM",null);
+
+            else
             jsonObject.put("NoOfFM",familyMember);
+
+
+            if(typeOfHouse==null)
+            jsonObject.put("TypOfHA",null);
+            else
             jsonObject.put("TypOfHA",typeOfHouse);
+
+            if(rationCardAffidavit==null)
+            jsonObject.put("RtCrdAff",null);
+            else
             jsonObject.put("RtCrdAff",rationCardAffidavit);
+
+
+            if(twoWheeler==null)
+            jsonObject.put("TWhelr",null);
+            else
             jsonObject.put("TWhelr",twoWheeler);
+
+            if(affidavitDate==null)
+            jsonObject.put("AffDt",null);
+            else
             jsonObject.put("AffDt",affidavitDate);
+
+            if(fourWheeler==null)
+            jsonObject.put("FWhelr",null);
+            else
             jsonObject.put("FWhelr",fourWheeler);
-            jsonObject.put("RCNo",rationCardNo);
+
+
+            if(pipeGas==null)
+            jsonObject.put("UsePipGs",null);
+            else
             jsonObject.put("UsePipGs",pipeGas);
+
+
+            if(panCardNo==null)
+            jsonObject.put("PCNo",null);
+            else
             jsonObject.put("PCNo",panCardNo);
+
+
+            if(passportNo==null)
+            jsonObject.put("PsprtNo",null);
+            else
             jsonObject.put("PsprtNo",passportNo);
+
+
+            if(voterId==null)
+            jsonObject.put("VCNo",null);
+            else
             jsonObject.put("VCNo",voterId);
+
+
+            if(licenseNo==null)
+            jsonObject.put("DriLicNo",null);
+            else
             jsonObject.put("DriLicNo",licenseNo);
+
+
+            if(mobileNo==null)
+            jsonObject.put("MobNo",null);
+            else
             jsonObject.put("MobNo",mobileNo);
+
+
+            if(emailId==null)
+            jsonObject.put("EmailId",null);
+            else
             jsonObject.put("EmailId",emailId);
+
+
         }
 
         catch (JSONException e)
@@ -1266,17 +1378,26 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
 
     //converts the parameters into a JSON Array string to POST to server
-    public String getConsumerJsonString(String allottedId,double latitude,double longitude,String instruction,String dateString)
+    public String getConsumerJsonString(String allottedId,double latitude,double longitude,String instruction,String dateString,boolean isSatisfied)
     {
         JSONArray jsonArray=new JSONArray();
         JSONObject jsonObject=new JSONObject();
+
+
+      /*  jsonObjBasicInfo.put("AltId", strAllotmentId);
+        jsonObjBasicInfo.put("Lat", todayAllotedList.getLatitude());
+        jsonObjBasicInfo.put("Long", todayAllotedList.getLongitude());
+        jsonObjBasicInfo.put("Stisfy", strSatisfy);
+        jsonObjBasicInfo.put("Rmrk", todayAllotedList.getInstruction());
+        jsonObjBasicInfo.put("IDt", strInsDate);*/
+
 
         try
         {
             jsonObject.put("AltId",allottedId);
             jsonObject.put("Lat",latitude);
             jsonObject.put("Long",longitude);
-            jsonObject.put("Stisfy",true);
+            jsonObject.put("Stisfy",isSatisfied);
             jsonObject.put("Rmrk",instruction);
             jsonObject.put("IDt",dateString);
         }
@@ -1333,7 +1454,17 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
                 {
                     JSONObject jsonObjectAnswers=new JSONObject();
                     jsonObjectAnswers.put("QId",cursor.getString(1));
+
+
+                    if(cursor.getString(3).equalsIgnoreCase("yes"))
+                    jsonObjectAnswers.put("Ans","1");
+
+                    else if(cursor.getString(3).equalsIgnoreCase("no"))
+                        jsonObjectAnswers.put("Ans","0");
+
+                    else
                     jsonObjectAnswers.put("Ans",cursor.getString(3));
+
                     jsonArrayQuestions.put(jsonObjectAnswers);
                 }
 
@@ -1341,8 +1472,6 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
                 {
                     e.printStackTrace();
                 }
-
-
 
             }while (cursor.moveToNext());
 
