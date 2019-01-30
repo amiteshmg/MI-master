@@ -6,16 +6,16 @@ android {
     compileSdkVersion 28
     defaultConfig
             {
-        applicationId "com.example.aadyam.mi"
-        minSdkVersion 16
-        targetSdkVersion 28
+                applicationId "com.example.aadyam.mi"
+                minSdkVersion 16
+                targetSdkVersion 28
 
                 //Open File
 
                 versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        vectorDrawables.useSupportLibrary = true
+                versionName "1.0"
+                testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+                vectorDrawables.useSupportLibrary = true
             }
 
     buildTypes
@@ -29,8 +29,8 @@ android {
 
     compileOptions
             {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+                sourceCompatibility JavaVersion.VERSION_1_8
+                targetCompatibility JavaVersion.VERSION_1_8
             }
 }
 
@@ -67,4 +67,4 @@ repositories {
     maven { url 'https://jitpack.io' }
     //maven { url 'https://oss.sonatype.org/content/repositories/ksoap2-android-releases/' }
     maven { url 'https://oss.sonatype.org/content/repositories/ksoap2-android-releases/' }
-            }
+}

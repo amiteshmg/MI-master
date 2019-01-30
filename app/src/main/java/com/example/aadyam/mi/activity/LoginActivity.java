@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity
 
        alert = new AlertDialogManager();
 
-        //TODO : Code for sharedPreference . Uncomment later on
+
 
         if (!CameraUtils.isDeviceSupportCamera(getApplicationContext()))
         {

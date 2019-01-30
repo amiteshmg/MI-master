@@ -2,12 +2,10 @@ package com.example.aadyam.mi.activity;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,15 +15,12 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,30 +28,21 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
-import com.androidquery.AQuery;
 import com.example.aadyam.mi.Global.MyGlobals;
 import com.example.aadyam.mi.R;
 import com.example.aadyam.mi.Utils.Constants;
-import com.example.aadyam.mi.interfaces.DataUpdateListener;
-import com.example.aadyam.mi.session.AlertDialogManager;
-import com.example.aadyam.mi.session.SessionManager;
 import com.example.aadyam.mi.database.DatabaseHelperUser;
 import com.example.aadyam.mi.fragment.Fragment_today;
 import com.example.aadyam.mi.fragment.Fragment_total;
-import com.example.aadyam.mi.model.Allotment;
-import com.example.aadyam.mi.model.Distributor;
-import com.example.aadyam.mi.rest.ApiClient;
-import com.example.aadyam.mi.rest.ApiInterface;
+import com.example.aadyam.mi.interfaces.DataUpdateListener;
+import com.example.aadyam.mi.session.AlertDialogManager;
+import com.example.aadyam.mi.session.SessionManager;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /*
 import com.aquery.AQuery;
@@ -96,7 +82,7 @@ public class MainActivity extends FragmentActivity
 
     // Session Manager Class
     private SessionManager session;
-  //  SwipeRefreshLayout swipeRefreshLayout;
+    SwipeRefreshLayout swipeRefreshLayout;
   private TabLayout tabLayout;
     private ViewPager viewPager;
     private Date c;
@@ -140,12 +126,12 @@ public class MainActivity extends FragmentActivity
         setContentView(R.layout.activity_main);
 
         tabLayout = findViewById(R.id.tabs);
-        //swipeRefreshLayout=findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout=findViewById(R.id.swipe_layout);
         progressDialog=new ProgressDialog(getApplicationContext());
         progressDialog.setMessage("Please wait..");
         session = new SessionManager(getApplicationContext());
         databaseHelperUser=new DatabaseHelperUser(getApplicationContext(),this);
-        mDrawerLayout=findViewById(R.id.drawer_layout);
+        mDrawerLayout=(DrawerLayout) findViewById(R.id.drawer_layout);
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         navigationView = findViewById(R.id.navigation_view);
@@ -217,16 +203,11 @@ public class MainActivity extends FragmentActivity
 
 
 
-     /*  swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+       swipeRefreshLayout.setOnRefreshListener(() ->
        {
-           @Override
-           public void onRefresh()
-           {
-                syncFragments();
-                swipeRefreshLayout.setRefreshing(false);
-           }
+            syncFragments();
+            swipeRefreshLayout.setRefreshing(false);
        });
-*/
        setupViewPager(viewPager);
 
        tabLayout.setupWithViewPager(viewPager);

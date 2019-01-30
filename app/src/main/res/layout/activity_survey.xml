@@ -35,7 +35,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/user_name"
+
                     android:textSize="@dimen/normal_text"
                     android:textColor="@color/white"/>
 
@@ -43,12 +43,14 @@
                     android:id="@+id/display_id_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/number_text"
+                    android:layout_weight="2"
+
                     android:textColor="@color/white" />
             </LinearLayout>
 
         </Toolbar>
+
+
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs1"
@@ -58,7 +60,9 @@
             app:tabMode="scrollable"
             app:tabIndicatorColor="@color/red"
             android:background="@color/colorPrimary"
-            app:tabTextColor="@color/white">
+            app:tabTextColor="@color/white"
+
+            >
 
         </android.support.design.widget.TabLayout>
 
@@ -68,7 +72,6 @@
             android:id="@+id/question_linear_layout">
 
             <android.support.v4.view.ViewPager
-
                 android:id="@+id/viewpager1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

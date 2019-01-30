@@ -162,7 +162,7 @@ public class Fragment_total extends Fragment implements DataUpdateListener
         unsafe_layout=view.findViewById(R.id.unsafe_layout);
         Denied_layout=view.findViewById(R.id.denied_layout);
         Not_available_layout=view.findViewById(R.id.not_available_layout);
-        reallotted_unsafe_layout=view.findViewById(R.id.reallotted_not_available_layout);
+        reallotted_unsafe_layout=view.findViewById(R.id.reallotted_unsafe_layout);
         reallotted_denied_layout=view.findViewById(R.id.reallotted_denied_layout);
         reallotted_not_available_layout=view.findViewById(R.id.reallotted_not_available_layout);
         total_layout=view.findViewById(R.id.total_layout);
@@ -184,116 +184,39 @@ public class Fragment_total extends Fragment implements DataUpdateListener
         setCountTextViews(databaseHelperUser.getAllotmentEntriesCount(2));
         intent=new Intent(getActivity(),InspectionDisplayActivity.class);
 
-        allotted_pending_layout.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                new MyGlobals(getContext()).changeIntent(getActivity(),allotted_count_tv,Constants.TOTAL_ALLOTTED_PENDING,2);
-            }
-        });
+        allotted_pending_layout.setOnClickListener(v -> new MyGlobals(getContext()).changeIntent(getActivity(),allotted_count_tv,Constants.TOTAL_ALLOTTED_PENDING,2));
 
 
-        unsafe_layout.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                new MyGlobals(getContext()).changeIntent(getActivity(),unsafe_count_tv,Constants.TOTAL_UNSAFE,2);
-            }
-        });
+        unsafe_layout.setOnClickListener(v -> new MyGlobals(getContext()).changeIntent(getActivity(),unsafe_count_tv,Constants.TOTAL_UNSAFE,2));
 
 
-        Denied_layout.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v) {
-                new MyGlobals(getContext()).changeIntent(getActivity(),denied_count_tv,Constants.TOTAL_DENIED,2);
-
-            }
-        });
+        Denied_layout.setOnClickListener(v -> new MyGlobals(getContext()).changeIntent(getActivity(),denied_count_tv,Constants.TOTAL_DENIED,2));
 
 
-        Not_available_layout.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v) {
-                new MyGlobals(getContext()).changeIntent(getActivity(),not_available_count_tv,Constants.TOTAL_NOT_AVAILABLE,2);
-            }
-        });
+        Not_available_layout.setOnClickListener(v -> new MyGlobals(getContext()).changeIntent(getActivity(),not_available_count_tv,Constants.TOTAL_NOT_AVAILABLE,2));
 
 
-        reallotted_unsafe_layout.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                new MyGlobals(getContext()).changeIntent(getActivity(),reallotted_unsafe_count_tv,Constants.TOTAL_REALLOTTED_UNSAFE,2);
-            }
-        });
+        reallotted_unsafe_layout.setOnClickListener(v -> new MyGlobals(getContext()).changeIntent(getActivity(),reallotted_unsafe_count_tv,Constants.TOTAL_REALLOTTED_UNSAFE,2));
 
 
-        reallotted_denied_layout.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                new MyGlobals(getContext()).changeIntent(getActivity(),reallotted_denied_count_tv,Constants.TOTAL_REALLOTTED_DENIED,2);
-            }
-        });
+        reallotted_denied_layout.setOnClickListener(v -> new MyGlobals(getContext()).changeIntent(getActivity(),reallotted_denied_count_tv,Constants.TOTAL_REALLOTTED_DENIED,2));
+
+
+        reallotted_not_available_layout.setOnClickListener(v -> new MyGlobals(getContext()).changeIntent(getActivity(),reallotted_not_available_count_tv,Constants.TOTAL_REALLOTTED_NOT_AVAILABLE,2));
 
 
 
+        total_layout.setOnClickListener(v -> new MyGlobals(getContext()).changeIntent(getActivity(),total_count_tv,Constants.TOTAL_TOTAL,2));
 
-        reallotted_not_available_layout.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                new MyGlobals(getContext()).changeIntent(getActivity(),reallotted_not_available_count_tv,Constants.TOTAL_REALLOTTED_NOT_AVAILABLE,2);
-            }
-        });
+
+        against_unsafe_layout.setOnClickListener(v -> new MyGlobals(getContext()).changeIntent(getActivity(),against_unsafe_count_tv,Constants.TOTAL_AGAINST_UNSAFE,2));
 
 
 
-        total_layout.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                new MyGlobals(getContext()).changeIntent(getActivity(),total_count_tv,Constants.TOTAL_TOTAL,2);
-            }
-        });
+        against_denied_layout.setOnClickListener(v -> new MyGlobals(getContext()).changeIntent(getActivity(),against_denied_count_tv,Constants.TOTAL_AGAINST_DENIED,2));
 
 
-        against_unsafe_layout.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                new MyGlobals(getContext()).changeIntent(getActivity(),against_unsafe_count_tv,Constants.TOTAL_AGAINST_UNSAFE,2);
-            }
-        });
-
-
-
-        against_denied_layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new MyGlobals(getContext()).changeIntent(getActivity(),against_denied_count_tv,Constants.TOTAL_AGAINST_DENIED,2);
-
-            }
-        });
-
-
-        against_not_available_layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                new MyGlobals(getContext()).changeIntent(getActivity(),against_not_available_count_tv,Constants.TOTAL_AGAINST_NOT_AVAILABLE,2);
-
-            }
-        });
+        against_not_available_layout.setOnClickListener(v -> new MyGlobals(getContext()).changeIntent(getActivity(),against_not_available_count_tv,Constants.TOTAL_AGAINST_NOT_AVAILABLE,2));
 
     }
 

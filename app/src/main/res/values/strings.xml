@@ -3,9 +3,9 @@
 
 
     <string name="dashboard">Dashboard</string>
-    <string name="user_name">Amit Jadhav</string>
-    <string name="number_text">6712311</string>
-    <string name="save">Save</string>
+
+
+    <string name="saveAndProceed">  Save &amp; Proceed  </string>
     <string name="next">Next</string>
     <string name="distributor_details">Distributor Details</string>
 
@@ -77,6 +77,15 @@
     <string name="search">Search</string>
     <string name="english">English</string>
     <string name="hindi">Hindi</string>
+
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_3">Tab 3</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 
 
 </resources>

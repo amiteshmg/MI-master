@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.example.aadyam.mi.Global.MyGlobals;
 import com.example.aadyam.mi.R;
 import com.example.aadyam.mi.Utils.Constants;
 import com.example.aadyam.mi.database.DatabaseHelperUser;
@@ -47,9 +48,12 @@ public class SplashScreenActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-        prefs = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
+        prefs = getSharedPreferences(Constants.PREFS_NAME+"_FirstRun", MODE_PRIVATE);
         context=getApplicationContext();
         databaseHelperUser = new DatabaseHelperUser(context,this);
+
+        if(new MyGlobals(this).isNetworkConnected())
+            databaseHelperUser.getAllotment();
         //databaseHelperUser.getAllotment();
 
         if (Build.VERSION.SDK_INT >= 23)
@@ -101,7 +105,6 @@ public class SplashScreenActivity extends AppCompatActivity
         super.onStart();
     }
 
-
     @SuppressLint("ApplySharedPref")
     @Override
     protected void onResume()
@@ -116,16 +119,20 @@ public class SplashScreenActivity extends AppCompatActivity
         }
     }
 
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case REQUEST: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+        switch (requestCode)
+        {
+            case REQUEST:
                 {
-                    Log.d("TAG", "Grant Permissions ");
-                    proceed();
-                }
+
+                    if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                    {
+                        Log.d("TAG", "Grant Permissions ");
+                        proceed();
+                    }
 
 
                 else
@@ -148,6 +155,8 @@ public class SplashScreenActivity extends AppCompatActivity
             }
         }
     }
+
+
 
 
     private static boolean hasPermissions(Context context, String... permissions)

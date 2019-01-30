@@ -1,16 +1,23 @@
 package com.example.aadyam.mi.activity;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.constraint.solver.Cache;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,13 +36,21 @@ import com.example.aadyam.mi.interfaces.AllotmentListAdapterListener;
 import com.example.aadyam.mi.interfaces.DataUpdateListener;
 import com.example.aadyam.mi.model.Allotment;
 import com.example.aadyam.mi.model.AllotmentList;
+import com.example.aadyam.mi.model.DeniedInspection;
+import com.example.aadyam.mi.rest.ApiClient;
+import com.example.aadyam.mi.rest.ApiInterface;
+import com.example.aadyam.mi.service.InspectionDataService;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 @SuppressWarnings("ALL")
-public class InspectionDisplayActivity extends AppCompatActivity implements AllotmentListAdapterListener, DataUpdateListener
+public class InspectionDisplayActivity extends AppCompatActivity implements DataUpdateListener,AllotmentListAdapterListener
 {
     DatabaseHelperUser databaseHelperUser;
     RecyclerView recyclerView;
@@ -50,6 +65,8 @@ public class InspectionDisplayActivity extends AppCompatActivity implements Allo
     SearchView searchView;
     private int typeFlag;
     Toolbar toolbar;
+
+    private Handler handler = new Handler();
 
     @Override
     public void onBackPressed()
@@ -75,7 +92,7 @@ public class InspectionDisplayActivity extends AppCompatActivity implements Allo
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        clickCode=getIntent().getIntExtra(Constants.CLICK_CODE,1000);
+        clickCode=getIntent().getIntExtra(Constants.CLICK_CODE,0);
         fragType=getIntent().getIntExtra(Constants.FRAG_TYPE,0);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inspection_display);
@@ -104,7 +121,7 @@ public class InspectionDisplayActivity extends AppCompatActivity implements Allo
                     allotmentAdapter=new AllotmentAdapter(list, getApplicationContext(),this);
                     recyclerView.setAdapter(allotmentAdapter);
                     recyclerView.setAdapter(new AllotmentAdapter(list, getApplicationContext(),this));
-                    allotmentAdapter.notifyDataSetChanged();
+                    //allotmentAdapter.notifyDataSetChanged();
                     break;
 
 
@@ -176,7 +193,7 @@ public class InspectionDisplayActivity extends AppCompatActivity implements Allo
                     list=databaseHelperUser.getAllotmentEntries(typeFlag,Constants.TOTAL_AGAINST_UNSAFE);
                     staticAdapter=new StaticAdapter(list, getApplicationContext(),this);
                     recyclerView.setAdapter(staticAdapter);
-                    recyclerView.setAdapter(new AllotmentAdapter(list, getApplicationContext(),this));
+                    recyclerView.setAdapter(new StaticAdapter(list, getApplicationContext(),this));
                     break;
 
 
@@ -197,7 +214,6 @@ public class InspectionDisplayActivity extends AppCompatActivity implements Allo
                 recyclerView.setAdapter(new StaticAdapter(list, getApplicationContext(),this));
                 break;
         }
-
     }
 
 
@@ -317,12 +333,171 @@ public class InspectionDisplayActivity extends AppCompatActivity implements Allo
         Toast.makeText(this, "Selected!"+allotmentList.getConsumerName(), Toast.LENGTH_SHORT).show();
     }
 
-
-    public void refreshAdapter()
+    @Override
+    public void onItemClicked(int position, View v,AllotmentList allotmentList)
     {
-        allotmentAdapter.notifyDataSetChanged();
-        recyclerView.setAdapter(allotmentAdapter);
+      if(v.getId()==R.id.denied_button)
+      {
+          AlertDialog.Builder alertDialog=new AlertDialog.Builder(this);
+          alertDialog.setMessage("Are you sure you want to submit the entry as DENIED ? ");
+
+          alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener()
+          {
+              @Override
+              public void onClick(DialogInterface dialog, int which)
+              {
+               /*   ProgressDialog progressDialog=new ProgressDialog(getApplicationContext());
+                  progressDialog.setMessage("Please wait....");
+                  progressDialog.setCancelable(false);
+                  progressDialog.show();
+*/
+               /*   handler.postDelayed(new Runnable()
+                  {
+                      public void run()
+                      {
+                          doStuff(allotmentList);
+                      }
+                  }, 5000);
+
+                  recyclerView.setAdapter(allotmentAdapter);
+                  progressDialog.dismiss();*/
+                  doStuff(allotmentList,0);
+                  refreshAdapter(typeFlag,clickCode);
+                  //refreshAdapter();
+                  //recyclerView.setAdapter(allotmentAdapter);
+
+              }
+          });
+
+          alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener()
+          {
+              @Override
+              public void onClick(DialogInterface dialog, int which)
+              {
+                dialog.dismiss();
+              }
+          });
+
+          alertDialog.show();
+      }
+
+
+      else if(v.getId() == R.id.not_available_button)
+      {
+          AlertDialog.Builder alertDialog=new AlertDialog.Builder(this);
+          alertDialog.setMessage("Are you sure you want to submit the entry as NOT AVAILABLE ? ");
+
+          alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener()
+          {
+              @Override
+              public void onClick(DialogInterface dialog, int which)
+              {
+                 /* ProgressDialog progressDialog=new ProgressDialog(getApplicationContext());
+                  progressDialog.setMessage("Please wait....");
+                  progressDialog.setCancelable(false);
+                  progressDialog.show();*/
+
+             /*     handler.postDelayed(new Runnable()
+                  {
+                      public void run()
+                      {
+                          doStuff(allotmentList);
+                      }
+                  }, 5000);*/
+
+                  doStuff(allotmentList,1);
+                  refreshAdapter(typeFlag,clickCode);
+                  //recyclerView.setAdapter(allotmentAdapter);
+                  //progressDialog.dismiss();
+              }
+          });
+
+          alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+
+              }
+          });
+
+          alertDialog.show();
+      }
     }
+
+
+    private void doStuff(AllotmentList allotmentList,int deniedNotAvailableFlag)
+    {
+     /*   setDenied(allotmentList.getAllotmentId().toString(), 0);
+        databaseHelperUser.getAllotment();
+        allotmentAdapter.notifyDataSetChanged();*/
+        setDenied(allotmentList.getAllotmentId().toString(), deniedNotAvailableFlag);
+
+    }
+
+
+    private void setDenied(String AllotmentId, int flag)
+    {
+        ApiInterface apiInterface;
+        apiInterface = ApiClient.getClient().create(ApiInterface.class);
+
+        if (flag == 0)
+        {
+            Call<DeniedInspection> call = apiInterface.denyInspection(AllotmentId, 1, 0);
+            call.enqueue(new Callback<DeniedInspection>()
+            {
+                @SuppressLint("CommitPrefEdits")
+                @Override
+                public void onResponse(@NonNull Call<DeniedInspection> call, @NonNull Response<DeniedInspection> response)
+                {
+                    Toast.makeText(getApplicationContext(), response.body().getInspectionDeniedResult(), Toast.LENGTH_SHORT).show();
+                }
+
+
+                @Override
+                public void onFailure(@NonNull Call<DeniedInspection> call, @NonNull Throwable t)
+                {
+                    Log.d(Constants.TAG, "set Denied onFailure() " + t.getMessage());
+                }
+            });
+        }
+
+
+        else if (flag == 1)
+        {
+            Call<DeniedInspection> call = apiInterface.denyInspection(AllotmentId, 0, 1);
+
+            call.enqueue(new Callback<DeniedInspection>()
+            {
+                @SuppressLint("CommitPrefEdits")
+                @Override
+                public void onResponse(@NonNull Call<DeniedInspection> call, @NonNull Response<DeniedInspection> response)
+                {
+                    Toast.makeText(getApplicationContext(), response.body().getInspectionDeniedResult(), Toast.LENGTH_SHORT).show();
+                }
+
+
+                @Override
+                public void onFailure(@NonNull Call<DeniedInspection> call, @NonNull Throwable t)
+                {
+                    Log.d(Constants.TAG, "set Denied onFailure() " + t.getMessage());
+                }
+            });
+        }
+    }
+
+
+    public void refreshAdapter(int typeFlag,int BLOCK_CODE)
+    {
+        databaseHelperUser.getAllotment();
+        list=databaseHelperUser.getAllotmentEntries(typeFlag,BLOCK_CODE);
+        //allotmentAdapter.notifyDataSetChanged();
+        //startService(new Intent(this, InspectionDataService.class));
+        //recyclerView.setAdapter(allotmentAdapter);
+        recyclerView.setAdapter(new AllotmentAdapter(list, getApplicationContext(),this));
+        //allotmentAdapter.notifyDataSetChanged();
+        //recyclerView.setAdapter(allotmentAdapter);
+    }
+
 
     @Override
     public void onDataUpdate()

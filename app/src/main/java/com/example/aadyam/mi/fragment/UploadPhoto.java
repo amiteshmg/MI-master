@@ -32,9 +32,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.androidquery.AQuery;
-import com.androidquery.callback.AjaxCallback;
-import com.androidquery.callback.AjaxStatus;
+
+import com.aquery.AQuery;
+import com.aquery.listener.QueryNetworkListener;
+import com.aquery.query.QueryNetwork;
 import com.example.aadyam.mi.Global.GPSTracker;
 import com.example.aadyam.mi.Utils.CameraUtils;
 import com.example.aadyam.mi.Utils.Constants;
@@ -53,21 +54,31 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.IntStream;
 
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import static android.content.Context.COMPANION_DEVICE_SERVICE;
 import static android.support.v7.app.AppCompatActivity.RESULT_CANCELED;
 import static android.support.v7.app.AppCompatActivity.RESULT_OK;
 import static com.example.aadyam.mi.activity.MainActivity.IMAGE_EXTENSION;
 import static com.example.aadyam.mi.activity.MainActivity.MEDIA_TYPE_IMAGE;
+import static okhttp3.MediaType.parse;
 
 
 /**
@@ -78,7 +89,7 @@ import static com.example.aadyam.mi.activity.MainActivity.MEDIA_TYPE_IMAGE;
 @SuppressWarnings("ALL")
 public class UploadPhoto extends Fragment
 {
-
+    public static final MediaType JSON = parse("application/json; charset=utf-8");
     private static final int SIGNATURE = 5;
     private static final String ALLOTED_ID = "allottedId";
     private static String imageStoragePath;
@@ -347,21 +358,33 @@ public class UploadPhoto extends Fragment
             public void onClick(View v)
             {
 
-
                 progressDialog.show();
+
                 if(hoseBitmap!=null && regulatorBitmap!=null && installationBitmap!=null && signatureBitmap!=null && stoveBitmap!=null)
                 {
                     ArrayList<byte[]> imageByteArray=saveCapturedImage(stoveBitmap,regulatorBitmap,hoseBitmap,installationBitmap,signatureBitmap);
-                    //saveCapturedImage(stoveBitmap,regulatorBitmap,hoseBitmap,installationBitmap,signatureBitmap);
                     String dateString = new MyGlobals(getContext()).getCurrentDate();
                     GPSTracker gps = new GPSTracker(context);
                     DatabaseHelperUser databaseHelperUser=new DatabaseHelperUser(context);
                     double latitude,longitude;
                     String allotted_id=sharedPreferences.getString(Constants.ALLOTED_ID,null);
                     String unique=sharedPreferences.getString(Constants.UNIQUE_CONSUMER_NO,null);
+
+
+                    sharedPreferences=getActivity().getSharedPreferences(Constants.PREFS_NAME,Context.MODE_PRIVATE);
+
+                    boolean unsafeFlagPref= sharedPreferences.getBoolean(Constants.UNSAFE_FLAG,true);
+
                     int count=databaseHelperUser.getFragmentSaveEntries(allotted_id);
 
-                    if(count==1)
+
+                 /*if(unsafeFlagPref)
+                    {
+
+
+                    }*/
+
+                    if(count==1 || unsafeFlagPref)
                     {
                         latitude = gps.getLatitude();
                         longitude = gps.getLongitude();
@@ -370,16 +393,18 @@ public class UploadPhoto extends Fragment
                         //  Toast.makeText(context, "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
                         databaseHelperUser.putExtraAllotedUserData(allotted_id,instruction,latitude,longitude);
 
-                        String personalInfo=databaseHelperUser.getPersonalJsonString(unique);
-                        String answerInfo=databaseHelperUser.getAnswerJsonString(unique);
+                        String personalInfo=null;
 
-                        // Toast.makeText(context, ""+consumerInfo, Toast.LENGTH_SHORT).show();
+                        if(!unsafeFlagPref)
+                        {
+                            personalInfo = databaseHelperUser.getPersonalJsonString(unique);
+                            Log.d(Constants.TAG, "onClick: "+personalInfo);
+                        }
 
-                        Log.d(Constants.TAG, "onClick: "+personalInfo);
-                        Log.d(Constants.TAG, "onClick: "+answerInfo);
+                        //Toast.makeText(context, ""+consumerInfo, Toast.LENGTH_SHORT).show();
                         // Toast.makeText(context, ""+personalInfo, Toast.LENGTH_SHORT).show();
                         // Toast.makeText(context, ""+answerInfo, Toast.LENGTH_SHORT).show();
-                        boolean isSuccess;
+                            boolean isSuccess;
                             int[] unsafeIdArray={3,10,13,16,21,23,24,30,32};
                             int [] unsafeValuesArray=new int[unsafeIdArray.length];
 
@@ -393,22 +418,37 @@ public class UploadPhoto extends Fragment
                                 }
                             }
 
+
+                              //TODO changed for reallotted denied proper submission - 30/01/2019 12:08 PM
+//                            if(unsafeCount>0)
+//                            {
+//                                sharedPreferences.edit().putBoolean(Constants.UNSAFE_FLAG,true).commit();
+//                            }
+
                         //check whether the unsafe flag array contains 1 in the array
                         //boolean contains = IntStream.of(unsafeValuesArray).anyMatch(x -> x == 1);
 
-                        if(new MyGlobals(context).isNetworkConnected() && unsafeCount==0)
+
+
+                        //first time safe inspection
+                        if(new MyGlobals(context).isNetworkConnected() &&  unsafeCount==0 && unsafeFlagPref==false)
                         {
+                            String answerInfo=databaseHelperUser.getAnswerJsonString(unique,false);
+                            Log.d(Constants.TAG, "onClick: "+answerInfo);
                             String consumerInfo=databaseHelperUser.getConsumerJsonString(allotted_id,latitude,longitude,instruction,dateString,true);
                             Log.d(Constants.TAG, "onClick: "+consumerInfo);
                             isSuccess = inspectionWebService(false,consumerInfo, personalInfo, answerInfo, allotted_id,imageByteArray);
+
                             if(isSuccess)
                             {
+                                //setIsInMobileCompleted flag to 1;
+                                new MyGlobals(context).setIsInMobileFlag(allotted_id);
                                 Toast.makeText(context, "Entry uploaded sucessfully as SAFE!", Toast.LENGTH_SHORT).show();
-                              //  databaseHelperUser.deleteAllTableEntries(allotted_id, uniqueNo);
+                                databaseHelperUser.deleteAllTableEntries(allotted_id, uniqueNo);
+                                sharedPreferences.edit().clear().commit();
                                 progressDialog.dismiss();
-
                                 Intent i = new Intent(getActivity(), MainActivity.class);
-                                // set the new task and clear flags
+                                //set the new task and clear flags
                                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(i);
                             }
@@ -421,15 +461,61 @@ public class UploadPhoto extends Fragment
                         }
 
 
-                             else if(new MyGlobals(context).isNetworkConnected() && unsafeCount>0)
+
+
+
+
+                        //TODO - start this condition
+                        //first time unsafe inspection
+                        else if(new MyGlobals(context).isNetworkConnected() && unsafeCount>0 && unsafeFlagPref==false)
+                        {
+                            String answerInfo=databaseHelperUser.getAnswerJsonString(unique,false);
+                            Log.d(Constants.TAG, "onClick: "+answerInfo);
+                            String consumerInfo=databaseHelperUser.getConsumerJsonString(allotted_id,latitude,longitude,instruction,dateString,true);
+                            Log.d(Constants.TAG, "onClick: "+consumerInfo);
+                            isSuccess = inspectionWebService(true,consumerInfo, personalInfo, answerInfo, allotted_id,imageByteArray);
+
+                            if(isSuccess)
                             {
+                                new MyGlobals(context).setIsInMobileFlag(allotted_id);
+                                Toast.makeText(context, "Entry uploaded sucessfully as UNSAFE!", Toast.LENGTH_SHORT).show();
+                                databaseHelperUser.deleteAllTableEntries(allotted_id, uniqueNo);
+                                sharedPreferences.edit().clear().commit();
+                                progressDialog.dismiss();
+                                Intent i = new Intent(getActivity(), MainActivity.class);
+                                //set the new task and clear flags
+                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(i);
+                            }
+
+
+                            else
+                            {
+                                Toast.makeText(context, "Server Response UNSAFE : Fail ", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+
+
+
+
+
+                        //reallotted unsafe to safe inspection
+                        else if(new MyGlobals(context).isNetworkConnected() && unsafeCount==0 && unsafeFlagPref==true)
+                            {
+
+                                String answerInfo=databaseHelperUser.getAnswerJsonString(unique,true);
+                                Log.d(Constants.TAG, "onClick: "+answerInfo);
                                 String consumerInfo=databaseHelperUser.getConsumerJsonString(allotted_id,latitude,longitude,instruction,dateString,true);
                                 Log.d(Constants.TAG, "onClick: "+consumerInfo);
+
                                 isSuccess = inspectionWebService(true,consumerInfo, personalInfo, answerInfo, allotted_id,imageByteArray);
                                 if(isSuccess)
                                 {
-                                    Toast.makeText(context, "Entry uploaded sucessfully as UNSAFE!", Toast.LENGTH_SHORT).show();
+                                    new MyGlobals(context).setIsInMobileFlag(allotted_id);
+                                    Toast.makeText(context, "Realloted Entry uploaded sucessfully as SAFE!", Toast.LENGTH_SHORT).show();
                                     databaseHelperUser.deleteAllTableEntries(allotted_id, uniqueNo);
+                                    sharedPreferences.edit().clear().commit();
                                     progressDialog.dismiss();
                                     Intent i = new Intent(getActivity(), MainActivity.class);
                                     // set the new task and clear flags
@@ -442,6 +528,14 @@ public class UploadPhoto extends Fragment
                                     Toast.makeText(context, "Server Response UNSAFE : Fail", Toast.LENGTH_SHORT).show();
                                 }
                             }
+
+
+
+
+
+
+
+
 
 
                         else if(!new MyGlobals(context).isNetworkConnected())
@@ -458,7 +552,6 @@ public class UploadPhoto extends Fragment
                     }
 
 
-
                     else
                     {
                         // Can't get location.
@@ -470,11 +563,14 @@ public class UploadPhoto extends Fragment
                         //gps.showSettingsAlert();
                     }
 
+
                     if(progressDialog.isShowing())
                         progressDialog.dismiss();
+
                 }
 
-                else /*if(hoseBitmap==null && regulatorBitmap==null && installationBitmap==null && signatureBitmap==null && stoveBitmap==null)*/
+
+                else
                 {
                     if(progressDialog.isShowing())
                         progressDialog.dismiss();
@@ -485,6 +581,8 @@ public class UploadPhoto extends Fragment
             }
         });
     }
+
+
 
 
 
@@ -1033,7 +1131,6 @@ public class UploadPhoto extends Fragment
 
 
 
-
         else if (requestCode == Constants.SIGNATURE)
         {
             if (resultCode == RESULT_OK)
@@ -1069,12 +1166,13 @@ public class UploadPhoto extends Fragment
             transaction.addToBackStack(fragment.getClass().getSimpleName());
         }
 
-
         //transaction.add(R.id., fragment);
         transaction.commit();
         ((FragmentActivity) context).getFragmentManager().executePendingTransactions();
 
     }
+
+
 
 
 
@@ -1085,13 +1183,17 @@ public class UploadPhoto extends Fragment
         {
 
             // Mobile completed flag service
-            AQuery aQuery = new AQuery(getContext());
+
+            /* AQuery aQuery = new AQuery(getContext());
             String url = Constants.InspCompletedFlagInMobile + "AllotmentId=" +allotedId+   "&" + "IsCompleteFlag=" + "1";
             Date currentTime = Calendar.getInstance().getTime();
-            String date = currentTime.toString();
+            String date = currentTime.toString();*/
+
+
             //Constants.printResponseLog(InspectionDataService.this, " InspCompletedFlagInMobile Service - " + "AllotmentId=" + strAllotmentId, "Request -", date.toString(), " Seq - 001");
 
-            aQuery.ajax(url, JSONObject.class, 60000, new AjaxCallback<JSONObject>()
+
+          /*  aQuery.ajax(url, JSONObject.class, 60000, new AjaxCallback<JSONObject>()
             {
                 public void callback(String url, JSONObject object, AjaxStatus status)
                 {
@@ -1105,13 +1207,28 @@ public class UploadPhoto extends Fragment
                             // Constants.printResponseLog(InspectionDataService.this, " InspCompletedFlagInMobile Service - " + "", "Response - Success", date.toString(), " Seq - 001");
                         }
                 }
-            });
+            });*/
 
+          //  Map<String, String> ajaxResponse=new HashMap<>();
 
+            /*aQuery.ajax(url).get().response(new QueryNetworkListener()
+            {
+                @Override
+                public void response(String s, Throwable throwable)
+                {
+                    Toast.makeText(getContext(), "AJAX response"+s, Toast.LENGTH_SHORT).show();
+                }
+            });*/
+                  /*  .toObject(GithubUsers.class, (user, error) -> {
+                        // Do stuff
+                    })*/;
             LinkedHashMap recordHashMap = new LinkedHashMap<>();
             recordHashMap.put("ConsumerInfo", consumerInfo);
 
-            if(!unsafeFlag)
+            //for avoiding entry fill in case of realloted unsafe submission
+
+            //TODO chnaged for unsafe reallotted DENIED / NOT AVAILABLE INSPECTION
+            if(!unsafeFlag || /*&&*/ personalInfo!=null)
             {
                 recordHashMap.put("PersonalInfo", personalInfo);
             }
@@ -1125,29 +1242,26 @@ public class UploadPhoto extends Fragment
             }
 
 
-
-
             for(int i=0;i<imageByteArray.size();i++)
             {
                 int j=i+1;
                 recordHashMap.put("img"+j+"Byt", imageByteArray.get(i));
                 String encodedString=Base64.encodeToString(imageByteArray.get(i),Base64.DEFAULT);
                 Log.d(Constants.TAG, "inspectionWebService: "+encodedString);
-
-
             }
-
 
             InspectionDataSoapHelper helper=new InspectionDataSoapHelper();
 
             for(int i=0;i<recordHashMap.size();i++)
                 Log.d(Constants.TAG, "inspectionWebService LinkedHashMap : "+recordHashMap.get(i));
 
+
             if(!unsafeFlag)
             {
+
                 String response = helper.getSoapRequest(context, Constants.NAMESPACE, Constants.METHOD_INSPECTION_DATA_PostFile, Constants.ServerUrl_Soap, Constants.SOAP_ACTION_INSPECTION_DATA, recordHashMap);
                 Log.d(Constants.TAG, "Server Response SAFE : " + response);
-                //Toast.makeText(context, ""+response, Toast.LENGTH_SHORT).show();
+
                 if (response != null && !response.matches("fail|Fail|FAIL"))
                     token = true;
 
@@ -1155,8 +1269,10 @@ public class UploadPhoto extends Fragment
                     token = false;
             }
 
-            else if(unsafeFlag)
+
+            else if(unsafeFlag && personalInfo!=null)
             {
+
                 String response = helper.getSoapRequest(context, Constants.NAMESPACE, Constants.METHOD_INSPECTION_DATA_PostFile, Constants.ServerUrl_Soap, Constants.SOAP_ACTION_INSPECTION_DATA, recordHashMap);
                 Log.d(Constants.TAG, "Server Response UNSAFE : " + response);
                 //Toast.makeText(context, ""+response, Toast.LENGTH_SHORT).show();
@@ -1167,15 +1283,17 @@ public class UploadPhoto extends Fragment
                     token = false;
             }
 
-           /* else if(unsafeFlag)
+
+            else if(unsafeFlag & personalInfo==null)
             {
+
                 String response = helper.getSoapRequest(context, Constants.NAMESPACE, Constants.METHOD_UNSAFE_INSPECTION_DATA_PostFile, Constants.ServerUrl_Soap, Constants.SOAP_ACTION_UNSAFE_INSPECTION_DATA, recordHashMap);
                 Log.d(Constants.TAG, "Server Response UNSAFE : " + response);
                 if (response != null && !response.matches("fail|Fail|FAIL"))
                     token = true;
                 else
                     token = false;
-            }*/
+            }
             return token;
         }
 

@@ -55,7 +55,7 @@ public class Cylinder extends Fragment
         size=questionList.size();
 
         MyGlobals myGlobals=new MyGlobals(getContext());
-        myGlobals.dynamicQuestion(cylinderLayout, getContext(),view,questionList);
+        myGlobals.dynamicQuestion(cylinderLayout, getContext(),questionList,false);
 
     }
 

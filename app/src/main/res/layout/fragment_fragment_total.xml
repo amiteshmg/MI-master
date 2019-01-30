@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,705 +11,724 @@
     >
 
 
-    <LinearLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
-
-        <!--horizontal block 1-->
-        <android.support.v7.widget.CardView
+        android:layout_height="match_parent">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="13dp"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="2dp">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-
-            <LinearLayout
-
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:orientation="horizontal"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp"
-                android:paddingTop="2dp"
-                android:paddingBottom="2dp">
-
-                <!--alloted pending block-->
-                <LinearLayout
-
-                    android:background="@color/white"
-                    android:id="@+id/allotted_layout"
-                    android:layout_width="fill_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:layout_marginTop="5dp"
-
-                    android:orientation="vertical"
-                    android:paddingLeft="2dp"
-                    android:paddingTop="2dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:paddingRight="2dp"
-                    android:paddingBottom="2dp">
-
-                    <TextView
-                        android:id="@+id/allotted_count_text"
-                        android:layout_width="50dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center_horizontal"
-                        android:gravity="center_horizontal|center_vertical"
-                        android:text="0"
-                        android:fontFamily="@font/roboto_medium"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/allotted_pending__text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:gravity="center_horizontal|center_vertical"
-                        android:text="Allotted Pending"
-                        android:fontFamily="@font/roboto_medium"
-                        android:textColor="@color/dark_blue" />
-
-
-
-                </LinearLayout>
-
-
-
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="#f2f3f6" />
-
-                <!--unsafe block-->
-
-                <LinearLayout
-
-                    android:id="@+id/unsafe_layout"
-                    android:layout_width="fill_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/white"
-                    android:orientation="vertical"
-                    android:paddingLeft="2dp"
-                    android:layout_marginTop="5dp"
-                    android:paddingTop="2dp"
-                    android:paddingRight="2dp"
-                    android:paddingBottom="2dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    >
-
-                    <TextView
-                        android:id="@+id/unsafe_count_text"
-                        android:layout_width="50dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center_horizontal"
-                        android:gravity="center_horizontal|center_vertical"
-                        android:text="0"
-                        android:fontFamily="@font/roboto_medium"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/unsafe_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:gravity="center_horizontal|center_vertical"
-                        android:text="Unsafe"
-                        android:fontFamily="@font/roboto_medium"
-                        android:textColor="@color/dark_blue" />
-
-
-                </LinearLayout>
-
-
-
-            </LinearLayout>
-
-
-        </android.support.v7.widget.CardView>
-
-
-        <!--horizontal block 2-->
-
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="13dp"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="2dp">
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                >
 
-
-
-
-
-                <LinearLayout
+                <!--horizontal block 1-->
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:orientation="horizontal"
-                    android:layout_marginLeft="5dp"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="2dp"
-                    android:paddingTop="2dp"
-                    android:paddingBottom="2dp"
-                    >
+                    android:layout_height="wrap_content"
+                    android:layout_margin="13dp"
+                    app:cardCornerRadius="5dp"
+                    app:cardElevation="2dp">
+
 
                     <LinearLayout
-                        android:id="@+id/denied_layout"
-                        android:layout_width="fill_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
 
-                        android:background="@color/white"
-                        android:orientation="vertical"
-                        android:paddingLeft="2dp"
-                        android:layout_marginLeft="@dimen/icon_padding"
-                        android:layout_marginRight="@dimen/icon_padding"
-                        android:layout_marginTop="@dimen/icon_padding"
-                        android:layout_marginEnd="@dimen/icon_padding"
-                        android:paddingTop="2dp"
-                        android:paddingRight="2dp"
-                        android:paddingBottom="2dp">
-
-                        <TextView
-                            android:id="@+id/denied_count_text"
-                            android:layout_width="50dp"
-                            android:layout_height="30dp"
-                            android:layout_gravity="center_horizontal"
-                            android:gravity="center_horizontal|center_vertical"
-                            android:text="0"
-                            android:fontFamily="@font/roboto_medium"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/denied_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:gravity="center_horizontal|center_vertical"
-                            android:text="Denied"
-                            android:fontFamily="@font/roboto_medium"
-                            android:textColor="@color/dark_blue" />
-
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:background="#f2f3f6" />
-
-                    <LinearLayout
-                        android:id="@+id/not_available_layout"
-                        android:layout_width="fill_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-
-                        android:orientation="vertical"
-                        android:paddingLeft="2dp"
-                        android:background="@color/white"
-                        android:paddingTop="2dp"
-                        android:paddingRight="2dp"
-                        android:paddingBottom="2dp"
-
-                        android:layout_marginLeft="@dimen/icon_padding"
-                        android:layout_marginRight="@dimen/icon_padding"
-                        android:layout_marginTop="@dimen/icon_padding"
-                        android:layout_marginEnd="@dimen/icon_padding"
-
-                        >
-
-                        <TextView
-                            android:id="@+id/not_available_count_text"
-                            android:layout_width="50dp"
-                            android:layout_height="30dp"
-                            android:layout_gravity="center_horizontal"
-                            android:gravity="center_horizontal|center_vertical"
-                            android:text="0"
-                            android:fontFamily="@font/roboto_medium"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/not_available_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:gravity="center_horizontal|center_vertical"
-                            android:text="Not Available"
-                            android:fontFamily="@font/roboto_medium"
-                            android:textColor="@color/dark_blue" />
-
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
-
-
-
-
-
-
-        <!--horizontal block 3-->
-
-
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="13dp"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="2dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    >
-
-                    <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:gravity="center_horizontal|center_vertical"
-                        android:text="Total Re-Allotted"
-                        android:fontFamily="@font/roboto_medium"
-                        android:textColor="@color/dark_blue"
-
-                        />
-
-                </LinearLayout>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:background="#f2f3f6" />
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="2dp"
-                    android:paddingTop="2dp"
-                    android:paddingBottom="2dp"
-
-
-                    >
-
-
-                    <LinearLayout
-                        android:id="@+id/reallotted_unsafe_layout"
-                        android:layout_width="fill_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-
-                        android:background="@color/white"
-                        android:orientation="vertical"
+                        android:layout_height="80dp"
+                        android:orientation="horizontal"
                         android:paddingLeft="2dp"
-                        android:paddingTop="2dp"
                         android:paddingRight="2dp"
-                        android:layout_marginLeft="5dp"
-
+                        android:paddingTop="2dp"
                         android:paddingBottom="2dp">
 
-                        <TextView
-                            android:id="@+id/reallotted_unsafe_count_text"
-                            android:layout_width="50dp"
-                            android:layout_height="30dp"
-                            android:layout_gravity="center_horizontal"
-                            android:gravity="center_horizontal|center_vertical"
-                            android:text="0"
-                            android:fontFamily="@font/roboto_medium"
-                            android:textStyle="bold" />
+                        <!--alloted pending block-->
+                        <LinearLayout
 
-                        <TextView
-                            android:id="@+id/reallotted_unsafe_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:gravity="center_horizontal|center_vertical"
-                            android:text="Unsafe"
-                            android:fontFamily="@font/roboto_medium"
-                            android:textColor="@color/dark_blue" />
+                            android:background="@color/white"
+                            android:id="@+id/allotted_layout"
+                            android:layout_width="fill_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:layout_marginTop="5dp"
+
+                            android:orientation="vertical"
+                            android:paddingLeft="2dp"
+                            android:paddingTop="2dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:paddingRight="2dp"
+                            android:paddingBottom="2dp">
+
+                            <TextView
+                                android:id="@+id/allotted_count_text"
+                                android:layout_width="50dp"
+                                android:layout_height="30dp"
+                                android:layout_gravity="center_horizontal"
+                                android:gravity="center_horizontal|center_vertical"
+                                android:text="0"
+                                android:fontFamily="@font/roboto_medium"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/allotted_pending__text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:gravity="center_horizontal|center_vertical"
+                                android:text="Allotted Pending"
+                                android:fontFamily="@font/roboto_medium"
+                                android:textColor="@color/dark_blue" />
+
+
+
+                        </LinearLayout>
+
+
+
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:background="#f2f3f6" />
+
+                        <!--unsafe block-->
+
+                        <LinearLayout
+
+                            android:id="@+id/unsafe_layout"
+                            android:layout_width="fill_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@color/white"
+                            android:orientation="vertical"
+                            android:paddingLeft="2dp"
+                            android:layout_marginTop="5dp"
+                            android:paddingTop="2dp"
+                            android:paddingRight="2dp"
+                            android:paddingBottom="2dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            >
+
+                            <TextView
+                                android:id="@+id/unsafe_count_text"
+                                android:layout_width="50dp"
+                                android:layout_height="30dp"
+                                android:layout_gravity="center_horizontal"
+                                android:gravity="center_horizontal|center_vertical"
+                                android:text="0"
+                                android:fontFamily="@font/roboto_medium"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/unsafe_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:gravity="center_horizontal|center_vertical"
+                                android:text="Unsafe"
+                                android:fontFamily="@font/roboto_medium"
+                                android:textColor="@color/dark_blue" />
+
+
+                        </LinearLayout>
+
 
 
                     </LinearLayout>
 
 
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:background="#f2f3f6" />
+                </android.support.v7.widget.CardView>
 
 
-                    <LinearLayout
-                        android:id="@+id/reallotted_denied_layout"
-                        android:layout_width="fill_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/roboto_medium"
-                        android:background="@color/white"
-                        android:orientation="vertical"
-                        android:paddingLeft="2dp"
-                        android:paddingTop="2dp"
-                        android:paddingRight="2dp"
-                        android:paddingBottom="2dp"
-                        android:layout_marginLeft="5dp"
-                        >
+                <!--horizontal block 2-->
 
-                        <TextView
-                            android:id="@+id/reallotted_denied_count_text"
-                            android:layout_width="50dp"
-                            android:layout_height="30dp"
-                            android:layout_gravity="center_horizontal"
-                            android:gravity="center_horizontal|center_vertical"
-                            android:text="0"
-                            android:fontFamily="@font/roboto_medium"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/reallotted_denied_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:fontFamily="@font/roboto_medium"
-                            android:gravity="center_horizontal|center_vertical"
-                            android:text="Denied"
-
-                            android:textColor="@color/dark_blue" />
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:background="#f2f3f6" />
-
-
-                    <LinearLayout
-                        android:id="@+id/reallotted_not_available_layout"
-                        android:layout_width="fill_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@color/white"
-                        android:orientation="vertical"
-                        android:paddingLeft="2dp"
-                        android:paddingTop="2dp"
-                        android:paddingRight="2dp"
-                        android:paddingBottom="2dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        >
-
-                        <TextView
-                            android:id="@+id/reallotted_not_available_count_text"
-                            android:layout_width="50dp"
-                            android:layout_height="30dp"
-                            android:layout_gravity="center_horizontal"
-                            android:gravity="center_horizontal|center_vertical"
-                            android:text="0"
-                            android:fontFamily="@font/roboto_medium"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/reallotted_not_available_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:gravity="center_horizontal|center_vertical"
-                            android:text="Not Available"
-                            android:fontFamily="@font/roboto_medium"
-                            android:textColor="@color/dark_blue" />
-                    </LinearLayout>
-                </LinearLayout>
-
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
-
-
-
-        <!--horizontal block 4-->
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="13dp"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="2dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-                <LinearLayout
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content"
+                    android:layout_margin="13dp"
+                    app:cardCornerRadius="5dp"
+                    app:cardElevation="2dp">
 
-                    <TextView
+
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:elevation="@dimen/layout_elevation"
-                        android:gravity="center_horizontal|center_vertical"
-                        android:text="Total Completed"
-                        android:fontFamily="@font/roboto_medium"
-                        android:textColor="@color/dark_blue"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
 
-                        />
-                </LinearLayout>
 
-                <View
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:orientation="horizontal"
+                            android:layout_marginLeft="5dp"
+                            android:paddingLeft="2dp"
+                            android:paddingRight="2dp"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            >
+
+                            <LinearLayout
+                                android:id="@+id/denied_layout"
+                                android:layout_width="fill_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+
+                                android:background="@color/white"
+                                android:orientation="vertical"
+                                android:paddingLeft="2dp"
+                                android:layout_marginLeft="@dimen/icon_padding"
+                                android:layout_marginRight="@dimen/icon_padding"
+                                android:layout_marginTop="@dimen/icon_padding"
+                                android:layout_marginEnd="@dimen/icon_padding"
+                                android:paddingTop="2dp"
+                                android:paddingRight="2dp"
+                                android:paddingBottom="2dp">
+
+                                <TextView
+                                    android:id="@+id/denied_count_text"
+                                    android:layout_width="50dp"
+                                    android:layout_height="30dp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal|center_vertical"
+                                    android:text="0"
+                                    android:fontFamily="@font/roboto_medium"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/denied_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal|center_vertical"
+                                    android:text="Denied"
+                                    android:fontFamily="@font/roboto_medium"
+                                    android:textColor="@color/dark_blue" />
+
+
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:background="#f2f3f6" />
+
+                            <LinearLayout
+                                android:id="@+id/not_available_layout"
+                                android:layout_width="fill_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+
+                                android:orientation="vertical"
+                                android:paddingLeft="2dp"
+                                android:background="@color/white"
+                                android:paddingTop="2dp"
+                                android:paddingRight="2dp"
+                                android:paddingBottom="2dp"
+
+                                android:layout_marginLeft="@dimen/icon_padding"
+                                android:layout_marginRight="@dimen/icon_padding"
+                                android:layout_marginTop="@dimen/icon_padding"
+                                android:layout_marginEnd="@dimen/icon_padding"
+
+                                >
+
+                                <TextView
+                                    android:id="@+id/not_available_count_text"
+                                    android:layout_width="50dp"
+                                    android:layout_height="30dp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal|center_vertical"
+                                    android:text="0"
+                                    android:fontFamily="@font/roboto_medium"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/not_available_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal|center_vertical"
+                                    android:text="Not Available"
+                                    android:fontFamily="@font/roboto_medium"
+                                    android:textColor="@color/dark_blue" />
+
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+
+
+
+
+
+                <!--horizontal block 3-->
+
+
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:background="#f2f3f6" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="2dp"
-                    android:paddingTop="2dp"
-                    android:paddingBottom="2dp"
-
-                    >
-
+                    android:layout_height="wrap_content"
+                    android:layout_margin="13dp"
+                    app:cardCornerRadius="5dp"
+                    app:cardElevation="2dp">
 
                     <LinearLayout
-                        android:id="@+id/total_layout"
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@color/white"
-                        android:orientation="vertical"
-                        android:paddingLeft="2dp"
-                        android:paddingTop="2dp"
-                        android:paddingRight="2dp"
-                        android:layout_marginLeft="5dp"
-                        android:paddingBottom="2dp">
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            >
 
-                        <TextView
-                            android:id="@+id/total_count_text"
-                            android:layout_width="50dp"
-                            android:layout_height="30dp"
-                            android:layout_gravity="center_horizontal"
-                            android:gravity="center_horizontal|center_vertical"
-                            android:text="0"
-                            android:fontFamily="@font/roboto_medium"
-                            android:textStyle="bold" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:gravity="center_horizontal|center_vertical"
+                                android:text="Total Re-Allotted"
+                                android:fontFamily="@font/roboto_medium"
+                                android:textColor="@color/dark_blue"
 
-                        <TextView
-                            android:id="@+id/total_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:gravity="center_horizontal|center_vertical"
-                            android:text="Total"
-                            android:fontFamily="@font/roboto_medium"
-                            android:textColor="@color/dark_blue" />
+                                />
+
+                        </LinearLayout>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:background="#f2f3f6" />
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="2dp"
+                            android:paddingRight="2dp"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+
+
+                            >
+
+
+                            <LinearLayout
+                                android:id="@+id/reallotted_unsafe_layout"
+                                android:layout_width="fill_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+
+                                android:background="@color/white"
+                                android:orientation="vertical"
+                                android:paddingLeft="2dp"
+                                android:paddingTop="2dp"
+                                android:paddingRight="2dp"
+                                android:layout_marginLeft="5dp"
+
+                                android:paddingBottom="2dp">
+
+                                <TextView
+                                    android:id="@+id/reallotted_unsafe_count_text"
+                                    android:layout_width="50dp"
+                                    android:layout_height="30dp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal|center_vertical"
+                                    android:text="0"
+                                    android:fontFamily="@font/roboto_medium"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/reallotted_unsafe_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal|center_vertical"
+                                    android:text="Unsafe"
+                                    android:fontFamily="@font/roboto_medium"
+                                    android:textColor="@color/dark_blue" />
+
+
+                            </LinearLayout>
+
+
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:background="#f2f3f6" />
+
+
+                            <LinearLayout
+                                android:id="@+id/reallotted_denied_layout"
+                                android:layout_width="fill_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/roboto_medium"
+                                android:background="@color/white"
+                                android:orientation="vertical"
+                                android:paddingLeft="2dp"
+                                android:paddingTop="2dp"
+                                android:paddingRight="2dp"
+                                android:paddingBottom="2dp"
+                                android:layout_marginLeft="5dp"
+                                >
+
+                                <TextView
+                                    android:id="@+id/reallotted_denied_count_text"
+                                    android:layout_width="50dp"
+                                    android:layout_height="30dp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal|center_vertical"
+                                    android:text="0"
+                                    android:fontFamily="@font/roboto_medium"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/reallotted_denied_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:fontFamily="@font/roboto_medium"
+                                    android:gravity="center_horizontal|center_vertical"
+                                    android:text="Denied"
+
+                                    android:textColor="@color/dark_blue" />
+
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:background="#f2f3f6" />
+
+
+                            <LinearLayout
+                                android:id="@+id/reallotted_not_available_layout"
+                                android:layout_width="fill_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="@color/white"
+                                android:orientation="vertical"
+                                android:paddingLeft="2dp"
+                                android:paddingTop="2dp"
+                                android:paddingRight="2dp"
+                                android:paddingBottom="2dp"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="5dp"
+                                >
+
+                                <TextView
+                                    android:id="@+id/reallotted_not_available_count_text"
+                                    android:layout_width="50dp"
+                                    android:layout_height="30dp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal|center_vertical"
+                                    android:text="0"
+                                    android:fontFamily="@font/roboto_medium"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/reallotted_not_available_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal|center_vertical"
+                                    android:text="Not Available"
+                                    android:fontFamily="@font/roboto_medium"
+                                    android:textColor="@color/dark_blue" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+
+
+                <!--horizontal block 4-->
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="13dp"
+                    app:cardCornerRadius="5dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:elevation="@dimen/layout_elevation"
+                                android:gravity="center_horizontal|center_vertical"
+                                android:text="Total Completed"
+                                android:fontFamily="@font/roboto_medium"
+                                android:textColor="@color/dark_blue"
+
+
+                                />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:background="#f2f3f6" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="2dp"
+                            android:paddingRight="2dp"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+
+                            >
+
+
+                            <LinearLayout
+                                android:id="@+id/total_layout"
+                                android:layout_width="fill_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="@color/white"
+                                android:orientation="vertical"
+                                android:paddingLeft="2dp"
+                                android:paddingTop="2dp"
+                                android:paddingRight="2dp"
+                                android:layout_marginLeft="5dp"
+                                android:paddingBottom="2dp">
+
+                                <TextView
+                                    android:id="@+id/total_count_text"
+                                    android:layout_width="50dp"
+                                    android:layout_height="30dp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal|center_vertical"
+                                    android:text="0"
+                                    android:fontFamily="@font/roboto_medium"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/total_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal|center_vertical"
+                                    android:text="Total"
+                                    android:fontFamily="@font/roboto_medium"
+                                    android:textColor="@color/dark_blue" />
+
+
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:background="#f2f3f6" />
+
+
+
+                            <LinearLayout
+                                android:id="@+id/against_unsafe_layout"
+                                android:layout_width="fill_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="@color/white"
+                                android:orientation="vertical"
+                                android:paddingLeft="2dp"
+                                android:paddingTop="2dp"
+                                android:paddingRight="2dp"
+                                android:paddingBottom="2dp"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="5dp"
+                                >
+
+                                <TextView
+                                    android:id="@+id/against_unsafe_count_text"
+                                    android:layout_width="50dp"
+                                    android:layout_height="30dp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal|center_vertical"
+                                    android:text="0"
+                                    android:fontFamily="@font/roboto_medium"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/against_unsafe_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal|center_vertical"
+                                    android:text="Against Unsafe"
+                                    android:fontFamily="@font/roboto_medium"
+                                    android:textColor="@color/dark_blue" />
+
+                            </LinearLayout>
+
+
+
+
+
+                        </LinearLayout>
+
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:background="#f2f3f6" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="2dp"
+                            android:paddingRight="2dp"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp">
+
+
+
+
+                            <LinearLayout
+                                android:id="@+id/against_denied_layout"
+                                android:layout_width="fill_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="@color/white"
+                                android:orientation="vertical"
+                                android:paddingLeft="2dp"
+                                android:paddingTop="2dp"
+                                android:paddingRight="2dp"
+                                android:layout_marginLeft="5dp"
+                                android:paddingBottom="2dp">
+
+                                <TextView
+                                    android:id="@+id/against_denied_count_text"
+                                    android:layout_width="50dp"
+                                    android:layout_height="30dp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal|center_vertical"
+                                    android:text="0"
+                                    android:fontFamily="@font/roboto_medium"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/against_denied_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal|center_vertical"
+                                    android:text="Against Denied"
+                                    android:fontFamily="@font/roboto_medium"
+                                    android:textColor="@color/dark_blue" />
+
+
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:background="#f2f3f6" />
+
+                            <LinearLayout
+                                android:id="@+id/against_not_available_layout"
+                                android:layout_width="fill_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="@color/white"
+                                android:orientation="vertical"
+                                android:paddingRight="2dp"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="5dp"
+                                >
+
+                                <TextView
+                                    android:id="@+id/against_not_available_count_text"
+                                    android:layout_width="50dp"
+                                    android:fontFamily="@font/roboto_medium"
+                                    android:layout_height="30dp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal|center_vertical"
+                                    android:text="0"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/against_not_available_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/roboto_medium"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal|center_vertical"
+                                    android:text="Against Not Available"
+                                    android:textColor="@color/dark_blue" />
+
+
+                            </LinearLayout>
+
+
+
+
+
+                        </LinearLayout>
 
 
                     </LinearLayout>
+                </android.support.v7.widget.CardView>
 
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:background="#f2f3f6" />
-
-
-
-                    <LinearLayout
-                        android:id="@+id/against_unsafe_layout"
-                        android:layout_width="fill_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@color/white"
-                        android:orientation="vertical"
-                        android:paddingLeft="2dp"
-                        android:paddingTop="2dp"
-                        android:paddingRight="2dp"
-                        android:paddingBottom="2dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        >
-
-                        <TextView
-                            android:id="@+id/against_unsafe_count_text"
-                            android:layout_width="50dp"
-                            android:layout_height="30dp"
-                            android:layout_gravity="center_horizontal"
-                            android:gravity="center_horizontal|center_vertical"
-                            android:text="0"
-                            android:fontFamily="@font/roboto_medium"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/against_unsafe_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:gravity="center_horizontal|center_vertical"
-                            android:text="Against Unsafe"
-                            android:fontFamily="@font/roboto_medium"
-                            android:textColor="@color/dark_blue" />
-
-                    </LinearLayout>
-
-
-
-
-
-                </LinearLayout>
-
-
-                <View
+                <!--horizontal block 5-->
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:background="#f2f3f6" />
+                    android:layout_height="wrap_content"
+                    android:layout_margin="13dp"
+                    app:cardCornerRadius="5dp"
+                    app:cardElevation="2dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:orientation="horizontal"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="2dp"
-                    android:paddingTop="2dp"
-                    android:paddingBottom="2dp">
-
-
-
-
-                    <LinearLayout
-                        android:id="@+id/against_denied_layout"
-                        android:layout_width="fill_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@color/white"
-                        android:orientation="vertical"
-                        android:paddingLeft="2dp"
-                        android:paddingTop="2dp"
-                        android:paddingRight="2dp"
-                        android:layout_marginLeft="5dp"
-                        android:paddingBottom="2dp">
-
-                        <TextView
-                            android:id="@+id/against_denied_count_text"
-                            android:layout_width="50dp"
-                            android:layout_height="30dp"
-                            android:layout_gravity="center_horizontal"
-                            android:gravity="center_horizontal|center_vertical"
-                            android:text="0"
-                            android:fontFamily="@font/roboto_medium"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/against_denied_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:gravity="center_horizontal|center_vertical"
-                            android:text="Against Denied"
-                            android:fontFamily="@font/roboto_medium"
-                            android:textColor="@color/dark_blue" />
-
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:background="#f2f3f6" />
-
-                    <LinearLayout
-                        android:id="@+id/against_not_available_layout"
-                        android:layout_width="fill_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@color/white"
-                        android:orientation="vertical"
-                        android:paddingRight="2dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        >
-
-                        <TextView
-                            android:id="@+id/against_not_available_count_text"
-                            android:layout_width="50dp"
-                            android:fontFamily="@font/roboto_medium"
-                            android:layout_height="30dp"
-                            android:layout_gravity="center_horizontal"
-                            android:gravity="center_horizontal|center_vertical"
-                            android:text="0"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/against_not_available_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/roboto_medium"
-                            android:layout_gravity="center_horizontal"
-                            android:gravity="center_horizontal|center_vertical"
-                            android:text="Against Not Available"
-                            android:textColor="@color/dark_blue" />
-
-
-                    </LinearLayout>
-
-
-
-
-
-                </LinearLayout>
-
+                </android.support.v7.widget.CardView>
 
             </LinearLayout>
-        </android.support.v7.widget.CardView>
 
-        <!--horizontal block 5-->
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="13dp"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="2dp">
 
-        </android.support.v7.widget.CardView>
 
-    </LinearLayout>
 
-</ScrollView>
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+
+
+</LinearLayout>

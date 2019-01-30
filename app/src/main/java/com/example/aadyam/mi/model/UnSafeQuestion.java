@@ -7,9 +7,9 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-class UnSafeQuestion {
-
-    @SerializedName("UnsafeQueListForAllInspIdResult")
+public class UnsafeQuestion {
+//UnsafeQueListForAllInspIdResult
+    @SerializedName("GetUnsafeQuestionnaireListResult")
     // @SerializedName("UnsafeQueListForAllInspIdResult")
     private List<QuestionList> questionList;
 
@@ -29,7 +29,7 @@ class UnSafeQuestion {
     @Override
     public String toString()
     {
-        return "[ POJO UnsafeQuestions : { "+questionList+" } ]";
+        return "{GetUnsafeQuestionnaireListResult"+" :"+questionList+"}";
     }
 
 }

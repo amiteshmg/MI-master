@@ -35,6 +35,7 @@ import com.example.aadyam.mi.model.DeniedInspection;
 import com.example.aadyam.mi.rest.ApiClient;
 import com.example.aadyam.mi.rest.ApiInterface;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -63,7 +64,6 @@ public class AllotmentAdapter extends RecyclerView.Adapter<AllotmentAdapter.MyVi
         //this.databaseHelperUser = new DatabaseHelperUser(context);
        /* notifyDataSetChanged();*/
     }
-
 
 
     @Override
@@ -126,6 +126,10 @@ public class AllotmentAdapter extends RecyclerView.Adapter<AllotmentAdapter.MyVi
     }
 
 
+
+
+
+
     /*@Override
     public void onClick(View v) {
         clickListener.onItemClicked(getItemClicked(););
@@ -134,18 +138,19 @@ public class AllotmentAdapter extends RecyclerView.Adapter<AllotmentAdapter.MyVi
 
             //TODO: Fetch Dummy data for now into the application and store in DB and fetch it again
 
-            class MyViewHolder extends RecyclerView.ViewHolder
+            class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
             {
                 CardView listLayout;
                 TextView serial_no, consumer_no, contact_no, name, user_address, distributor_address;
                 Button not_available, denied, inspect;
                 LinearLayout call_layout;
                 AlertDialog.Builder alertDialog;
-
+                private WeakReference<AllotmentListAdapterListener> listenerRef;
 
                 MyViewHolder(View view)
                 {
                     super(view);
+                    listenerRef = new WeakReference<>(listener);
                     listLayout = itemView.findViewById(R.id.card_funtional_view_layout);
                     serial_no = itemView.findViewById(R.id.functional_serial_no_tv);
                     consumer_no = itemView.findViewById(R.id.consumer_no_tv);
@@ -158,16 +163,42 @@ public class AllotmentAdapter extends RecyclerView.Adapter<AllotmentAdapter.MyVi
                     inspect = itemView.findViewById(R.id.inspect_button);
                     call_layout = itemView.findViewById(R.id.call_layout);
                     alertDialog = new AlertDialog.Builder(itemView.getContext());
-                    view.setOnClickListener(new View.OnClickListener() {
+
+                    view.setOnClickListener(view1 -> {
+                        // send selected contact in callback
+                        listener.onContactSelected(allotmentListFiltered.get(getAdapterPosition()));
+                    });
+                    denied.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(View view) {
-                            // send selected contact in callback
-
-
-                            listener.onContactSelected(allotmentListFiltered.get(getAdapterPosition()));
+                        public void onClick(View v) {
+                            listener.onItemClicked(getAdapterPosition(),v,allotmentListFiltered.get(getAdapterPosition()));
                         }
                     });
 
+                    not_available.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            listener.onItemClicked(getAdapterPosition(),v,allotmentListFiltered.get(getAdapterPosition()));
+                        }
+                    });
+
+
+
+                }
+
+                @Override
+                public void onClick(View v)
+                {
+                    if(v.getId()==denied.getId())
+                    {
+                        Toast.makeText(v.getContext(), "ITEM PRESSED = " + String.valueOf(getAdapterPosition()), Toast.LENGTH_SHORT).show();
+                    }
+                    else if(v.getId()==not_available.getId())
+                    {
+                        Toast.makeText(v.getContext(), "ROW PRESSED = " + String.valueOf(getAdapterPosition()), Toast.LENGTH_SHORT).show();
+                    }
+
+                    listenerRef.get().onItemClicked(getAdapterPosition(),v,allotmentList.get(getAdapterPosition()));
                 }
             }
 
@@ -187,8 +218,8 @@ public class AllotmentAdapter extends RecyclerView.Adapter<AllotmentAdapter.MyVi
             @Override public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) throws ArrayIndexOutOfBoundsException
             {
 
-                if(allotmentListFiltered.size()!=0) {
-
+                if(allotmentListFiltered.size()!=0)
+                {
                     //used for loading data into each entry
                     final AllotmentList allotmentList = allotmentListFiltered.get(position);
                     final int pos;
@@ -229,7 +260,7 @@ public class AllotmentAdapter extends RecyclerView.Adapter<AllotmentAdapter.MyVi
                     });
 
 
-                    holder.denied.setOnClickListener(new View.OnClickListener() {
+                   /* holder.denied.setOnClickListener(new View.OnClickListener() {
 
                         @Override
                         public void onClick(View v) {
@@ -273,33 +304,30 @@ public class AllotmentAdapter extends RecyclerView.Adapter<AllotmentAdapter.MyVi
 
                             holder.alertDialog.show();
                         }
-                    });
+                    });*/
 
 
 
 
-                    holder.not_available.setOnClickListener(new View.OnClickListener() {
+                   /* holder.not_available.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
 
                             holder.alertDialog.setMessage("Are you sure you want to submit the entry as NOT AVAILABLE ? ");
 
-                            holder.alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
+                            holder.alertDialog.setPositiveButton("Yes", (dialog, which) -> {
 
-                                    //databaseHelperUser.moveEntryToNotAvailable(allotmentList.getConsumerNo());
+                                //databaseHelperUser.moveEntryToNotAvailable(allotmentList.getConsumerNo());
 
-                                    setDenied(allotmentList.getAllotmentId().toString(), 1);
-                                    notifyDataSetChanged();
-                                    Intent i = new Intent(context, MainActivity.class);
-                                    // set the new task and clear flags
-                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    context.startActivity(i);
-                                    /*InspectionDisplayActivity inspectionDisplayActivity=new InspectionDisplayActivity();
-                                    inspectionDisplayActivity.refreshAdapter();*/
+                                setDenied(allotmentList.getAllotmentId().toString(), 1);
+                                notifyDataSetChanged();
+                                Intent i = new Intent(context, MainActivity.class);
+                                // set the new task and clear flags
+                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                context.startActivity(i);
+                                InspectionDisplayActivity inspectionDisplayActivity=new InspectionDisplayActivity();
+                                inspectionDisplayActivity.refreshAdapter();
 
-                                }
                             });
 
                             holder.alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -312,56 +340,80 @@ public class AllotmentAdapter extends RecyclerView.Adapter<AllotmentAdapter.MyVi
 
                         }
 
-                    });
+                    });*/
 
 
 
 
-                    holder.inspect.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(context, SurveyActivity.class);
-                            intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                    holder.inspect.setOnClickListener(v -> {
+                        Intent intent = new Intent(context, SurveyActivity.class);
+                        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
 
-                            SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.PREFS_NAME, Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                            Random rand = new Random();
-
-                            // Generate random integers in range 0 to 999
-                            int rand_int1 = rand.nextInt(50000);
-                            int rand_int2 = rand.nextInt(50000);
+//
+                        if(allotmentList.getIsUnsafeReallot()==1 && allotmentList.getIsPrevDenied()==0 && allotmentList.getIsPrevNotAvailable()==0)
+                            intent.putExtra(Constants.QUESTION_CATEGORY_FLAG,Constants.UNSAFE_QUESTIONS);
 
 
-                            String allot_date = allotmentList.getAllottedDate();
-                            String AreaName = allotmentList.getAreaName();
-                            String ConsumerName = allotmentList.getConsumerName();
-                            String ConsumerNo = allotmentList.getConsumerNo().toString();
-                            String UniqueId = allotmentList.getUniqueConsumerId().toString();
-                            String IsCompleted = allotmentList.getIsCompleted().toString();
-                            String allotmentId = allotmentList.getAllotmentId().toString();
+                        else
+                            intent.putExtra(Constants.QUESTION_CATEGORY_FLAG,Constants.SAFE_QUESTIONS);
 
-                            editor.putInt(Constants.INSPECTION_ID, rand_int1);
-                            editor.putString(Constants.ALLOTMENT_DATE, allot_date);
-                            editor.putString(Constants.AREA_NAME, AreaName);
-                            editor.putString(Constants.CONSUMER_NAME, ConsumerName);
-                            editor.putString(Constants.CONSUMER_NO, ConsumerNo);
-                            editor.putString(Constants.UNIQUE_CONSUMER_NO, UniqueId);
-                            editor.putString(Constants.IS_COMPLETED, IsCompleted);
-                            editor.putString(Constants.ALLOTED_ID, allotmentId);
-                            editor.commit();
-         /*     intent.putExtra(Constants.CONSUMER_NO, ConsumerNo);
-                intent.putExtra(Constants.AREA_NAME, AreaName);
-                intent.putExtra(Constants.CONSUMER_NAME, ConsumerName);
-                intent.putExtra(Constants.ALLOTMENT_DATE, allot_date);
-                intent.putExtra(Constants.UNIQUE_CONSUMER_NO, UniqueId);
-                intent.putExtra(Constants.IS_COMPLETED, IsCompleted);
-                intent.putExtra(Constants.ALLOTED_ID, allotmentId);
+                        //NEW
+                        //Allotted SAFE
+                        if(allotmentList.getIsUnsafeReallot()==0 && allotmentList.getIsPrevDenied()==0 && allotmentList.getIsPrevNotAvailable()==0)
+                            intent.putExtra(Constants.QUESTION_CATEGORY_FLAG,Constants.SAFE_QUESTIONS);
+
+                        //Allotted UNSAFE  & reallotted UNSAFE
+                        else if(allotmentList.getIsUnsafeReallot()==1 && allotmentList.getIsPrevDenied()==0 && allotmentList.getIsPrevNotAvailable()==0)
+                        intent.putExtra(Constants.QUESTION_CATEGORY_FLAG,Constants.UNSAFE_QUESTIONS);
+
+                        //Reallotted DENIED SAFE
+                        else if(allotmentList.getIsUnsafeReallot()==1 && allotmentList.getIsPrevDenied()==1 && allotmentList.getIsPrevNotAvailable()==0)
+                        intent.putExtra(Constants.QUESTION_CATEGORY_FLAG,Constants.SAFE_QUESTIONS);
+
+                        //Reallotted DENIED UNSAFE
+                        else if(allotmentList.getIsUnsafeReallot()==1 && allotmentList.getIsPrevDenied()==1 && allotmentList.getIsPrevNotAvailable()==0 && !allotmentList.getIsSatisfactory())
+                            intent.putExtra(Constants.QUESTION_CATEGORY_FLAG,Constants.UNSAFE_QUESTIONS);
+
+                        //Reallotted not available SAFE
+                        else if(allotmentList.getIsUnsafeReallot()==1 && allotmentList.getIsPrevDenied()==0 && allotmentList.getIsPrevNotAvailable()==1)
+                            intent.putExtra(Constants.QUESTION_CATEGORY_FLAG,Constants.SAFE_QUESTIONS);
+
+                        //reallotted not available UNSAFE
+                        else if(allotmentList.getIsUnsafeReallot()==1 && allotmentList.getIsPrevDenied()==0 && allotmentList.getIsPrevNotAvailable()==1 && !allotmentList.getIsSatisfactory())
+                            intent.putExtra(Constants.QUESTION_CATEGORY_FLAG,Constants.UNSAFE_QUESTIONS);
+
+                        SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.PREFS_NAME, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+
+                        String allot_date = allotmentList.getAllottedDate();
+                        String AreaName = allotmentList.getAreaName();
+                        String ConsumerName = allotmentList.getConsumerName();
+                        String ConsumerNo = allotmentList.getConsumerNo().toString();
+                        String UniqueId = allotmentList.getUniqueConsumerId().toString();
+                        String IsCompleted = allotmentList.getIsCompleted().toString();
+                        String allotmentId = allotmentList.getAllotmentId().toString();
+
+                        if(allotmentList.getInspFormId()!=null)
+                        editor.putInt(Constants.INSPECTION_ID, Integer.parseInt(allotmentList.getInspFormId()));
+                        editor.putString(Constants.ALLOTMENT_DATE, allot_date);
+                        editor.putString(Constants.AREA_NAME, AreaName);
+                        editor.putString(Constants.CONSUMER_NAME, ConsumerName);
+                        editor.putString(Constants.CONSUMER_NO, ConsumerNo);
+                        editor.putString(Constants.UNIQUE_CONSUMER_NO, UniqueId);
+                        editor.putString(Constants.IS_COMPLETED, IsCompleted);
+                        editor.putString(Constants.ALLOTED_ID, allotmentId);
+                        editor.commit();
+     /*     intent.putExtra(Constants.CONSUMER_NO, ConsumerNo);
+            intent.putExtra(Constants.AREA_NAME, AreaName);
+            intent.putExtra(Constants.CONSUMER_NAME, ConsumerName);
+            intent.putExtra(Constants.ALLOTMENT_DATE, allot_date);
+            intent.putExtra(Constants.UNIQUE_CONSUMER_NO, UniqueId);
+            intent.putExtra(Constants.IS_COMPLETED, IsCompleted);
+            intent.putExtra(Constants.ALLOTED_ID, allotmentId);
 */
-                            context.startActivity(intent);
-                            //  new MyGlobals(context).passOnAllotmentDetailsToAnswers(allot_date, AreaName, ConsumerName, ConsumerNo);
-
-                        }
+                        context.startActivity(intent);
+                        //  new MyGlobals(context).passOnAllotmentDetailsToAnswers(allot_date, AreaName, ConsumerName, ConsumerNo);
 
                     });
                 }

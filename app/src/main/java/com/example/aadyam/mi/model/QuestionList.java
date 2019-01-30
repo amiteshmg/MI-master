@@ -120,5 +120,4 @@ public class QuestionList
         return "{ Active = "+Active+", Description = "+Description+", CategoryId = "+CategoryId+", FieldType = "+FieldType+", IsRemark = "+IsRemark+", FieldData = "+FieldData+", QuestionId = "+  QuestionId+", DescriptionMarathi = "+DescriptionMarathi+", DescriptionHindi = "+DescriptionHindi+" }";
     }
 
-
 }

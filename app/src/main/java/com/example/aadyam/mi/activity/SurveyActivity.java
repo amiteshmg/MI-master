@@ -22,6 +22,7 @@ import com.example.aadyam.mi.fragment.PersonalInfo;
 import com.example.aadyam.mi.fragment.Regulator;
 import com.example.aadyam.mi.fragment.Rubberhose;
 import com.example.aadyam.mi.fragment.Stove;
+import com.example.aadyam.mi.fragment.Unsafe;
 import com.example.aadyam.mi.fragment.UploadPhoto;
 import com.example.aadyam.mi.model.Allotment;
 
@@ -59,7 +60,7 @@ public class SurveyActivity extends FragmentActivity
 
         databaseHelperUser=new DatabaseHelperUser(this);
         viewPager1 = findViewById(R.id.viewpager1);
-        setupViewPager(viewPager1);
+        setupViewPager(viewPager1,getIntent().getExtras().getInt(Constants.QUESTION_CATEGORY_FLAG));
 
         tabLayout = findViewById(R.id.tabs1);
         tabLayout.setupWithViewPager(viewPager1);
@@ -77,16 +78,28 @@ public class SurveyActivity extends FragmentActivity
 
 
 
-    private void setupViewPager(ViewPager viewPager)
+    private void setupViewPager(ViewPager viewPager,int CODE)
     {
         SurveyActivity.ViewPagerAdapter1 adapter = new ViewPagerAdapter1(getSupportFragmentManager());
-        adapter.addFragment(new Cylinder(),"Cylinder");
-        adapter.addFragment(new Regulator(), "Regulator");
-        adapter.addFragment(new Rubberhose(), "Rubber Hose");
-        adapter.addFragment(new Stove(), "Stove");
-        adapter.addFragment(new General(), "General");
-        adapter.addFragment(new PersonalInfo(), "Personal Information");
-        adapter.addFragment(new UploadPhoto(), "Upload Photo");
+        switch (CODE)
+        {
+
+            case 1:
+            adapter.addFragment(new Cylinder(), "Cylinder");
+            adapter.addFragment(new Regulator(), "Regulator");
+            adapter.addFragment(new Rubberhose(), "Rubber Hose");
+            adapter.addFragment(new Stove(), "Stove");
+            adapter.addFragment(new General(), "General");
+            adapter.addFragment(new PersonalInfo(), "Personal Information");
+            adapter.addFragment(new UploadPhoto(), "Upload Photo");
+            break;
+
+            case 2:
+                adapter.addFragment(new Unsafe(), "Unsafe Questions");
+                adapter.addFragment(new UploadPhoto(), "Upload Photo");
+                break;
+        }
+
         viewPager.setAdapter(adapter);
     }
 

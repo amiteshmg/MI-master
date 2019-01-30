@@ -56,7 +56,7 @@ public class Rubberhose extends Fragment {
         questionList = databaseHelperUser.getQuestionEntries(R.layout.fragment_rubberhose);
 
         MyGlobals myGlobals=new MyGlobals(getContext());
-        myGlobals.dynamicQuestion(rubberHoseLayout,getContext(),view,questionList);
+        myGlobals.dynamicQuestion(rubberHoseLayout,getContext(),questionList,false);
         //recyclerView.setAdapter(new QuestionAdapter(questionList,getContext()));
     }
 }

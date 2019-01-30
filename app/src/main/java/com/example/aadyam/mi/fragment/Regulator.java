@@ -61,7 +61,7 @@ public class Regulator extends Fragment {
         questionList=new ArrayList<QuestionList>();
         questionList = databaseHelperUser.getQuestionEntries(R.layout.fragment_regulator);
         MyGlobals myGlobals=new MyGlobals(getContext());
-        myGlobals.dynamicQuestion(regulatorLayout,getContext(),view,questionList);
+        myGlobals.dynamicQuestion(regulatorLayout,getContext(),questionList,false);
         //recyclerView.setAdapter(new QuestionAdapter(questionList,getContext()));
         //recyclerView.setAdapter(new QuestionAdapter(questionObject.getQuestionnaireListResult(),R.layout.card_radio, getContext()));
 

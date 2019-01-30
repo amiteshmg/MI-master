@@ -57,7 +57,7 @@ public class Stove extends Fragment {
         questionList=new ArrayList<QuestionList>();
         questionList = databaseHelperUser.getQuestionEntries(R.layout.fragment_stove);
         MyGlobals myGlobals=new MyGlobals(getContext());
-        myGlobals.dynamicQuestion(stoveLayout,getContext(),view,questionList);
+        myGlobals.dynamicQuestion(stoveLayout,getContext(),questionList,false);
 
 
        // recyclerView.setAdapter(new QuestionAdapter(questionList,getContext()));

@@ -52,8 +52,6 @@ import static android.content.ContentValues.TAG;
 public class DatabaseHelperUser extends SQLiteOpenHelper
 {
 
-    //User table table details
-
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "userinfo.db";
 
@@ -122,13 +120,11 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
 
 
-    public static final int API_QUESTIONS=1;
-    public static final int API_ALLOTMENT=2;
-
 
     private int count=0;
 
-    private static final String TABLE_NAME_ANSWERS ="Answers";
+
+
 
     //photos table
 
@@ -153,7 +149,8 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
     //Answers table
 
-    private static final String SQL_CREATE_TABLE_ANSWERS = "CREATE TABLE IF NOT EXISTS "+TABLE_NAME_ANSWERS+" ( id INTEGER PRIMARY KEY,questionid TEXT,questiondesc TEXT,answer TEXT,allotteddate TEXT, areaname TEXT, consumername TEXT,consumerno TEXT,isCompleted TEXT,uniqueConsumerId TEXT,alloted_id TEXT,categoryid TEXT,fieldtype TEXT,inspectionid TEXT,unsafe_inspectionid TEXT,json_data TEXT);";
+    private static final String TABLE_NAME_ANSWERS ="Answers";
+
     private static final String COL4_1 = "id";
     private static final String COL4_2 = "questionid";
     private static final String COL4_3 = "questiondesc";
@@ -171,7 +168,32 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
     private static final String COL4_15 = "unsafe_inspectionid";
     private static final String COL4_16 = "json_data";
 
-    //CREATE TABLE deniedNotAvl( id INTEGER PRIMARY KEY,allotedId TEXT,deniedFlag TEXT,notAvlFlag TEXT,json_data TEXT)
+
+
+
+
+    //Unsafe Answers table
+
+    private static final String TABLE_NAME_UNSAFE_ANSWERS ="unsafeAnswers";
+  //  private static final String SQL_CREATE_TABLE_UNSAFE_ANSWERS = "CREATE TABLE IF NOT EXISTS "+TABLE_NAME_UNSAFE_ANSWERS+" ( id INTEGER PRIMARY KEY,questionid TEXT,questiondesc TEXT,answer TEXT,allotteddate TEXT, areaname TEXT, consumername TEXT,consumerno TEXT,isCompleted TEXT,uniqueConsumerId TEXT,alloted_id TEXT,categoryid TEXT,fieldtype TEXT,inspectionid TEXT,unsafe_inspectionid TEXT,json_data TEXT);";
+    private static final String COL7_1 = "id";
+    private static final String COL7_2 = "questionid";
+    private static final String COL7_3 = "questiondesc";
+    private static final String COL7_4 = "answer";
+    private static final String COL7_5 = "allotteddate";
+    private static final String COL7_6 = "areaname";
+    private static final String COL7_7 = "consumername";
+    private static final String COL7_8 = "consumerno";
+    private static final String COL7_9 = "isCompleted";
+    private static final String COL7_10 = "uniqueConsumerId";
+    private static final String COL7_11 = "alloted_id";
+    private static final String COL7_12 = "categoryid";
+    private static final String COL7_13 = "fieldtype";
+    private static final String COL7_14 = "inspectionid";
+    private static final String COL7_15 = "unsafe_inspectionid";
+    private static final String COL7_16 = "json_data";
+
+
 
     //PersonalInfoList table
 
@@ -206,6 +228,8 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
     private static final String COL5_28 = "json_data";
     private Activity activity;
 
+
+
     //create table queries
 
     private static final String SQL_CREATE_TABLE_QUESTIONS = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_QUESTION + " (Active TEXT,Category_ID TEXT,Description TEXT,Description_Hindi TEXT,Description_Marathi TEXT,Field_Data TEXT,Field_Type TEXT,Remark TEXT,Question_ID INTEGER PRIMARY KEY) ";
@@ -215,14 +239,12 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
     private static final String SQL_CREATE_TABLE_PHOTOS =  "CREATE TABLE IF NOT EXISTS "+TABLE_NAME_PHOTOS+" ( id INTEGER PRIMARY KEY AUTOINCREMENT,flag TEXT,filestream TEXT, distributor_id TEXT, filename TEXT,Inspectionformid TEXT,ref_Inspectionformid TEXT,unsafe_id TEXT,uniqueConsumerId TEXT,allotedId TEXT,imageType TEXT,json_data TEXT);";
     private static final String TABLE_NAME_UNSAFE_QUESTIONS = "UnsafeQuestions";
     private static final String SQL_CREATE_TABLE_UNSAFE_QUESTIONS =  "CREATE TABLE IF NOT EXISTS "+TABLE_NAME_UNSAFE_QUESTIONS+" ( id INTEGER PRIMARY KEY,active TEXT,categoryid TEXT, description TEXT, descriptionHindi TEXT, descriptionMarathi TEXT, fielddata TEXT,fieldtype TEXT,isremark TEXT,questionid TEXT,ref_ins_formId TEXT,json_data TEXT);";
+    private static final String SQL_CREATE_TABLE_ANSWERS = "CREATE TABLE IF NOT EXISTS "+TABLE_NAME_ANSWERS+" ( id INTEGER PRIMARY KEY,questionid TEXT,questiondesc TEXT,answer TEXT,allotteddate TEXT, areaname TEXT, consumername TEXT,consumerno TEXT,isCompleted TEXT,uniqueConsumerId TEXT,alloted_id TEXT,categoryid TEXT,fieldtype TEXT,inspectionid TEXT,unsafe_inspectionid TEXT,json_data TEXT);";
+    private static final String SQL_CREATE_TABLE_UNSAFE_ANSWERS = "CREATE TABLE IF NOT EXISTS "+TABLE_NAME_UNSAFE_ANSWERS+" ( id INTEGER PRIMARY KEY,questionid TEXT,questiondesc TEXT,answer TEXT,allotteddate TEXT, areaname TEXT, consumername TEXT,consumerno TEXT,isCompleted TEXT,uniqueConsumerId TEXT,alloted_id TEXT,categoryid TEXT,fieldtype TEXT,inspectionid TEXT,unsafe_inspectionid TEXT,json_data TEXT);";
     private  Context context;
 
 
-    private static final String TABLE_NAME_LAYOUT_COUNT = "layoutCount";
-    private static final String SQL_CREATE_TABLE_LAYOUT_COUNT =  "CREATE TABLE IF NOT EXISTS "+TABLE_NAME_LAYOUT_COUNT+" ( id INTEGER PRIMARY KEY,Count INTEGER);";
 
-    ProgressDialog mProgressDialog;
-    //private Activity activityContext;
     private SQLiteDatabase db;
 
     public DatabaseHelperUser(Context context)
@@ -240,31 +262,6 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
 
 
-    public void createTables()
-    {
-
-
-        //getQuestion();
-        //getQuestion();
-        /*if(new MyGlobals(context).isNetworkConnected())
-        {
-
-            getAllotment();
-        }
-*/
-
-    }
-
-
- /*   public void updateTables()
-    {
-        getAllotment();
-        getQuestion();
-
-    }
-*/
-
-
     @Override
     public void onCreate(SQLiteDatabase db)
     {
@@ -274,12 +271,8 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
         db.execSQL(SQL_CREATE_TABLE_PERSONAL_INFO);
         db.execSQL(SQL_CREATE_TABLE_UNSAFE_QUESTIONS);
         db.execSQL(SQL_CREATE_TABLE_ANSWERS);
+        db.execSQL(SQL_CREATE_TABLE_UNSAFE_ANSWERS);
         db.execSQL(SQL_CREATE_TABLE_PHOTOS);
-        db.execSQL(SQL_CREATE_TABLE_LAYOUT_COUNT);
-        //getAllotment();
-        //db.execSQL();
-        //getAllotmentOnCreate();
-        //getAllotmentBeta();
 
     }
 
@@ -665,14 +658,15 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
             public void onResponse(@NonNull Call<Allotment> call, @NonNull Response<Allotment> response)
             {
                 // hideDialog();
-                int size= 0;
+                /*int size= 0;
                 if (response.body() != null)
                 {
                     size = response.body().getAllotmentListResult().size();
-                }
+                }*/
 
-                Toast.makeText(context, ""+size, Toast.LENGTH_SHORT).show();
-                Toast.makeText(context, "Connected. Fetched Allotment updates successfully! ", Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(context, "Synced Successfully!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "Connected. Fetched Allotment updates successfully! ", Toast.LENGTH_SHORT).show();
 
                 assert response.body() != null;
               //  Log.d(Constants.TAG," getAllotment Entered : DEMO DATA RESPONSE : "+response.body().getAllotmentListResult().get(1).getAddress());
@@ -755,7 +749,8 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
 
     //fetching allotment entries from the mobile SQLiteDatabase
-    public List<AllotmentList> getAllotmentEntries(int FRAG_TYPE,int CLICK_CODE)
+    @SuppressLint("Recycle")
+    public List<AllotmentList> getAllotmentEntries(int FRAG_TYPE, int CLICK_CODE)
     {
         SQLiteDatabase db = this.getReadableDatabase();
         String currentDate="'"+new MyGlobals(context).getCurrentDate()+"'";
@@ -767,32 +762,35 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
         switch (CLICK_CODE)
         {
-            //TODO Apply logic here
 
             case Constants.TOTAL_ALLOTTED_PENDING:
                 if(FRAG_TYPE==2)
                 {
-                String selectQuery = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_9+"=0 AND "+COL3_12+"=0 and "+COL3_13+"=0 and "+COL3_10+"=0";
-                cursor = db.rawQuery(selectQuery, null);
-                }
-
-                else {
-                    String selectQuery = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_9+"=0 AND "+COL3_12+"=0 and "+COL3_13+"=0 and "+COL3_10+"=0"+" AND "+COL3_4+"="+currentDate;
+                    String selectQuery = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_9+"=0";
+                    //String selectQuery = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_9+"=0 AND "+COL3_12+"=0 and "+COL3_13+"=0 and "+COL3_10+"=0";
                     cursor = db.rawQuery(selectQuery, null);
                 }
+
+                else
+                    {
+                        String selectQuery = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_9+"=0 AND "+COL3_4+"="+currentDate;
+                        //String selectQuery = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_9+"=0 AND "+COL3_12+"=0 and "+COL3_13+"=0 and "+COL3_10+"=0"+" AND "+COL3_4+"="+currentDate;
+                        cursor = db.rawQuery(selectQuery, null);
+                    }
                 break;
 
             case Constants.TOTAL_UNSAFE:
                 if(FRAG_TYPE==2)
                 {
-                    String selectQuery1 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_10+"=1 AND "+COL3_33+"='false';";
+                    String selectQuery1 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_9+"=1 AND "+COL3_33+"=0;";
                     cursor = db.rawQuery(selectQuery1, null);
                 }
 
-                else {
-                    String selectQuery1 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_10+"=1 AND "+COL3_33+"='false';"+" AND "+COL3_4+"="+currentDate;
-                    cursor = db.rawQuery(selectQuery1, null);
-                }
+                else
+                    {
+                        String selectQuery1 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_9+"=1 AND "+COL3_33+"=0"+" AND "+COL3_25+"="+currentDate;
+                        cursor = db.rawQuery(selectQuery1, null);
+                    }
 
                 break;
 
@@ -830,13 +828,14 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
             case Constants.TOTAL_REALLOTTED_UNSAFE:
                 if(FRAG_TYPE==2)
                 {
-                    String selectQuery4 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_11+"=1;";
+                    String selectQuery4 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_11+"=1 AND "+COL3_9+" = "+0+" AND "+COL3_33+" = 0 AND "+COL3_11+"=1";
                     cursor = db.rawQuery(selectQuery4, null);
                 }
-                else {
-                    String selectQuery4 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_11+"=1 "+" AND "+COL3_4+"="+currentDate;
-                    cursor = db.rawQuery(selectQuery4, null);
-                }
+                else
+                    {
+                        String selectQuery4 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_11+"=1 AND "+COL3_9+" = 0 "+" AND "+COL3_33+" = 0 AND "+COL3_11+"=1 AND "+COL3_4+"="+currentDate;
+                        cursor = db.rawQuery(selectQuery4, null);
+                    }
 
                 break;
 
@@ -844,28 +843,30 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
             case Constants.TOTAL_REALLOTTED_DENIED:
                 if (FRAG_TYPE==2)
                 {
-                    String selectQuery5 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_12+"=0 AND "+COL3_14+"=1 ;";
+                    String selectQuery5 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_12+"=0 AND "+COL3_14+"=1 AND "+COL3_9+"=0 AND "+COL3_11+"=1";
                     cursor = db.rawQuery(selectQuery5, null);
                 }
 
-                else {
-                    String selectQuery5 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_12+"=0 AND "+COL3_14+"=1 "+" AND "+COL3_4+"="+currentDate;
-                    cursor = db.rawQuery(selectQuery5, null);
-                }
+                else
+                    {
+                        String selectQuery5 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_12+"=0 AND "+COL3_14+"=1 "+" AND "+COL3_9+"=0 AND "+COL3_11+"=1 AND "+COL3_4+"="+currentDate;
+                        cursor = db.rawQuery(selectQuery5, null);
+                    }
                 break;
 
 
             case Constants.TOTAL_REALLOTTED_NOT_AVAILABLE:
                 if(FRAG_TYPE==2)
                 {
-                    String selectQuery6 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_15+"=1";
+                    String selectQuery6 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_15+"=1 AND "+COL3_9+"=0 AND "+COL3_11+"=1";
                     cursor = db.rawQuery(selectQuery6, null);
                 }
 
-                else {
-                    String selectQuery6 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_15+"=1 "+" AND "+COL3_4+"="+currentDate;
-                    cursor = db.rawQuery(selectQuery6, null);
-                }
+                else
+                    {
+                        String selectQuery6 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_15+"=1 "+" AND "+COL3_9+"=0 AND "+COL3_11+"=1 AND "+COL3_4+"="+currentDate;
+                        cursor = db.rawQuery(selectQuery6, null);
+                    }
 
                 break;
 
@@ -873,29 +874,30 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
             case Constants.TOTAL_TOTAL:
                 if(FRAG_TYPE==2)
                 {
-                    String selectQuery7 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_9+"=1;";
+                    String selectQuery7 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_9+"=1 AND "+COL3_33+" = 1;";
                     cursor = db.rawQuery(selectQuery7, null);
 
                 }
                 else
                     {
-                    String selectQuery7_1 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_9+"=1 "+" AND "+COL3_25+"="+currentDate;
-                    Log.d(Constants.TAG, "getAllotmentEntries: TOTAL "+selectQuery7_1);
-                    cursor = db.rawQuery(selectQuery7_1, null);
-                }
+                        String selectQuery7_1 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_9+"=1 AND "+COL3_33+"=1 AND "+COL3_25+"="+currentDate;
+                        Log.d(Constants.TAG, "getAllotmentEntries: TOTAL "+selectQuery7_1);
+                        cursor = db.rawQuery(selectQuery7_1, null);
+                    }
                 break;
 
             case Constants.TOTAL_AGAINST_UNSAFE:
                 if(FRAG_TYPE==2)
                 {
-                    String selectQuery8 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_10+"=1;";
+                    String selectQuery8 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_10+"=1 AND "+COL3_33+" = 1 AND "+COL3_9+" = 1;";
                     cursor = db.rawQuery(selectQuery8, null);
                 }
-                else {
-                    String selectQuery8 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_10+"=1 "+" AND "+COL3_4+"="+currentDate;
 
+                else
+                    {
+                    String selectQuery8 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_10+"=1 AND "+COL3_33+" = 1 AND "+COL3_9+" = 1 AND "+COL3_25+"="+currentDate;
                     cursor = db.rawQuery(selectQuery8, null);
-                }
+                    }
                 break;
 
 
@@ -903,40 +905,36 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
                 if(FRAG_TYPE==2)
                 {
-                    String selectQuery9 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_14+"=1;";
+                    String selectQuery9 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_14+"=1 AND "+COL3_9+"=1;";
                     cursor = db.rawQuery(selectQuery9, null);
                 }
 
                 else
                     {
-                        String selectQuery9 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_14+"=1 "+" AND "+COL3_4+"="+currentDate;
+                        String selectQuery9 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_14+"=1 AND "+COL3_9+"=1 AND "+COL3_25+"="+currentDate;
                         cursor = db.rawQuery(selectQuery9, null);
                     }
 
-
                 break;
-
 
 
             case Constants.TOTAL_AGAINST_NOT_AVAILABLE:
                 if(FRAG_TYPE==2)
                 {
-
                     String selectQuery10 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_15+"=1;";
                     cursor = db.rawQuery(selectQuery10, null);
-
                 }
+
                 else
                 {
-                    String selectQuery10 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_15+"=1 "+" AND "+COL3_4+"="+currentDate;
+                    String selectQuery10 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT+" WHERE "+COL3_15+"=1 "+" AND "+COL3_25+"="+currentDate;
                     cursor = db.rawQuery(selectQuery10, null);
-
                 }
+
                 break;
 
 
             default:
-
                 String selectQuery0 = "SELECT  * FROM " + TABLE_NAME_ALLOTMENT;
                 cursor = db.rawQuery(selectQuery0, null);
         }
@@ -989,7 +987,7 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
     //TODO----------------------------------------PHOTOS TABLE-----------------------------------------------------
 
 
-    //TODO Changed on 25 JAn retrive if not working
+    //TODO Changed on 25 Jan retrieve if not working
 
     public void setPhotos(String filename,String encodedImage,String CODE)
     {
@@ -1063,38 +1061,60 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
 
     //inserts individual answer entry into Database
-    public void putAnswerEntryInDatabase(String answer,String questionId,String quesDescription,String categoryId,String allottedDate,String areaName,String consumerName, String consumerNo,String isCompleted,String uniqueConsumerId,String allottedId)
+    public void putAnswerEntryInDatabase(boolean unsafe,String[] answer,String[] questionId,String[] quesDescription,String[] categoryId,String allottedDate,String areaName,String consumerName, String consumerNo,String isCompleted,String uniqueConsumerId,String allottedId)
     {
         SQLiteDatabase db=this.getWritableDatabase();
 
-        Cursor cursor=db.rawQuery("SELECT * FROM "+TABLE_NAME_ANSWERS+" WHERE "+COL4_8+"="+consumerNo+" AND "+COL4_2+"="+questionId ,null);
+        for(int i=0;i<questionId.length;i++)
+        {
+            Cursor cursor;
+            ContentValues cv = new ContentValues();
 
-        int c=cursor.getCount();
+            if(!unsafe)
+            {
+                cursor=db.rawQuery("SELECT * FROM "+TABLE_NAME_ANSWERS+" WHERE "+COL4_8+"="+consumerNo+" AND "+COL4_2+"="+questionId[i] ,null);
+            }
 
-        ContentValues cv = new ContentValues();
-        cv.put(COL4_2, questionId);
-        cv.put(COL4_3, quesDescription);
-        cv.put(COL4_12, categoryId);
-        cv.put(COL4_4, answer);
-        cv.put(COL4_6, areaName);
-        cv.put(COL4_7, consumerName);
-        cv.put(COL4_5,allottedDate);
-        cv.put(COL4_8, consumerNo);
-        cv.put(COL4_9,isCompleted);
-        cv.put(COL4_10, uniqueConsumerId);
-        cv.put(COL4_11, allottedId);
+
+            else
+            {
+                cursor=db.rawQuery("SELECT * FROM "+TABLE_NAME_UNSAFE_ANSWERS+" WHERE "+COL7_8+"="+consumerNo+" AND "+COL7_2+"="+questionId[i] ,null);
+            }
+
+            int c=cursor.getCount();
+
+            cv.put(COL4_2, questionId[i]);
+            cv.put(COL4_3, quesDescription[i]);
+            cv.put(COL4_12, categoryId[i]);
+            cv.put(COL4_4, answer[i]);
+            cv.put(COL4_6, areaName);
+            cv.put(COL4_7, consumerName);
+            cv.put(COL4_5,allottedDate);
+            cv.put(COL4_8, consumerNo);
+            cv.put(COL4_9,isCompleted);
+            cv.put(COL4_10, uniqueConsumerId);
+            cv.put(COL4_11, allottedId);
 
         System.out.println("Before update Count : "+count);
 
         if(c==1)
         {
-            long result=db.update(TABLE_NAME_ANSWERS,  cv,COL2_2+" = "+consumerNo+" AND "+COL4_2+" = "+questionId,null);
+            long result;
+            if(!unsafe)
+            {
+                result=db.update(TABLE_NAME_ANSWERS,  cv,COL4_8+" = "+consumerNo+" AND "+COL4_2+" = "+questionId[i],null);
+            }
+
+            else
+                {
+                    result=db.update(TABLE_NAME_UNSAFE_ANSWERS,  cv,COL7_8+" = "+consumerNo+" AND "+COL7_2+" = "+questionId[i],null);
+                }
+
             Log.i(Constants.TAG,""+result);
+
             if(result!=-1)
             {
                 Log.i(Constants.TAG,"Updated");
-                //Toast.makeText(context, "Updated!"+c, Toast.LENGTH_SHORT).show();
-
             }
 
         }
@@ -1102,12 +1122,22 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
         else
         {
-            long result=db.insert(TABLE_NAME_ANSWERS,  null,cv);
+            long result;
+
+            if(!unsafe)
+                result=db.insert(TABLE_NAME_ANSWERS,  null,cv);
+
+            else
+                result=db.insert(TABLE_NAME_UNSAFE_ANSWERS,  null,cv);
+
             Log.i(Constants.TAG,"ANSWER RESULT "+result);
+
             if(result!=-1)
             {
                 Log.i(Constants.TAG,"Inserted!");
             }
+        }
+
         }
     }
 
@@ -1435,26 +1465,27 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
 
 
     //fetch all QuestionAnswer entries of respective user from answers table in database
-    public String getAnswerJsonString(String unique)
+    public String getAnswerJsonString(String unique,boolean unsafeFlagReallot)
     {
         SQLiteDatabase db=this.getWritableDatabase();
+        Cursor cursor;
 
+        if(!unsafeFlagReallot)
+        cursor=db.rawQuery("Select * from "+TABLE_NAME_ANSWERS+" where "+COL4_10+"="+unique,null);
 
+        else
+            cursor=db.rawQuery("Select * from "+TABLE_NAME_UNSAFE_ANSWERS+" where "+COL7_10+"="+unique,null);
 
-        Cursor cursor=db.rawQuery("Select * from "+TABLE_NAME_ANSWERS+" where "+COL4_10+"="+unique,null);
         JSONArray jsonArrayQuestions=new JSONArray();
+
         if(cursor.moveToFirst())
         {
-
-
             do
             {
-
                 try
                 {
                     JSONObject jsonObjectAnswers=new JSONObject();
                     jsonObjectAnswers.put("QId",cursor.getString(1));
-
 
                     if(cursor.getString(3).equalsIgnoreCase("yes"))
                     jsonObjectAnswers.put("Ans","1");
@@ -1509,6 +1540,10 @@ public class DatabaseHelperUser extends SQLiteOpenHelper
         for(int i=1;i<=5;i++)
         result2=db.delete(TABLE_NAME_PHOTOS,""+COL6_10+"="+allotted_id+" and "+COL6_11+"="+i,null);
 
+        long result4=db.delete(TABLE_NAME_UNSAFE_ANSWERS,""+COL7_11+"="+allotted_id,null);
+
+        if(result4!=-1)
+            Log.d(Constants.TAG, "deleted Unsafe Answer Table Entries");
 
 
     }

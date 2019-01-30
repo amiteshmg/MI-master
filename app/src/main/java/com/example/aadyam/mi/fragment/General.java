@@ -53,6 +53,6 @@ public class General extends Fragment
         questionList=new ArrayList<QuestionList>();
         questionList = databaseHelperUser.getQuestionEntries(R.layout.fragment_general);
         MyGlobals myGlobals=new MyGlobals(getContext());
-        myGlobals.dynamicQuestion(generalLayout,getContext(),view,questionList);
+        myGlobals.dynamicQuestion(generalLayout,getContext(),questionList,false);
     }
 }

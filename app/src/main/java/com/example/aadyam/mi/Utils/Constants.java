@@ -1,6 +1,5 @@
 package com.example.aadyam.mi.Utils;
 
-import android.content.Context;
 import android.os.Bundle;
 
 public class Constants
@@ -40,8 +39,10 @@ public class Constants
     public static final String STOVE_SAVE  = "stoveSave";
     public static final String GENERAL_SAVE = "generalSave";
     public static final String IMAGE_ARRAY = "imageArray";
-
-
+    public static final String QUESTION_CATEGORY_FLAG = "questionCategory";
+    public static final int SAFE_QUESTIONS = 1;
+    public static final int UNSAFE_QUESTIONS = 2;
+    public static final String UNSAFE_FLAG = "unsafeFlag";
     public static  String SERVER_URL="http://hpgasprodweb1t.hpcl.co.in/hp.svc/QuestionnaireList";
     public static  String JSON_OBJECT="QuestionnaireListResult";
     public static final String Time_Out_Exception = "Timeout Exception!";
@@ -49,7 +50,6 @@ public class Constants
     public static final String OK = "OK";
     public static final String warning="Warning";
     public static long StaffRefNo;
-
     public static String FONT_REGULAR = "fonts/OpenSans-Regular.ttf";
     public static String FONT_BOLD = "fonts/OpenSans-Bold.ttf";
 
@@ -151,9 +151,4 @@ public class Constants
     public static String imageStoragePath;
 
     public static Bundle savBundle;
-
-
-
-
-
 }

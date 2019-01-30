@@ -18,6 +18,7 @@ import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -31,6 +32,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aquery.AQuery;
+import com.aquery.listener.QueryNetworkListener;
 import com.example.aadyam.mi.R;
 import com.example.aadyam.mi.Utils.Constants;
 import com.example.aadyam.mi.activity.InspectionDisplayActivity;
@@ -73,6 +76,7 @@ public class MyGlobals
     {
         ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();
+
         if (ni == null)
         {
             // There are no active networks.
@@ -222,7 +226,6 @@ public class MyGlobals
 
         catch (JSONException e)
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -239,7 +242,6 @@ public class MyGlobals
 
             catch (JSONException e)
             {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             }
 
@@ -647,24 +649,25 @@ public class MyGlobals
 
 
 
+
+
 //--------------------------------------DYNAMIC QUESTION------------------------------------------------
 
     //Universal function to display all questions and save the same to Database
-    @SuppressLint("NewApi")
-    public void dynamicQuestion(LinearLayout fragmentLinearLayout, final Context context, View v, final List<QuestionList> questionList)
+    @SuppressLint({"NewApi", "ApplySharedPref"})
+    public void dynamicQuestion(LinearLayout fragmentLinearLayout, final Context context, final List<QuestionList> questionList,boolean unsafeQuestionFlag)
     {
-        sharedPreferences=context.getSharedPreferences(Constants.PREFS_NAME,Context.MODE_PRIVATE);
+
+        SharedPreferences sharedPreferences=context.getSharedPreferences(Constants.PREFS_NAME,Context.MODE_PRIVATE);
 
          answer = new String[questionList.size()];
          questionID=new String[questionList.size()];
          categoryID=new String[questionList.size()];
          questionDescription=new String[questionList.size()];
-         size= questionList.size();
+         int size= questionList.size();
         
-        params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        params.gravity=Gravity.CENTER_HORIZONTAL;
-
-         final SharedPreferences sharedPreferences=mContext.getSharedPreferences(Constants.PREFS_NAME,Context.MODE_PRIVATE);
+         params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+         params.gravity=Gravity.CENTER_HORIZONTAL;
 
          /*final SharedPreferences.Editor edit = sharedPreferences.edit();
          edit.putInt(Constants.ARRAY_LENGTH, questionList.size());
@@ -687,306 +690,241 @@ public class MyGlobals
             questionHolderLinearLayout.addView(question);
 
             //radioGroup condition
-            if (questionList.get(j).getFieldType().equals("C")) {
-                final AppCompatRadioButton[] rb = new AppCompatRadioButton[2];
+            switch (questionList.get(j).getFieldType())
+            {
+                case "C":
+                    final AppCompatRadioButton[] rb = new AppCompatRadioButton[2];
 
-                final RadioGroup rg = new RadioGroup(context); //create the RadioGroup
-                rg.setOrientation(RadioGroup.HORIZONTAL);//or RadioGroup.VERTICAL
-                String[] options = context.getResources().getStringArray(R.array.radio_options_yes_no);
+                    final RadioGroup rg = new RadioGroup(context); //create the RadioGroup
 
-                for (int i = 0; i < options.length; i++)
-                {
-                    rb[i] = new AppCompatRadioButton(context);
-                    rb[i].setText(options[i]);
-                    rb[i].setId(i + 100);
-                    rb[i].setHighlightColor(context.getResources().getColor(R.color.colorPrimary));
-                    rg.addView(rb[i]);
-                }
+                    rg.setOrientation(RadioGroup.HORIZONTAL);//or RadioGroup.VERTICAL
 
-                if (questionList.get(j).getQuestionId().matches("3|16|24"))
-                {
-                    rb[1].setHighlightColor(context.getResources().getColor(R.color.red));
-                    rb[1].setTextColor(context.getResources().getColor(R.color.red));
-                }
+                    String[] options = context.getResources().getStringArray(R.array.radio_options_yes_no);
+
+                    for (int i = 0; i < options.length; i++) {
+                        rb[i] = new AppCompatRadioButton(context);
+                        rb[i].setText(options[i]);
+                        rb[i].setId(i + 100);
+                        rb[i].setHighlightColor(context.getResources().getColor(R.color.colorPrimary));
+                        rg.addView(rb[i]);
+                    }
+
+                    if (questionList.get(j).getQuestionId().matches("3|16|24")) {
+                        rb[1].setHighlightColor(context.getResources().getColor(R.color.red));
+                        rb[1].setTextColor(context.getResources().getColor(R.color.red));
+                    }
 
 
-                //for yes as unsafe option
-                else if (questionList.get(j).getQuestionId().matches("21|23|30|32"))
-                {
-                    rb[0].setHighlightColor(context.getResources().getColor(R.color.red));
-                    rb[0].setTextColor(context.getResources().getColor(R.color.red));
-                }
+                    //for yes as unsafe option
+                    else if (questionList.get(j).getQuestionId().matches("21|23|30|32")) {
+                        rb[0].setHighlightColor(context.getResources().getColor(R.color.red));
+                        rb[0].setTextColor(context.getResources().getColor(R.color.red));
+                    }
 
-                questionHolderLinearLayout.addView(rg);
+                    questionHolderLinearLayout.addView(rg);
 
-                //unsafe questions category
-                //for No as unsafe option
-                final int finalJ = j;
+                    //unsafe questions category
+                    //for No as unsafe option
+                    final int finalJ = j;
 
                     // no radio buttons are checked
-                    rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-                    {
-                        @Override
-                        public void onCheckedChanged(RadioGroup group, int checkedId)
-                        {
-                            int radioButtonID = rg.getCheckedRadioButtonId();
-                            View radioButton = rg.findViewById(radioButtonID);
-                            int idx = rg.indexOfChild(radioButton);
-                            AppCompatRadioButton r = (AppCompatRadioButton) rg.getChildAt(idx);
+                    rg.setOnCheckedChangeListener((group, checkedId) -> {
+                        int radioButtonID = rg.getCheckedRadioButtonId();
+                        View radioButton = rg.findViewById(radioButtonID);
+                        int idx = rg.indexOfChild(radioButton);
+                        AppCompatRadioButton r = (AppCompatRadioButton) rg.getChildAt(idx);
 
-                                if(questionList.get(finalJ).getQuestionId().matches("3|16|24"))
-                                {
-                                    if(r.getText().toString().equalsIgnoreCase("no"))
-                                    {
-                                        question.setTextColor(context.getResources().getColor(R.color.red));
-                                        r.setHighlightColor(context.getResources().getColor(R.color.red));
-                                        sharedPreferences.edit().putInt(Constants.ANSWER+questionList.get(finalJ).getQuestionId(),1).commit();
-                                    }
-
-                                        else
-                                        {
-                                            question.setTextColor(Color.BLACK);
-                                            sharedPreferences.edit().putInt(Constants.ANSWER+questionList.get(finalJ).getQuestionId(),0).commit();
-                                            //r.setHighlightColor(context.getResources().getColor(R.color.dark_blue));
-
-                                        }
-                                }
-
-
-                            else if(questionList.get(finalJ).getQuestionId().matches("21|23|30|32"))
-                            {
-                                if(r.getText().toString().equalsIgnoreCase("yes"))
-                                {
-                                    question.setTextColor(context.getResources().getColor(R.color.red));
-                                    r.setHighlightColor(context.getResources().getColor(R.color.red));
-                                    //r;
-                                    sharedPreferences.edit().putInt(Constants.ANSWER+questionList.get(finalJ).getQuestionId(),1).commit();
-                                }
-
-                                else {
-                                    question.setTextColor(Color.BLACK);
-                                    sharedPreferences.edit().putInt(Constants.ANSWER+questionList.get(finalJ).getQuestionId(),0).commit();
-                                    }
+                        if (questionList.get(finalJ).getQuestionId().matches("3|16|24")) {
+                            if (r.getText().toString().equalsIgnoreCase("no")) {
+                                question.setTextColor(context.getResources().getColor(R.color.red));
+                                r.setHighlightColor(context.getResources().getColor(R.color.red));
+                                sharedPreferences.edit().putInt(Constants.ANSWER + questionList.get(finalJ).getQuestionId(), 1).commit();
+                            } else {
+                                question.setTextColor(Color.BLACK);
+                                sharedPreferences.edit().putInt(Constants.ANSWER + questionList.get(finalJ).getQuestionId(), 0).commit();
+                                //r.setHighlightColor(context.getResources().getColor(R.color.dark_blue));
                             }
+                        } else if (questionList.get(finalJ).getQuestionId().matches("21|23|30|32")) {
+                            if (r.getText().toString().equalsIgnoreCase("yes")) {
+                                question.setTextColor(context.getResources().getColor(R.color.red));
+                                r.setHighlightColor(context.getResources().getColor(R.color.red));
+                                //r;
+                                sharedPreferences.edit().putInt(Constants.ANSWER + questionList.get(finalJ).getQuestionId(), 1).commit();
+                            } else {
+                                question.setTextColor(Color.BLACK);
+                                sharedPreferences.edit().putInt(Constants.ANSWER + questionList.get(finalJ).getQuestionId(), 0).commit();
+                            }
+                        }
 
-                            answer[finalJ] = r.getText().toString();
-                            questionID[finalJ] = questionList.get(finalJ).getQuestionId();
-                            categoryID[finalJ] = questionList.get(finalJ).getCategoryId();
-                            questionDescription[finalJ] = questionList.get(finalJ).getDescription();
+                        answer[finalJ] = r.getText().toString();
+                        questionID[finalJ] = questionList.get(finalJ).getQuestionId();
+                        categoryID[finalJ] = questionList.get(finalJ).getCategoryId();
+                        questionDescription[finalJ] = questionList.get(finalJ).getDescription();
+                    });
+                    break;
+
+
+                //textFields
+                case "T":
+                    final EditText editText = new EditText(context);
+                    if (questionList.get(j).getQuestionId().equals("35")) {
+                        popUpDatePicker(context, editText);
+                    }
+
+                    if (questionList.get(j).getQuestionId().equals("17")) {
+                        if (hoseExpiryDate != null) {
+                            editText.setText(hoseExpiryDate);
+                            editText.setFocusable(false);
+                        } else {
+                            popUpDatePicker(context, editText);
+                        }
+                    }
+
+                    questionHolderLinearLayout.addView(editText);
+                    final int finalJ1 = j;
+
+                    editText.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                            answer[finalJ1] = editText.getText().toString();
+                            questionID[finalJ1] = questionList.get(finalJ1).getQuestionId();
+                            categoryID[finalJ1] = questionList.get(finalJ1).getCategoryId();
+                            questionDescription[finalJ1] = questionList.get(finalJ1).getDescription();
                         }
                     });
-            }
+
+                    View.OnFocusChangeListener ofcListener = new MyFocusChangeListener();
+                    editText.setOnFocusChangeListener(ofcListener);
+                    break;
+
+                //listViews
+                case "D":
+
+                    final Spinner spinner = new Spinner(context);
+                    String str = context.getResources().getString(R.string.spinner_default_item) + questionList.get(j).getFieldData();
+                    final List<String> spinnerList = Arrays.asList(str.split(","));
+
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, spinnerList);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                    spinner.setAdapter(adapter);
+                    questionHolderLinearLayout.addView(spinner);
+
+                    final int finalJ2 = j;
 
 
-            //textFields
-            else if (questionList.get(j).getFieldType().equals("T"))
-            {
-                final EditText editText=new EditText(context);
-                if(questionList.get(j).getQuestionId().equals("35"))
-                {
-                    popUpDatePicker(context,editText);
-                }
-
-                if(questionList.get(j).getQuestionId().equals("17"))
-                {
-                    if(hoseExpiryDate!=null)
-                    {
-                        editText.setText(hoseExpiryDate);
-                        editText.setFocusable(false);
-                    }
-
-                    else {
-                        popUpDatePicker(context,editText);
-                        }
-                }
-
-                questionHolderLinearLayout.addView(editText);
-                final int finalJ1 = j;
-
-                editText.addTextChangedListener(new TextWatcher()
-                {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after)
-                    {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count)
-                    {
-
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s)
-                    {
-                        answer[finalJ1] = editText.getText().toString();
-                        questionID[finalJ1] = questionList.get(finalJ1).getQuestionId();
-                        categoryID[finalJ1] = questionList.get(finalJ1).getCategoryId();
-                        questionDescription[finalJ1] = questionList.get(finalJ1).getDescription();
-                        //Toast.makeText(context, "" + answer[finalJ1], Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-                View.OnFocusChangeListener ofcListener = new MyFocusChangeListener();
-                editText.setOnFocusChangeListener(ofcListener);
-            }
-            
-            //listViews
-            else if(questionList.get(j).getFieldType().equals("D"))
-            {
-
-                final Spinner spinner=new Spinner(context);
-                String str = context.getResources().getString(R.string.spinner_default_item)+questionList.get(j).getFieldData();
-                final List<String> spinnerList = Arrays.asList(str.split(","));
-
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, spinnerList);
-                adapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
-
-                spinner.setAdapter(adapter);
-                questionHolderLinearLayout.addView(spinner);
-
-                final int finalJ2 = j;
+                    spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @SuppressLint("ApplySharedPref")
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
 
-                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-                    {
+                            if (questionList.get(finalJ2).getQuestionId().equals("13")) {
+                                if (spinner.getSelectedItem().toString().equalsIgnoreCase("rubber")) {
+                                    final AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+                                    alertDialog.setMessage("Do you want to change the Rubber Hose?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            AlertDialog.Builder alertDialog1 = new AlertDialog.Builder(context);
+                                            final EditText input = new EditText(context);
+                                            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                                                    LinearLayout.LayoutParams.MATCH_PARENT,
+                                                    LinearLayout.LayoutParams.MATCH_PARENT);
+                                            input.setLayoutParams(lp);
+                                            new MyGlobals(context).popUpDatePicker(context, input);
+                                            alertDialog1.setView(input).setTitle("Suraksha Hose Expiry date").setMessage("New Suraksha hose expiry date").setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    hoseExpiryDate = input.getText().toString();
+                                                    spinner.setBackgroundColor(context.getResources().getColor(R.color.white));
+                                                    answer[finalJ2] = spinner.getSelectedItem().toString();
+                                                    questionID[finalJ2] = questionList.get(finalJ2).getQuestionId();
+                                                    categoryID[finalJ2] = questionList.get(finalJ2).getCategoryId();
+                                                    questionDescription[finalJ2] = questionList.get(finalJ2).getDescription();
+                                                    sharedPreferences.edit().putInt(Constants.ANSWER + questionList.get(finalJ2).getQuestionId(), 0).commit();
+                                                    Toast.makeText(context, "" + input.getText().toString(), Toast.LENGTH_SHORT).show();
+                                                }
+                                            }).show();
 
+                                        }
 
-                        if(questionList.get(finalJ2).getQuestionId().equals("13"))
-                        {
-                            if(spinner.getSelectedItem().toString().equalsIgnoreCase("rubber"))
-                            {
-                                final AlertDialog.Builder alertDialog=new AlertDialog.Builder(context);
-                                alertDialog.setMessage("Do you want to change the Rubber Hose?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which)
-                                    {
-                                        AlertDialog.Builder alertDialog1=new AlertDialog.Builder(context);
-                                        final EditText input = new EditText(context);
-                                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                                                LinearLayout.LayoutParams.MATCH_PARENT,
-                                                LinearLayout.LayoutParams.MATCH_PARENT);
-                                        input.setLayoutParams(lp);
-                                        new MyGlobals(context).popUpDatePicker(context,input);
-                                        alertDialog1.setView(input).setTitle("Suraksha Hose Expiry date").setMessage("New Suraksha hose expiry date").setPositiveButton("Ok", new DialogInterface.OnClickListener()
-                                        {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which)
-                                            {
-                                                hoseExpiryDate=input.getText().toString();
-                                                spinner.setBackgroundColor(context.getResources().getColor(R.color.white));
-                                                answer[finalJ2] = spinner.getSelectedItem().toString();
-                                                questionID[finalJ2] = questionList.get(finalJ2).getQuestionId();
-                                                categoryID[finalJ2] = questionList.get(finalJ2).getCategoryId();
-                                                questionDescription[finalJ2] = questionList.get(finalJ2).getDescription();
-                                                sharedPreferences.edit().putInt(Constants.ANSWER+questionList.get(finalJ2).getQuestionId(),0).commit();
-                                                Toast.makeText(context, ""+input.getText().toString(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        }).show();
-
-                                    }
-
-                                }).setNegativeButton("No", new DialogInterface.OnClickListener()
-                                {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which)
-                                    {
+                                    }).setNegativeButton("No", (dialog, which) -> {
                                         spinner.setBackgroundColor(context.getResources().getColor(R.color.red));
-                                        //spinner.setBackgroundColor(context.getResources().getColor(R.color.white));
                                         answer[finalJ2] = spinner.getSelectedItem().toString();
                                         questionID[finalJ2] = questionList.get(finalJ2).getQuestionId();
                                         categoryID[finalJ2] = questionList.get(finalJ2).getCategoryId();
                                         questionDescription[finalJ2] = questionList.get(finalJ2).getDescription();
-                                        sharedPreferences.edit().putInt(Constants.ANSWER+questionList.get(finalJ2).getQuestionId(),1).commit();
+                                        sharedPreferences.edit().putInt(Constants.ANSWER + questionList.get(finalJ2).getQuestionId(), 1).commit();
                                         dialog.dismiss();
-                                    }
-                                }).show();
-                            }
-
-                            else if(spinner.getSelectedItem().toString().equalsIgnoreCase("Select one"))
-                            {
-                                spinner.setBackgroundColor(context.getResources().getColor(R.color.white));
-                                answer[finalJ2]=null;
-                            }
-
-
-                            else if(spinner.getSelectedItem().toString().equalsIgnoreCase("Suraksha Hose"))
-                                {
+                                    }).show();
+                                } else if (spinner.getSelectedItem().toString().equalsIgnoreCase("Select one")) {
+                                    spinner.setBackgroundColor(context.getResources().getColor(R.color.white));
+                                    answer[finalJ2] = null;
+                                } else if (spinner.getSelectedItem().toString().equalsIgnoreCase("Suraksha Hose")) {
                                     spinner.setBackgroundColor(context.getResources().getColor(R.color.white));
                                     answer[finalJ2] = spinner.getSelectedItem().toString();
                                     questionID[finalJ2] = questionList.get(finalJ2).getQuestionId();
                                     categoryID[finalJ2] = questionList.get(finalJ2).getCategoryId();
                                     questionDescription[finalJ2] = questionList.get(finalJ2).getDescription();
-                                    sharedPreferences.edit().putInt(Constants.ANSWER+questionList.get(finalJ2).getQuestionId(),0).commit();
+                                    sharedPreferences.edit().putInt(Constants.ANSWER + questionList.get(finalJ2).getQuestionId(), 0).commit();
                                 }
 
 
-                        }
-
-
-                        else if(questionList.get(finalJ2).getQuestionId().equals("10"))
-                        {
-                            if(/*position==0*/spinner.getSelectedItem().toString().matches("select one|Select one|Select One|SELECT ONE"))
-                            {
-                                spinner.setBackgroundColor(context.getResources().getColor(R.color.white));
-                                answer[finalJ2]=null;
-                            }
+                            } else if (questionList.get(finalJ2).getQuestionId().equals("10")) {
+                                if (/*position==0*/spinner.getSelectedItem().toString().matches("select one|Select one|Select One|SELECT ONE")) {
+                                    spinner.setBackgroundColor(context.getResources().getColor(R.color.white));
+                                    answer[finalJ2] = null;
+                                }
 //
-                            else  if(spinner.getSelectedItem().toString().matches("hpcl|Hpcl|HPCL"))
-                            {
-                                spinner.setBackgroundColor(context.getResources().getColor(R.color.white));
-                                answer[finalJ2] = spinner.getSelectedItem().toString();
-                                questionID[finalJ2] = questionList.get(finalJ2).getQuestionId();
-                                categoryID[finalJ2] = questionList.get(finalJ2).getCategoryId();
-                                questionDescription[finalJ2] = questionList.get(finalJ2).getDescription();
-                                sharedPreferences.edit().putInt(Constants.ANSWER+questionList.get(finalJ2).getQuestionId(),0).commit();
-                                //Toast.makeText(context, "" + answer[finalJ2], Toast.LENGTH_SHORT).show();
-                            }
+                                else if (spinner.getSelectedItem().toString().matches("hpcl|Hpcl|HPCL")) {
+                                    spinner.setBackgroundColor(context.getResources().getColor(R.color.white));
+                                    answer[finalJ2] = spinner.getSelectedItem().toString();
+                                    questionID[finalJ2] = questionList.get(finalJ2).getQuestionId();
+                                    categoryID[finalJ2] = questionList.get(finalJ2).getCategoryId();
+                                    questionDescription[finalJ2] = questionList.get(finalJ2).getDescription();
+                                    sharedPreferences.edit().putInt(Constants.ANSWER + questionList.get(finalJ2).getQuestionId(), 0).commit();
+                                } else {
+                                    spinner.setBackgroundColor(context.getResources().getColor(R.color.red));
+                                    answer[finalJ2] = spinner.getSelectedItem().toString();
+                                    questionID[finalJ2] = questionList.get(finalJ2).getQuestionId();
+                                    categoryID[finalJ2] = questionList.get(finalJ2).getCategoryId();
+                                    questionDescription[finalJ2] = questionList.get(finalJ2).getDescription();
+                                    sharedPreferences.edit().putInt(Constants.ANSWER + questionList.get(finalJ2).getQuestionId(), 1).commit();
+                                }
+                            } else {
 
-                            else
-                            {
-                                spinner.setBackgroundColor(context.getResources().getColor(R.color.red));
-                                answer[finalJ2] = spinner.getSelectedItem().toString();
-                                questionID[finalJ2] = questionList.get(finalJ2).getQuestionId();
-                                categoryID[finalJ2] = questionList.get(finalJ2).getCategoryId();
-                                questionDescription[finalJ2] = questionList.get(finalJ2).getDescription();
-                                sharedPreferences.edit().putInt(Constants.ANSWER+questionList.get(finalJ2).getQuestionId(),1).commit();
-                            }
-                        }
-
-
-                        else
-                            {
-
-                            if(position==0)
-                            {
-                                spinner.setBackgroundColor(context.getResources().getColor(R.color.white));
-                                answer[finalJ2]=null;
-                            }
-
-
-                            else
-                            {
-                                spinner.setBackgroundColor(context.getResources().getColor(R.color.white));
-                                answer[finalJ2] = spinner.getSelectedItem().toString();
-                                questionID[finalJ2] = questionList.get(finalJ2).getQuestionId();
-                                categoryID[finalJ2] = questionList.get(finalJ2).getCategoryId();
-                                questionDescription[finalJ2] = questionList.get(finalJ2).getDescription();
-                                //Toast.makeText(context, "" + answer[finalJ2], Toast.LENGTH_SHORT).show();
+                                if (position == 0)
+                                {
+                                    spinner.setBackgroundColor(context.getResources().getColor(R.color.white));
+                                    answer[finalJ2] = null;
+                                } else {
+                                    spinner.setBackgroundColor(context.getResources().getColor(R.color.white));
+                                    answer[finalJ2] = spinner.getSelectedItem().toString();
+                                    questionID[finalJ2] = questionList.get(finalJ2).getQuestionId();
+                                    categoryID[finalJ2] = questionList.get(finalJ2).getCategoryId();
+                                    questionDescription[finalJ2] = questionList.get(finalJ2).getDescription();
+                                }
                             }
                         }
-                    }
 
 
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent)
-                    {
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent)
+                        {
 
-                    }
-                });
+                        }
+                    });
+                    break;
             }
 
             fragmentLinearLayout.addView(questionHolderLinearLayout);
@@ -994,9 +932,11 @@ public class MyGlobals
         }
 
 
+
         Button save=new Button(context);
         Button next =new Button(context);
         Button prev=new Button(context);
+
 
         int pad=dpToPx(5,context);
         next.setWidth(dpToPx(50,context));
@@ -1006,74 +946,65 @@ public class MyGlobals
         next.setTextColor(context.getResources().getColor(R.color.colorPrimary));
         next.setPadding(pad,pad,pad,pad);
         next.setText(R.string.next);
-
+        LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         save.setBackground(context.getResources().getDrawable(R.drawable.blue_rectangle));
-        save.setWidth(60);
-        save.setHeight(30);
+        save.setLayoutParams(lp);
         save.setTextColor(context.getResources().getColor(R.color.white));
-        save.setText(R.string.save);
+        save.setText(R.string.saveAndProceed);
+        save.setPadding(pad,pad,pad,pad);
+
 
         prev.setHeight(dpToPx(30,context));
+        prev.setLayoutParams(lp);
         prev.setBackground(context.getResources().getDrawable(R.drawable.rectangle));
         prev.setTextColor(context.getResources().getColor(R.color.colorPrimary));
         prev.setPadding(pad,pad,pad,pad);
         prev.setText(R.string.prev);
 
-
-        prev.setOnClickListener(new View.OnClickListener()
+        if(!unsafeQuestionFlag)
         {
-            @Override
-            public void onClick(View v) {
-                if(Integer.parseInt(questionList.get(0).getCategoryId())>0) {
-                    int fragPrev=Integer.parseInt(questionList.get(0).getCategoryId());
-                    ((SurveyActivity) context).setCurrentItem( fragPrev-2, true);
+
+            prev.setOnClickListener(v -> {
+                if (Integer.parseInt(questionList.get(0).getCategoryId()) > 0) {
+                    int fragPrev = Integer.parseInt(questionList.get(0).getCategoryId());
+                    ((SurveyActivity) context).setCurrentItem(fragPrev - 2, true);
                 }
-            }
-        });
+            });
 
 
-        save.setOnClickListener(new View.OnClickListener()
-        {
-            @SuppressLint("ApplySharedPref")
-            @Override
-            public void onClick(View v)
-            {
+            save.setOnClickListener(v -> {
                 DatabaseHelperUser databaseHelperUser = new DatabaseHelperUser(context);
+                SharedPreferences sharedPreferences1 = context.getSharedPreferences(Constants.PREFS_NAME, Context.MODE_PRIVATE);
+                String areaName = sharedPreferences1.getString(Constants.AREA_NAME, "0");
+                String consumerName = sharedPreferences1.getString(Constants.CONSUMER_NAME, "0");
+                String consumerNo = sharedPreferences1.getString(Constants.CONSUMER_NO, "0");
+                String uniqueConsumerId = sharedPreferences1.getString(Constants.UNIQUE_CONSUMER_NO, "0");
+                String allottedId = sharedPreferences1.getString(Constants.ALLOTED_ID, "0");
+                String allotmentDate = sharedPreferences1.getString(Constants.ALLOTMENT_DATE, "0");
+                String isCompleted = sharedPreferences1.getString(Constants.IS_COMPLETED, "0");
 
-                SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.PREFS_NAME, Context.MODE_PRIVATE);
-                String areaName = sharedPreferences.getString(Constants.AREA_NAME, "0");
-                String consumerName = sharedPreferences.getString(Constants.CONSUMER_NAME, "0");
-                String consumerNo = sharedPreferences.getString(Constants.CONSUMER_NO, "0");
-                String uniqueConsumerId = sharedPreferences.getString(Constants.UNIQUE_CONSUMER_NO, "0");
-                String allottedId = sharedPreferences.getString(Constants.ALLOTED_ID, "0");
-                String allotmentDate = sharedPreferences.getString(Constants.ALLOTMENT_DATE, "0");
-                String isCompleted = sharedPreferences.getString(Constants.IS_COMPLETED, "0");
+                int count = 0;
 
-                int count=0;
-
-                for(int i=0;i<questionList.size();i++)
-                {
-                    if(answer[i]!=null)
-                    {
+                for (int i = 0; i < size; i++) {
+                    if (answer[i] != null) {
                         count++;
                     }
                 }
 
-                sharedPreferences.edit().putInt(Constants.CYLINDER_SAVE,0).commit();
+                sharedPreferences1.edit().putInt(Constants.CYLINDER_SAVE, 0).commit();
 
-                if(count==questionList.size())
+                if (count == size)
                 {
-                    int fragmentType= Integer.parseInt(questionList.get(0).getCategoryId());
+                    int fragmentType = Integer.parseInt(questionList.get(0).getCategoryId());
 
-                    for(int j=0;j<questionList.size();j++)
-                    {
-                        databaseHelperUser.putAnswerEntryInDatabase(answer[j], questionID[j], questionDescription[j], categoryID[j], allotmentDate, areaName, consumerName, consumerNo, isCompleted, uniqueConsumerId, allottedId);
-                    }
-
-                    databaseHelperUser.setFragmentStatusSaved(allottedId,Integer.parseInt(questionList.get(0).getCategoryId()));
+                    databaseHelperUser.putAnswerEntryInDatabase(false,answer, questionID, questionDescription, categoryID, allotmentDate, areaName, consumerName, consumerNo, isCompleted, uniqueConsumerId, allottedId);
+                    databaseHelperUser.setFragmentStatusSaved(allottedId, Integer.parseInt(questionList.get(0).getCategoryId()));
 
                     Toast.makeText(context, "Saved SuccessFully", Toast.LENGTH_SHORT).show();
-                    ((SurveyActivity)context).setCurrentItem(Integer.parseInt(questionList.get(0).getCategoryId()), true);
+
+                    sharedPreferences.edit().putBoolean(Constants.UNSAFE_FLAG,false).commit();
+
+                    ((SurveyActivity) context).setCurrentItem(Integer.parseInt(questionList.get(0).getCategoryId()), true);
 
                 }
 
@@ -1081,20 +1012,113 @@ public class MyGlobals
                     {
                         Toast.makeText(context, "Answer all questions ", Toast.LENGTH_SHORT).show();
                     }
-            }
-
-        });
+            });
 
 
+            next.setOnClickListener(v -> ((SurveyActivity) context).setCurrentItem(Integer.parseInt(questionList.get(0).getCategoryId()), true));
+        }
 
-        next.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
+
+        else
             {
-                ((SurveyActivity)context).setCurrentItem(Integer.parseInt(questionList.get(0).getCategoryId()), true);
-            }
-        });
+                prev.setOnClickListener(v -> {
+
+                });
+
+
+                    save.setOnClickListener(v -> {
+                    DatabaseHelperUser databaseHelperUser = new DatabaseHelperUser(context);
+                    String areaName = sharedPreferences.getString(Constants.AREA_NAME, "0");
+                    String consumerName = sharedPreferences.getString(Constants.CONSUMER_NAME, "0");
+                    String consumerNo = sharedPreferences.getString(Constants.CONSUMER_NO, "0");
+                    String uniqueConsumerId = sharedPreferences.getString(Constants.UNIQUE_CONSUMER_NO, "0");
+                    String allottedId = sharedPreferences.getString(Constants.ALLOTED_ID, "0");
+                    String allotmentDate = sharedPreferences.getString(Constants.ALLOTMENT_DATE, "0");
+                    String isCompleted = sharedPreferences.getString(Constants.IS_COMPLETED, "0");
+                            int[] unsafeIdArray=new int[questionList.size()];
+                            int [] unsafeValuesArray=new int[questionList.size()];
+
+                            int unsafeCount = 0;
+                            int count=0;
+
+                            for(int i=0;i<size;i++)
+                            {
+
+                                unsafeIdArray[i]=Integer.parseInt(questionList.get(i).getQuestionId());
+                                unsafeValuesArray[i]= sharedPreferences.getInt(Constants.ANSWER+unsafeIdArray[i],0);
+
+                                if(sharedPreferences.getInt(Constants.ANSWER+unsafeIdArray[i],0)==0 && answer[i]!=null)
+                                {
+                                    unsafeCount++;
+                                }
+
+                                if (answer[i] != null)
+                                {
+                                    count++;
+                                }
+
+                            }
+
+
+
+
+                           /* for(int i=0;i<unsafeIdArray.length;i++)
+                            {
+                            */
+
+
+
+
+                  /*  int count = 0;
+
+                    for (int i = 0; i < questionList.size(); i++) {
+
+                    }*/
+
+                    sharedPreferences.edit().putInt(Constants.CYLINDER_SAVE, 0).commit();
+
+
+                    if (unsafeCount == size)
+                    {
+                        databaseHelperUser.putAnswerEntryInDatabase(true,answer, questionID, questionDescription, categoryID, allotmentDate, areaName, consumerName, consumerNo, isCompleted, uniqueConsumerId, allottedId);
+                        Toast.makeText(context, "Saved SuccessFully", Toast.LENGTH_SHORT).show();
+
+                        sharedPreferences.edit().putBoolean(Constants.UNSAFE_FLAG,true).commit();
+
+                        ((SurveyActivity) context).setCurrentItem(1, true);
+                        //int safeAnswerCount=0;
+
+                        /* for (int j = 0; j < questionList.size(); j++)
+                        {
+                            if(questionID[j].matches("21|23|30|32") && answer[j].matches("no|No|NO") ||questionID[j].matches("3|16|24") && answer[j].matches("yes|Yes|YES"))
+                            {
+                                             safeAnswerCount++;
+                            }
+                        }
+
+                        if(safeAnswerCount==questionList.size())
+                        {
+                            Toast.makeText(context, "Saved SuccessFully", Toast.LENGTH_SHORT).show();
+                            ((SurveyActivity) context).setCurrentItem(1, true);
+
+                        }*/
+                    }
+
+                    else if(count!=size)
+                    {
+                        Toast.makeText(context, "Answer all questions ", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                        else
+                            {
+                                Toast.makeText(context, "Still Unsafe! Cannot Save", Toast.LENGTH_SHORT).show();
+                            }
+                });
+
+
+                next.setOnClickListener(v -> ((SurveyActivity) context).setCurrentItem(Integer.parseInt(questionList.get(0).getCategoryId()), true));
+        }
 
         LinearLayout buttonLayout=new LinearLayout(context);
         params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
@@ -1103,12 +1127,13 @@ public class MyGlobals
         buttonLayout.setPadding(pad,pad,pad,pad);
         buttonLayout.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
         buttonLayout.setLayoutParams(params);
-
+        if(questionList.get(0).getCategoryId()=="1" && !unsafeQuestionFlag)
         buttonLayout.addView(prev);
         buttonLayout.addView(save);
-        buttonLayout.addView(next);
+        //buttonLayout.addView(next);
 
         fragmentLinearLayout.addView(buttonLayout);
+
     }
 
 
@@ -1118,35 +1143,45 @@ public class MyGlobals
         editText.setFocusable(false);
         final Calendar myCalendar = Calendar.getInstance();
 
-        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener()
+        final DatePickerDialog.OnDateSetListener date = (view, year, monthOfYear, dayOfMonth) ->
         {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
-            {
-                // TODO Auto-generated method stub
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                //updateLabel();
-                String myFormat = "dd/MM/yyyy"; //In which you need put here
-                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-                editText.setText(sdf.format(myCalendar.getTime()));
-            }
+            myCalendar.set(Calendar.YEAR, year);
+            myCalendar.set(Calendar.MONTH, monthOfYear);
+            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            String myFormat = "dd/MM/yyyy";
+            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+            editText.setText(sdf.format(myCalendar.getTime()));
         };
 
 
-        editText.setOnClickListener(new View.OnClickListener()
+        editText.setOnClickListener(v -> {
+            new DatePickerDialog(context, date, myCalendar
+                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                    myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+        });
+    }
+
+
+
+
+    public void setIsInMobileFlag(String allotted_id)
+    {
+        AQuery aQuery = new AQuery(mContext);
+        String url = Constants.InspCompletedFlagInMobile + "AllotmentId=" +allotted_id+   "&" + "IsCompleteFlag=" + "1";
+        Date currentTime = Calendar.getInstance().getTime();
+        String date = currentTime.toString();
+
+        aQuery.ajax(url).get().response(new QueryNetworkListener()
         {
             @Override
-            public void onClick(View v)
+            public void response(String s, Throwable throwable)
             {
-                // TODO Auto-generated method stub
-                new DatePickerDialog(context, date, myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                Toast.makeText(mContext, "AJAX response"+s, Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+
 
 
     public String getCurrentDate()

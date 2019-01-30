@@ -96,11 +96,13 @@ public class Fragment_today extends Fragment implements DataUpdateListener
         progressDialog.setMessage("Please Wait.....");
         final ArrayList<Integer> countData;
         countData=databaseHelperUser.getAllotmentEntriesCount(1);
+
+
         allotted_pending_layout = view.findViewById(R.id.today_allotted_layout);
         unsafe_layout = view.findViewById(R.id.today_unsafe_layout);
         denied_layout = view.findViewById(R.id.today_denied_layout);
         not_available_layout = view.findViewById(R.id.today_not_available_layout);
-        reallotted_unsafe_layout = view.findViewById(R.id.today_reallotted_not_available_layout);
+        reallotted_unsafe_layout = view.findViewById(R.id.today_reallotted_unsafe_layout);
         reallotted_denied_layout = view.findViewById(R.id.today_reallotted_denied_layout);
         reallotted_not_available_layout = view.findViewById(R.id.today_reallotted_not_available_layout);
         total_layout = view.findViewById(R.id.today_total_layout);
@@ -153,17 +155,20 @@ public class Fragment_today extends Fragment implements DataUpdateListener
                     intent.putExtra(Constants.FRAG_TYPE,1);
                     startActivity(intent);
                 }
-                else {
-                    Toast.makeText(getContext(), "No entries!", Toast.LENGTH_SHORT).show();
-                }
 
+                else
+                    {
+                        Toast.makeText(getContext(), "No entries!", Toast.LENGTH_SHORT).show();
+                    }
             }
         });
 
 
-        denied_layout.setOnClickListener(new View.OnClickListener() {
+        denied_layout.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 if(!denied_count_tv.getText().toString().equals("0"))
                 {
                     intent.putExtra(Constants.CLICK_CODE, Constants.TOTAL_DENIED);
